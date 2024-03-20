@@ -7,6 +7,7 @@ Si propone di offrire una serie di servizi di semplificazione del warehousing, i
 - Riordino degli articoli in esaurimento 
 - Gestione degli ordini effettuati dai clienti
 - Procedure di reso semplificate
+
 Lo Smart Warehouse offre inoltre ai clienti la possibilità di effettuare i propri ordini direttamente tramite il sistema.
 
 
