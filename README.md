@@ -1,7 +1,7 @@
 
 # Smart Warehouse
 
-Smart warehouse è un software per la gestione del magazzino. 
+Smart Warehouse è un software per la gestione del magazzino. 
 Si propone di offrire una serie di servizi di semplificazione del warehousing, in particolare:
 - Monitoraggio dell’inventario
 - Riordino degli articoli in esaurimento 
