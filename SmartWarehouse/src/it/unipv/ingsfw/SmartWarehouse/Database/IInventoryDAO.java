@@ -1,5 +1,4 @@
-package db;
-
+package it.unipv.ingsfw.SmartWarehouse.Database;
 
 import java.util.List;
 import java.util.Set;
