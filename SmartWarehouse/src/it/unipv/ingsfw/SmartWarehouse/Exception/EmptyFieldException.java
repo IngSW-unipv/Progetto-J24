@@ -1,4 +1,4 @@
-package exception;
+package it.unipv.ingsfw.SmartWarehouse.Exception;
 
 public class EmptyFieldException extends Exception {
 	

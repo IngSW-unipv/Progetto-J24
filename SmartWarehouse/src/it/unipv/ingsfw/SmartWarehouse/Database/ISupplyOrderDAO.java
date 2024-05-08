@@ -1,8 +1,8 @@
-package db;
+package it.unipv.ingsfw.SmartWarehouse.Database;
 
 import java.util.List;
 
-import model.supply.SupplyOrder;
+import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyOrder;
 
 public interface ISupplyOrderDAO {
 	public List<SupplyOrder> selectAllSupplyOrders();

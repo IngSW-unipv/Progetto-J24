@@ -1,4 +1,4 @@
-package view.inventory;
+package it.unipv.ingsfw.SmartWarehouse.View.inventory;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;

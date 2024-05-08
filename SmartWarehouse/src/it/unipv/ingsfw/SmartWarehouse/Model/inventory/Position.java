@@ -1,4 +1,4 @@
-package model.inventory;
+package it.unipv.ingsfw.SmartWarehouse.Model.inventory;
 
 public class Position {
 	private String line, pod, bin;

@@ -1,4 +1,4 @@
-package exception.supplier;
+package it.unipv.ingsfw.SmartWarehouse.Exception.supplier;
 
 public class SupplierAlreadyExistsException extends InvalidSupplierException{
 

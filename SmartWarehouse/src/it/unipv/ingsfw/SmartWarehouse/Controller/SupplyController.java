@@ -1,4 +1,4 @@
-package controller;
+package it.unipv.ingsfw.SmartWarehouse.Controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,20 +8,17 @@ import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import model.SingletonUser;
-import model.inventory.InventoryItem;
-import model.inventory.InventoryManager;
-import model.operator.SupplyOperator;
-import model.supply.Supplier;
-import model.supply.Supply;
-import model.supply.SupplyManager;
-import model.supply.SupplyOrder;
-import view.inventory.FirstDialog;
-import view.inventory.InventoryView;
-import view.inventory.SuppliersDialog;
-import view.inventory.SuppliesDialog;
-import view.inventory.SupplyOrderDialog;
-import view.inventory.SupplyPanel;
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
+import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supplier;
+import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supply;
+import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyManager;
+import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyOrder;
+import it.unipv.ingsfw.SmartWarehouse.View.inventory.SuppliersDialog;
+import it.unipv.ingsfw.SmartWarehouse.View.inventory.SuppliesDialog;
+import it.unipv.ingsfw.SmartWarehouse.View.inventory.SupplyOrderDialog;
+import it.unipv.ingsfw.SmartWarehouse.View.inventory.SupplyPanel;
+
+
 
 public class SupplyController {
 	private SupplyPanel supplyPanel;

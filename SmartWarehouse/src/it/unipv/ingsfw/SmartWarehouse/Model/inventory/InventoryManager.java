@@ -1,15 +1,8 @@
-package model.inventory;
+package it.unipv.ingsfw.SmartWarehouse.Model.inventory;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-
-import exception.AuthorizationDeniedException;
-import exception.ItemNotFoundException;
-import facade.InventoryDAOFacade;
-import model.operator.InventoryOperator;
-import model.operator.SupplyOperator;
-import model.operator.WarehouseOperator;
 
 public class InventoryManager {  
 	private InventoryDAOFacade inventoryDAOFacade;

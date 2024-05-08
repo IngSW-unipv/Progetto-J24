@@ -1,20 +1,20 @@
-package model.supply;
+package it.unipv.ingsfw.SmartWarehouse.Model.supply;
 
 import java.time.LocalDateTime;
-import exception.*;
-import exception.supplier.SupplierDoesNotExistException;
-import exception.supply.InvalidMaxQuantityExcepion;
-import exception.supply.InvalidPriceException;
-import exception.supply.InvalidSupplyException;
-import exception.supply.SupplyAlreadyExistsException;
-import exception.supply.SupplyDoesNotExistException;
-import facade.InventoryDAOFacade;
-import facade.SupplyDAOFacade;
-import model.inventory.InventoryItem;
-import model.operator.SupplyOperator;
-import model.operator.WarehouseOperator;
-import randomGenerator.IRandomGenerator;
-import randomGenerator.RandomGenerator;
+
+import it.unipv.ingsfw.SmartWarehouse.Exception.AuthorizationDeniedException;
+import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
+import it.unipv.ingsfw.SmartWarehouse.Exception.supplier.SupplierDoesNotExistException;
+import it.unipv.ingsfw.SmartWarehouse.Exception.supply.InvalidMaxQuantityExcepion;
+import it.unipv.ingsfw.SmartWarehouse.Exception.supply.InvalidPriceException;
+import it.unipv.ingsfw.SmartWarehouse.Exception.supply.InvalidSupplyException;
+import it.unipv.ingsfw.SmartWarehouse.Exception.supply.SupplyAlreadyExistsException;
+import it.unipv.ingsfw.SmartWarehouse.Exception.supply.SupplyDoesNotExistException;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.Model.operator.SupplyOperator;
+import it.unipv.ingsfw.SmartWarehouse.Model.operator.WarehouseOperator;
+import it.unipv.ingsfw.SmartWarehouse.Model.randomGenerator.*;
 
 public class Supply {
 	private String ID_Supply;

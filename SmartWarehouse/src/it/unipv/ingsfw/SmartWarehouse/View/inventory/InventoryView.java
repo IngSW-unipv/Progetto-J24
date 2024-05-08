@@ -1,4 +1,4 @@
-package view.inventory;
+package it.unipv.ingsfw.SmartWarehouse.View.inventory;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -16,13 +16,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import controller.InventoryController;
-import controller.SupplyController;
-import model.inventory.InventoryItem;
-import model.inventory.InventoryManager;
-import model.inventory.Item;
-import model.operator.WarehouseOperator;
-import model.supply.SupplyManager;
+
+import it.unipv.ingsfw.SmartWarehouse.Controller.InventoryController;
+import it.unipv.ingsfw.SmartWarehouse.Controller.SupplyController;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
+import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyManager;
+
 
 public class InventoryView extends JFrame {
 	

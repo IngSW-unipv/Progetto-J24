@@ -1,4 +1,4 @@
-package exception.supply;
+package it.unipv.ingsfw.SmartWarehouse.Exception.supply;
 
 public class InvalidPriceException extends InvalidSupplyException {
 	

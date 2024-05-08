@@ -1,17 +1,13 @@
-package facade;
+package it.unipv.ingsfw.SmartWarehouse.Model.supply;
 
 import java.util.List;
-import java.util.Set;
 
-import db.ISupplierDAO;
-import db.ISupplyDAO;
-import db.ISupplyOrderDAO;
-import db.SupplierDAO;
-import db.SupplyDAO;
-import db.SupplyOrderDAO;
-import model.supply.Supplier;
-import model.supply.Supply;
-import model.supply.SupplyOrder;
+import it.unipv.ingsfw.SmartWarehouse.Database.ISupplierDAO;
+import it.unipv.ingsfw.SmartWarehouse.Database.ISupplyDAO;
+import it.unipv.ingsfw.SmartWarehouse.Database.ISupplyOrderDAO;
+import it.unipv.ingsfw.SmartWarehouse.Database.SupplierDAO;
+import it.unipv.ingsfw.SmartWarehouse.Database.SupplyDAO;
+import it.unipv.ingsfw.SmartWarehouse.Database.SupplyOrderDAO;
 
 public class SupplyDAOFacade {
 	private static SupplyDAOFacade instance;

@@ -1,4 +1,4 @@
-package db;
+package it.unipv.ingsfw.SmartWarehouse.Database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,8 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.supply.SupplyOrder;
-import util.DBConnection;
+import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyOrder;
 
 public class SupplyOrderDAO implements ISupplyOrderDAO {
 	private String schema;

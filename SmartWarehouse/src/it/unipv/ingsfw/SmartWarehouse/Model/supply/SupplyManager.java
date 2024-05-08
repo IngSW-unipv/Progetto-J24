@@ -1,9 +1,7 @@
-package model.supply;
+package it.unipv.ingsfw.SmartWarehouse.Model.supply;
 
 import java.util.List;
-import java.util.Set;
-import facade.InventoryDAOFacade;
-import facade.SupplyDAOFacade;
+
 
 public class SupplyManager {
 	private SupplyDAOFacade supplyDAOFacade;

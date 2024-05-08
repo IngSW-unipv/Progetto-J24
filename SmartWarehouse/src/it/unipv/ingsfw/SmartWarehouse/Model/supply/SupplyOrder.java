@@ -1,14 +1,7 @@
-package model.supply;
+package it.unipv.ingsfw.SmartWarehouse.Model.supply;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.UUID;
-
-import exception.AuthorizationDeniedException;
-import exception.supply.SupplyDoesNotExistException;
-import facade.SupplyDAOFacade;
-import model.operator.SupplyOperator;
-import model.operator.WarehouseOperator;
 
 public class SupplyOrder {   //ipotesi: una fornitura per ordine
 	private int n_order;

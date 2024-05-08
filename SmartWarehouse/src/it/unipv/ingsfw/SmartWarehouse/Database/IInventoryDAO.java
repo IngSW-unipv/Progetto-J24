@@ -3,10 +3,10 @@ package it.unipv.ingsfw.SmartWarehouse.Database;
 import java.util.List;
 import java.util.Set;
 
-import model.inventory.InventoryItem;
-import model.inventory.Item;
-import model.inventory.Position;
-import model.supply.Supplier;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Position;
+
+
 
 public interface IInventoryDAO {
 	List<InventoryItem> selectAllInventory();

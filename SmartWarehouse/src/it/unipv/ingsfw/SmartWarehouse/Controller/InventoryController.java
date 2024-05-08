@@ -1,29 +1,25 @@
-package controller;
+package it.unipv.ingsfw.SmartWarehouse.Controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import model.SingletonUser;
-import model.inventory.InventoryItem;
-import model.inventory.InventoryManager;
-import model.inventory.Item;
-import model.inventory.ItemDetails;
-import model.inventory.Position;
-import model.operator.WarehouseOperator;
-import model.supply.Supplier;
-import model.supply.SupplyManager;
-import model.supply.SupplyOrder;
-import view.inventory.FirstDialog;
-import view.inventory.InventoryView;
-import view.inventory.SecondDialog;
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Item;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.ItemDetails;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Position;
+import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supplier;
+import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyManager;
+import it.unipv.ingsfw.SmartWarehouse.View.inventory.FirstDialog;
+import it.unipv.ingsfw.SmartWarehouse.View.inventory.InventoryView;
+import it.unipv.ingsfw.SmartWarehouse.View.inventory.SecondDialog;
+
+
 
 public class InventoryController {
 	private InventoryManager w;

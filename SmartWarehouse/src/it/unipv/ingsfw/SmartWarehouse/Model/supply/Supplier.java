@@ -1,13 +1,12 @@
-package model.supply;
+package it.unipv.ingsfw.SmartWarehouse.Model.supply;
 
-import exception.AuthorizationDeniedException;
-import exception.EmptyFieldException;
-import exception.supplier.InvalidSupplierException;
-import exception.supplier.SupplierAlreadyExistsException;
-import exception.supplier.SupplierDoesNotExistException;
-import facade.SupplyDAOFacade;
-import model.operator.SupplyOperator;
-import model.operator.WarehouseOperator;
+import it.unipv.ingsfw.SmartWarehouse.Exception.AuthorizationDeniedException;
+import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyFieldException;
+import it.unipv.ingsfw.SmartWarehouse.Exception.supplier.InvalidSupplierException;
+import it.unipv.ingsfw.SmartWarehouse.Exception.supplier.SupplierAlreadyExistsException;
+import it.unipv.ingsfw.SmartWarehouse.Exception.supplier.SupplierDoesNotExistException;
+import it.unipv.ingsfw.SmartWarehouse.Model.operator.SupplyOperator;
+import it.unipv.ingsfw.SmartWarehouse.Model.operator.WarehouseOperator;
 
 public class Supplier {
 	private String IDS, fullname, address, email;

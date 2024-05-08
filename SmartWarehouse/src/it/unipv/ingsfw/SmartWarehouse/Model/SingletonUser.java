@@ -1,8 +1,7 @@
-package model;
+package it.unipv.ingsfw.SmartWarehouse.Model;
 
-import model.operator.InventoryOperator;
-import model.operator.SupplyOperator;
-import model.operator.WarehouseOperator;
+import it.unipv.ingsfw.SmartWarehouse.Model.operator.SupplyOperator;
+import it.unipv.ingsfw.SmartWarehouse.Model.operator.WarehouseOperator;
 
 public class SingletonUser {
 	private static SingletonUser instance;

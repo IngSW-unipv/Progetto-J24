@@ -1,4 +1,4 @@
-package model.operator;
+package it.unipv.ingsfw.SmartWarehouse.Model.operator;
 
 //inventory is singleton
 public class WarehouseOperator { 

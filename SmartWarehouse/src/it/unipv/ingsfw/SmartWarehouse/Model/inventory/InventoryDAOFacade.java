@@ -1,12 +1,10 @@
-package facade;
+package it.unipv.ingsfw.SmartWarehouse.Model.inventory;
 
 import java.util.List;
 import java.util.Set;
-import db.IInventoryDAO;
-import db.InventoryDAO;
-import model.inventory.InventoryItem;
-import model.inventory.Position;
-import model.supply.Supplier;
+
+import it.unipv.ingsfw.SmartWarehouse.Database.IInventoryDAO;
+import it.unipv.ingsfw.SmartWarehouse.Database.InventoryDAO;
 
 //contains all the DAO methods about inventory
 public class InventoryDAOFacade {

@@ -1,11 +1,12 @@
-package model.inventory;
+package it.unipv.ingsfw.SmartWarehouse.Model.inventory;
 
 import java.util.List;
-import exception.AuthorizationDeniedException;
-import exception.ItemNotFoundException;
-import facade.InventoryDAOFacade;
-import model.operator.InventoryOperator;
-import model.operator.WarehouseOperator;
+
+import it.unipv.ingsfw.SmartWarehouse.Exception.AuthorizationDeniedException;
+import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
+import it.unipv.ingsfw.SmartWarehouse.Model.operator.InventoryOperator;
+import it.unipv.ingsfw.SmartWarehouse.Model.operator.WarehouseOperator;
+
 
 //useful to InventoryDAO, POJO
 public class InventoryItem implements Comparable<InventoryItem>{

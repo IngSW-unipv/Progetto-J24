@@ -1,12 +1,10 @@
-package model.inventory;
+package it.unipv.ingsfw.SmartWarehouse.Model.inventory;
 
-import exception.AuthorizationDeniedException;
-import exception.EmptyFieldException;
-import facade.InventoryDAOFacade;
-import model.operator.InventoryOperator;
-import model.operator.WarehouseOperator;
-import randomGenerator.IRandomGenerator;
-import randomGenerator.RandomGenerator;
+import it.unipv.ingsfw.SmartWarehouse.Exception.AuthorizationDeniedException;
+import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyFieldException;
+import it.unipv.ingsfw.SmartWarehouse.Model.operator.InventoryOperator;
+import it.unipv.ingsfw.SmartWarehouse.Model.operator.WarehouseOperator;
+import it.unipv.ingsfw.SmartWarehouse.Model.randomGenerator.*;
 
 public class Item { 
 	private String description;

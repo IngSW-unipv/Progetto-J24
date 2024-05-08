@@ -1,4 +1,4 @@
-package db;
+package it.unipv.ingsfw.SmartWarehouse.Database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,10 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import model.inventory.Item;
-import model.supply.Supplier;
-import model.supply.Supply;
-import util.DBConnection;
+import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supply;
 
 public class SupplyDAO implements ISupplyDAO {
 	private String schema;

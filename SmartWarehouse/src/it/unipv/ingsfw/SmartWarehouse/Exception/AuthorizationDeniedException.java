@@ -1,4 +1,4 @@
-package exception;
+package it.unipv.ingsfw.SmartWarehouse.Exception;
 
 public class AuthorizationDeniedException extends Exception {
 
