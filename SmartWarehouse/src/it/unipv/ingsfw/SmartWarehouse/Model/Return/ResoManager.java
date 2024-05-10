@@ -2,6 +2,7 @@ package it.unipv.ingsfw.SmartWarehouse.Model.Return;
 
 import it.unipv.ingsfw.SmartWarehouse.Database.ReturnServiceFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
+import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 
 
 

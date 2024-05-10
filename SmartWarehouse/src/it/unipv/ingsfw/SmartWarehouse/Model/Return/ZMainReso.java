@@ -13,6 +13,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Ordine.Ordine;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.RefundFactory;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.BankTransfer.BankTransfer;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.Voucher.*;
+import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 import it.unipv.ingsfw.SmartWarehouse.View.ReturnView;
 
 // 1) // Gestire passaggio sku additemtobereturned(passagli item). 

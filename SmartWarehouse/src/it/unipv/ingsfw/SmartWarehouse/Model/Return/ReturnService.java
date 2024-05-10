@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
+import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 
 
 public class ReturnService { 
