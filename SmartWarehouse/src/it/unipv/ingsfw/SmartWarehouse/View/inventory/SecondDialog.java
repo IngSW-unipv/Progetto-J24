@@ -1,13 +1,11 @@
 package it.unipv.ingsfw.SmartWarehouse.View.inventory;
 
-import java.awt.GridLayout;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-//estendela prima????
+
 public class SecondDialog extends JDialog{
 	private String ids;
 	private JTextField qty;
@@ -20,7 +18,9 @@ public class SecondDialog extends JDialog{
 		setSize(700, 500);
 		setResizable(true);
 		setTitle("Sku: "+sku+", IdS: "+ids);
-		panel = new JPanel(new GridLayout(0, 2));
+		setSize(200, 400);
+		
+		panel = new JPanel();
 		JLabel qtyLabel=new JLabel("qty: ");
 		panel.add(qtyLabel);
 		qty=new JTextField(10);

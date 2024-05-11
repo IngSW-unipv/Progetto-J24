@@ -10,12 +10,11 @@ import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Position;
 
 public interface IInventoryDAO {
 	List<InventoryItem> selectAllInventory();
-	public InventoryItem getInventoryItemBySku(String sku);
 	public boolean insertItemToInventory(InventoryItem i);
 	public boolean deleteItem(String sku);
-	public InventoryItem getInventoryItemByPosition(Position pos); //o return Item?
-	//public boolean checkIfPositionAlreadyUsed(Position pos);
+	public InventoryItem getInventoryItemBySku(String sku);
+	public InventoryItem getInventoryItemByPosition(Position pos); 
 	public boolean updateInventoryItemQty(String sku, int qty);
-	public Set<InventoryItem> viewItemsUnderStdLevel();
+	public List<InventoryItem> viewItemsUnderStdLevel();
 	public List<Object[]> getSuppliersInfo(InventoryItem i);
 }

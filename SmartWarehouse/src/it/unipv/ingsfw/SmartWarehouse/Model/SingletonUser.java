@@ -1,6 +1,6 @@
 package it.unipv.ingsfw.SmartWarehouse.Model;
 
-import it.unipv.ingsfw.SmartWarehouse.Model.operator.SupplyOperator;
+import it.unipv.ingsfw.SmartWarehouse.Model.operator.InventoryOperator;
 import it.unipv.ingsfw.SmartWarehouse.Model.operator.WarehouseOperator;
 
 public class SingletonUser {
@@ -8,7 +8,7 @@ public class SingletonUser {
 	private WarehouseOperator op;
 	
 	private SingletonUser() {
-		op=new SupplyOperator();
+		op=new InventoryOperator();
 	}   
 	
 	public static synchronized SingletonUser getInstance() {

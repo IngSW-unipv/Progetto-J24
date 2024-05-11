@@ -2,12 +2,10 @@ package it.unipv.ingsfw.SmartWarehouse.View.inventory;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -23,14 +21,13 @@ import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyManager;
 
-
 public class InventoryView extends JFrame {
 	
 	private JTable table;
 	private DefaultTableModel tableModel;
 	private JTextField skutf;
-	private JLabel skul;
 	private JButton posb;
+	private JButton underLevel;
 	private JButton x;
 	private JButton insert;
 	private JButton orderItem;
@@ -42,7 +39,6 @@ public class InventoryView extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1500, 800); 
 		
-		// Creazione del modello della tabella
 	    tableModel = new DefaultTableModel();
 	    tableModel.addColumn("Sku");
 	    tableModel.addColumn("Description");
@@ -64,13 +60,15 @@ public class InventoryView extends JFrame {
         mainPanel.add(filterPanel, BorderLayout.NORTH);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
         
-        skul=new JLabel("Sku: ");
+        JLabel skul=new JLabel("Sku: ");
         filterPanel.add(skul);
         skutf=new JTextField(20);
         skutf.setBackground(Color.cyan);
         filterPanel.add(skutf);
         posb=new JButton("Filter by Position");
         filterPanel.add(posb);
+        underLevel=new JButton("Filter by UnderLevel");
+        filterPanel.add(underLevel);
         x=new JButton("X");
         filterPanel.add(x);
         
@@ -129,11 +127,11 @@ public class InventoryView extends JFrame {
                      fragilityField.getText().isEmpty() ||
                      dimensionField.getText().isEmpty()) {
         		JOptionPane.showMessageDialog(this, "empty fields" , "Error", JOptionPane.WARNING_MESSAGE);
-                          return null;
+                return null;
             } 
-        	  
+        	   
             String description = descriptionField.getText();
-            double price = Double.parseDouble(priceField.getText());
+            double price = Double.parseDouble(priceField.getText());   
             int std_level=Integer.parseInt(stdlField.getText());
             String line = lineField.getText();
             String pod = podField.getText();
@@ -152,7 +150,6 @@ public class InventoryView extends JFrame {
     }
 	 
 	public void viewInventoryItemFound(InventoryItem i) {
-		DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
 		tableModel.setRowCount(0);
 		if(i!=null) {
 		tableModel.addRow(new Object[]{i.getSku(), i.getItem().getDescription(), i.getPrice(),i.getQty(), i.getStdLevel(), i.getPos().getLine(), i.getPos().getPod(), i.getPos().getBin(),
@@ -208,15 +205,7 @@ public class InventoryView extends JFrame {
 	public void setSkutf(JTextField skutf) {
 		this.skutf = skutf;
 	}
-
-	public JLabel getSkul() {
-		return skul;
-	}
-
-	public void setSkul(JLabel skul) {
-		this.skul = skul;
-	}
-
+	
 	public JButton getPosb() {
 		return posb;
 	}
@@ -248,18 +237,6 @@ public class InventoryView extends JFrame {
 	public void setFirstDialog(FirstDialog firstDialog) {
 		this.firstDialog = firstDialog;
 	}
-	
-	
-	public static void main(String[] args) {
-		
-		InventoryView iv=new InventoryView();
-		System.out.println(iv.getSupplyPanel());
-		InventoryManager w=new InventoryManager();
-		InventoryController ic=new InventoryController(w, iv);
-		SupplyManager sm=new SupplyManager();
-		SupplyController sc=new SupplyController(sm, iv.getSupplyPanel());
-
-	}
 
 	public SupplyPanel getSupplyPanel() {
 		return supplyPanel;
@@ -277,6 +254,24 @@ public class InventoryView extends JFrame {
 		this.orderItem = orderItem;
 	}
 
+	public JButton getUnderLevel() {
+		return underLevel;
+	}
+
+	public void setUnderLevel(JButton underLevel) {
+		this.underLevel = underLevel;
+	}
+
+	public static void main(String[] args) {
+	
+		InventoryView iv=new InventoryView();
+		System.out.println(iv.getSupplyPanel());
+		InventoryManager w=new InventoryManager();
+		InventoryController ic=new InventoryController(w, iv);
+		SupplyManager sm=new SupplyManager();
+		SupplyController sc=new SupplyController(sm, iv.getSupplyPanel());
+
+	}
 	
 }
 

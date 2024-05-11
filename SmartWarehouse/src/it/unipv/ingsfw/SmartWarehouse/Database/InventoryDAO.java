@@ -5,9 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Item;
@@ -15,27 +13,24 @@ import it.unipv.ingsfw.SmartWarehouse.Model.inventory.ItemDetails;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Position;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supplier;
 
-
-
 public class InventoryDAO implements IInventoryDAO{ 
 	private String schema;
 	private Connection conn;
 	
 	public InventoryDAO () {
 		super();
-		this.schema="warehouse2"; 
-		//conn=DBConnection.startConnection(conn,schema);  
+		this.schema="warehouse2";  
 	}  
 	 
 	public List<InventoryItem> selectAllInventory(){  
 		List<InventoryItem> inventory=new ArrayList<InventoryItem>();
 		conn=DBConnection.startConnection(conn,schema);
-		java.sql.Statement st1; //!!!
+		Statement st1; 
 		ResultSet rs1;
  
 		try
 		{
-			st1 =  conn.createStatement();
+			st1 = conn.createStatement();
 			String query="select * from inventory order by description";
 			rs1= st1.executeQuery(query);
 
@@ -53,8 +48,7 @@ public class InventoryDAO implements IInventoryDAO{
 		return inventory;  
 	}
 	
-	//result inizializzata con null, non viene mai sovrascritta con un nuovo oggetto Item 
-	//se la query non restituisce risultati (se item non c'è restituisce null)
+	//return null if the item is not present
 	public InventoryItem getInventoryItemBySku(String sku) {
 		InventoryItem result=null; 
 		conn=DBConnection.startConnection(conn,schema);
@@ -64,13 +58,12 @@ public class InventoryDAO implements IInventoryDAO{
 		try {
 			String query="select * from inventory where sku= ? ";
 			st1 = conn.prepareStatement(query);
-			st1.setString(1, sku);
-			
+			st1.setString(1, sku);	
 			rs1=st1.executeQuery();
+			
 			if(rs1.next()) {
 			result = new InventoryItem(new Item(rs1.getString(2), new ItemDetails(rs1.getInt(9), rs1.getInt(10))), rs1.getString(1), rs1.getDouble(3), 
 					rs1.getInt(4), rs1.getInt(5), new Position(rs1.getString(6), rs1.getString(7),rs1.getString(8)));
-					//new Item(rs1.getString(1), rs1.getString(2), new ItemDetails(rs1.getInt(9), rs1.getInt(10)));
 			}
 		} catch (Exception e) {
 		    e.printStackTrace();
@@ -80,14 +73,13 @@ public class InventoryDAO implements IInventoryDAO{
 		return result; 
 	} 
 	
-	//attenzione che tutti gli attributi di item non devono essere null
+	//every field cannot be empty
 	public boolean insertItemToInventory(InventoryItem i) { 
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;
 		boolean result=true;
 		
-		try
-		{
+		try {
 			String query="insert into inventory (sku,description,price,qty,stdLevel,line,pod,bin,fragility,dimension) values (?,?,?,?,?,?,?,?,?,?)";
 			st1 = conn.prepareStatement(query);
 			st1.setString(1, i.getSku());
@@ -111,34 +103,7 @@ public class InventoryDAO implements IInventoryDAO{
 		}
 		return result;
 	} 
-	 //NOO
-	//metodo per vedere se una pos è già stata usata 
-	/*
-	public boolean checkIfPositionAlreadyUsed(Position pos) { 
-		conn=DBConnection.startConnection(conn,schema);
-		PreparedStatement st1;
-		ResultSet rs1;
-		
-	    int count = 0;
-	    try { //posso fare select 1 
-			String query ="select count(*) from inventory WHERE line = ? AND pod = ? AND bin = ?";
-			st1 = conn.prepareStatement(query);
-			st1.setString(1, pos.getLine());
-			st1.setString(2, pos.getPod()); 
-			st1.setString(3, pos.getBin());
-			rs1 = st1.executeQuery();
-			 
-			count = rs1.next() ? rs1.getInt(1) : 0;
-					
-	    }catch (Exception e){
-			e.printStackTrace();
-			return false; 
-	    } finally {
-		    DBConnection.closeConnection(conn);
-		}
-		return count>0;	
-	}
-	*/
+	 
 	public InventoryItem getInventoryItemByPosition(Position pos) { 
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;
@@ -187,7 +152,6 @@ public class InventoryDAO implements IInventoryDAO{
 		return rowsUpdated>0;	
 	}
 	
-	//controllo non si sia gia
 	public boolean deleteItem(String sku) {
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;
@@ -207,11 +171,11 @@ public class InventoryDAO implements IInventoryDAO{
 		return rowsUpdated>0;
 	}
 	
-	public Set<InventoryItem> viewItemsUnderStdLevel(){
-		Set<InventoryItem> result=new HashSet<InventoryItem>();
+	public List<InventoryItem> viewItemsUnderStdLevel(){
+		List<InventoryItem> result=new ArrayList<InventoryItem>();
 		conn=DBConnection.startConnection(conn,schema);
 		Statement st1;
-		ResultSet rs1;  //metterlo interface prima
+		ResultSet rs1; 
 		
 		try {
 			String query="select * from inventory where qty<stdLevel";

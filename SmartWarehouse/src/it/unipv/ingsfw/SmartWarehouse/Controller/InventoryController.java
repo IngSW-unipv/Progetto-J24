@@ -19,8 +19,6 @@ import it.unipv.ingsfw.SmartWarehouse.View.inventory.FirstDialog;
 import it.unipv.ingsfw.SmartWarehouse.View.inventory.InventoryView;
 import it.unipv.ingsfw.SmartWarehouse.View.inventory.SecondDialog;
 
-
-
 public class InventoryController {
 	private InventoryManager w;
 	private InventoryView iv;
@@ -30,11 +28,12 @@ public class InventoryController {
         this.iv = iv;
         updateInventory(w.getInventory()); // Aggiorna la tabella con gli articoli iniziali
         find();
+        findPosition();
+        underLevel();
         back();
         insert();
-        rowSelection();
         order();
-        findPosition();
+        rowSelection();
     }
 	
 	private void updateInventory(List<InventoryItem> items) {
@@ -83,6 +82,19 @@ public class InventoryController {
 		iv.getPosb().addActionListener(actionListener);
 	}
 	
+	private void underLevel() {
+		ActionListener underLevelListener=new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				manageAction(); 
+			}
+
+			private void manageAction() {
+				updateInventory(w.getInventoryItemsUnderStdLevel()); 
+			}
+		};
+		iv.getUnderLevel().addActionListener(underLevelListener);
+	}
+	
 	private void back() {
 		ActionListener backListener=new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -108,7 +120,7 @@ public class InventoryController {
 				if (input!=null) {
 					Item i=new Item((String)input[0], new ItemDetails((int)input[1], (int)input[2]));
 					try {
-						i.addToInventory(SingletonUser.getInstance().getOp(), (double)input[3], (int)input[4], new Position((String)input[5], (String)input[6], (String)input[7]));
+						i.addToInventory((double)input[3], (int)input[4], new Position((String)input[5], (String)input[6], (String)input[7]));
 						updateInventory(w.getInventory());
 					} catch(Exception e) {
 			            JOptionPane.showMessageDialog(iv, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
@@ -163,6 +175,20 @@ public class InventoryController {
 		rowOrderSelection();
 	}
 	
+	private void updateSupplier() {
+		String sku=iv.getFirstDialog().getSku();
+		try {
+			List<Object[]> suppliersInfo=w.findInventoryItem(sku).getSuppliersInfo();
+			 
+			iv.getFirstDialog().getTableModel().setRowCount(0);
+	        for (Object[] o : suppliersInfo) {
+	        	iv.getFirstDialog().addSupplierToTable(((Supplier)o[0]).getIDS(), ((Supplier)o[0]).getFullName(), ((Supplier)o[0]).getEmail(), ((Supplier)o[0]).getAddress(), (double)o[1], (int)o[2]);
+	        }
+		}catch(Exception e) {
+			JOptionPane.showMessageDialog(iv.getFirstDialog(), e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+		}
+    }
+	
 	private void plus() {
 		ActionListener plusListener=new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -209,7 +235,7 @@ public class InventoryController {
 				try {
 					int choice = JOptionPane.showConfirmDialog(iv.getFirstDialog(), "are you sure you want to delete this item?", "confirm delete", JOptionPane.YES_NO_OPTION);
 					if (choice==JOptionPane.YES_OPTION) {
-						w.findInventoryItem(iv.getFirstDialog().getSku()).delete(SingletonUser.getInstance().getOp());
+						w.findInventoryItem(iv.getFirstDialog().getSku()).delete();
 						updateInventory(w.getInventory()); 
 					}	
 				} catch(Exception e) {
@@ -219,20 +245,6 @@ public class InventoryController {
 		};
 		iv.getFirstDialog().getDelete().addActionListener(deleteListener);
 	}
-	
-	private void updateSupplier() {
-		String sku=iv.getFirstDialog().getSku();
-		try {
-			List<Object[]> suppliersInfo=w.findInventoryItem(sku).getSuppliersInfo();
-			 
-			iv.getFirstDialog().getTableModel().setRowCount(0);
-	        for (Object[] o : suppliersInfo) {
-	        	iv.getFirstDialog().addSupplierToTable(((Supplier)o[0]).getIDS(), ((Supplier)o[0]).getFullName(), ((Supplier)o[0]).getEmail(), ((Supplier)o[0]).getAddress(), (double)o[1], (int)o[2]);
-	        }
-		}catch(Exception e) {
-			JOptionPane.showMessageDialog(iv.getFirstDialog(), e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
-		}
-    }
 	
 	private void rowOrderSelection() {
 		ListSelectionListener listSelectionListener=new ListSelectionListener() {
@@ -246,7 +258,7 @@ public class InventoryController {
 							String ids= (String) iv.getFirstDialog().getTable().getValueAt(selectedRowIndex, 0);
 							iv.getFirstDialog().setSecondDialog(new SecondDialog(iv.getFirstDialog().getSku(),ids));
 							iv.getFirstDialog().getSecondDialog().setVisible(true);
-							ok_buy(); //qui???
+							ok_buy(); 
 						}			
 					}
 				}
@@ -272,13 +284,11 @@ public class InventoryController {
 
 				} catch(Exception e) {
 					JOptionPane.showMessageDialog(iv.getFirstDialog().getSecondDialog(), e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
-				}
-				
+				}			
 			}
 		};
 		iv.getFirstDialog().getSecondDialog().getOrder().addActionListener(buyListener);
 	}
-	
 } 
 
 

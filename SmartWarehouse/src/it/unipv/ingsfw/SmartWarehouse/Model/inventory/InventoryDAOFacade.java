@@ -46,7 +46,7 @@ public class InventoryDAOFacade {
 		return inventoryDAO.updateInventoryItemQty(sku, qty);
 	}
 	
-	public Set<InventoryItem> getInventoryItemsUnderStdLevel(){
+	public List<InventoryItem> getInventoryItemsUnderStdLevel(){
 		return inventoryDAO.viewItemsUnderStdLevel();
 	} 
 

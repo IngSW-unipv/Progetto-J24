@@ -5,34 +5,33 @@ import java.util.List;
 import java.util.Set;
 
 public class InventoryManager {  
-	private InventoryDAOFacade inventoryDAOFacade;
+	private InventoryDAOFacade invFacade;
 	
 	public InventoryManager() {
-		this.inventoryDAOFacade = InventoryDAOFacade.getInstance();
+		this.invFacade = InventoryDAOFacade.getInstance();
 	}
 	
 	public List<InventoryItem> getInventory() {
-		return inventoryDAOFacade.viewInventory();
+		return invFacade.viewInventory();
 	}  
 	
 	public InventoryItem findInventoryItem(String sku) {
-		return inventoryDAOFacade.findInventoryItemBySku(sku);
+		return invFacade.findInventoryItemBySku(sku);
 	}  
 	
 	public InventoryItem findInventoryItemByPosition(Position pos) throws IllegalArgumentException {
 		if(pos==null || pos.getLine().isEmpty() || pos.getPod().isEmpty() || pos.getBin().isEmpty()) {
 			throw new IllegalArgumentException("Insert a position valid, without empty fields");
 		}
-		return inventoryDAOFacade.checkIfPositionAlreadyUsed(pos);
+		return invFacade.checkIfPositionAlreadyUsed(pos);
 	}
-	
-	//useful?
+
 	public void orderInventoryItems(List<InventoryItem> items){
 		Collections.sort(items);
 	}
-	//???
-	public Set<InventoryItem> getInventoryItemsUnderStdLevel(){
-		return inventoryDAOFacade.getInventoryItemsUnderStdLevel();
+	//???non ancora messo nella view
+	public List<InventoryItem> getInventoryItemsUnderStdLevel(){
+		return invFacade.getInventoryItemsUnderStdLevel();
 	}
 
 } 

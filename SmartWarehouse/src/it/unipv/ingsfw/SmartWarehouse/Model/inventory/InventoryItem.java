@@ -4,19 +4,17 @@ import java.util.List;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.AuthorizationDeniedException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
 import it.unipv.ingsfw.SmartWarehouse.Model.operator.InventoryOperator;
 import it.unipv.ingsfw.SmartWarehouse.Model.operator.WarehouseOperator;
 
-
-//useful to InventoryDAO, POJO
-public class InventoryItem implements Comparable<InventoryItem>{
+public class InventoryItem implements Comparable<InventoryItem> {
 	private Item item;
 	private String sku;
 	private double price;
 	private int qty; 
 	private int stdLevel; 
 	private Position pos; 
-	private InventoryDAOFacade inventoryDAOFacade;
 	
 	public InventoryItem(Item item, String sku, double price, int qty, int stdLevel, Position pos) {
 		this.item=item;
@@ -25,7 +23,6 @@ public class InventoryItem implements Comparable<InventoryItem>{
 		this.qty = qty;
 		this.stdLevel = stdLevel; 
 		this.pos = pos;
-		inventoryDAOFacade=InventoryDAOFacade.getInstance();
 	}
 
 	public Item getItem() {
@@ -82,11 +79,13 @@ public class InventoryItem implements Comparable<InventoryItem>{
 	}
 	 
 	//check that the operator is an InventoryOperator
-	public void delete(WarehouseOperator op) throws ItemNotFoundException, AuthorizationDeniedException {
+	public void delete() throws ItemNotFoundException, AuthorizationDeniedException {
 		try {
+			WarehouseOperator op = SingletonUser.getInstance().getOp(); 
 			InventoryOperator InventoryOperator = (InventoryOperator) op; 
-			if(inventoryDAOFacade.findInventoryItemBySku(sku)!=null) { 
-				inventoryDAOFacade.deleteItem(sku);
+			InventoryManager im=new InventoryManager();
+			if(im.findInventoryItem(sku)!=null) { 
+				InventoryDAOFacade.getInstance().deleteItem(sku);
 			} else {
 				 throw new ItemNotFoundException(); 
 			}	
@@ -97,11 +96,12 @@ public class InventoryItem implements Comparable<InventoryItem>{
 	
 	public boolean updateQty(int qty) throws ItemNotFoundException, IllegalArgumentException {
 		if (qty<0) {
-			throw new IllegalArgumentException("quantity can't be negative");
+			throw new IllegalArgumentException("Quantity can't be negative");
 		}
 		this.setQty(qty);
-		if(inventoryDAOFacade.findInventoryItemBySku(sku)!=null) { 
-			return inventoryDAOFacade.updateInventoryItemQty(sku, qty);
+		InventoryManager im=new InventoryManager();
+		if(im.findInventoryItem(sku)!=null) { 
+			return InventoryDAOFacade.getInstance().updateInventoryItemQty(sku, qty);
 		} else { 
 	        throw new ItemNotFoundException(); 
 		}	  
@@ -118,16 +118,16 @@ public class InventoryItem implements Comparable<InventoryItem>{
 		return this.updateQty(newQty);
 	}
 	 
-	//returns the suppliers of the intentoryItem order by price
-	//ItemNotFoundException is useful?
+	//returns the suppliers with prices and maxQty order by price
 	public List<Object[]> getSuppliersInfo() throws ItemNotFoundException {
-		if(inventoryDAOFacade.findInventoryItemBySku(sku)!=null) {
+		InventoryManager im=new InventoryManager();
+		if(im.findInventoryItem(sku)!=null) {
 			return InventoryDAOFacade.getInstance().getSuppliersInfo(this);
 		} else {
 			throw new ItemNotFoundException();
 		} 
 	}
-	 
+	  
 	@Override
 	public int compareTo(InventoryItem o) {
 		int diffThis = this.stdLevel-this.qty;
@@ -135,8 +135,6 @@ public class InventoryItem implements Comparable<InventoryItem>{
 
         //descending sort with the difference between stdLevel and quantity
         return Integer.compare(diffOther, diffThis);
-	}
-	
-	
+	}	
 
 }
