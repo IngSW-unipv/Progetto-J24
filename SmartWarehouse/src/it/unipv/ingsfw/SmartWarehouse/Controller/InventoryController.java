@@ -7,7 +7,6 @@ import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Item;
@@ -279,7 +278,7 @@ public class InventoryController {
 				try {
 					int qty=Integer.parseInt(iv.getFirstDialog().getSecondDialog().getQty().getText());
 					SupplyManager s=new SupplyManager();
-					s.findSupplyByItemAndSupplier(iv.getFirstDialog().getSku(), iv.getFirstDialog().getSecondDialog().getIds()).buy(SingletonUser.getInstance().getOp(), qty);
+					s.findSupplyByItemAndSupplier(iv.getFirstDialog().getSku(), iv.getFirstDialog().getSecondDialog().getIds()).buy(qty);
 					JOptionPane.showMessageDialog(iv.getFirstDialog().getSecondDialog(), "successfull order", "Order", JOptionPane.INFORMATION_MESSAGE);
 
 				} catch(Exception e) {

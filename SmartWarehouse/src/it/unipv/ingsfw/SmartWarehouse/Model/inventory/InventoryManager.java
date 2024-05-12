@@ -29,7 +29,7 @@ public class InventoryManager {
 	public void orderInventoryItems(List<InventoryItem> items){
 		Collections.sort(items);
 	}
-	//???non ancora messo nella view
+	
 	public List<InventoryItem> getInventoryItemsUnderStdLevel(){
 		return invFacade.getInventoryItemsUnderStdLevel();
 	}

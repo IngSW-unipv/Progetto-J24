@@ -29,16 +29,16 @@ public class SupplyPanel extends JPanel{
 		 
 		 JPanel lowerPanel=new JPanel();
 		 newSupplier=new JButton("new Supplier");
-		 lowerPanel.add(newSupplier);
 		 newSupply=new JButton("new Supply");
+		 lowerPanel.add(newSupplier);
 		 lowerPanel.add(newSupply);
 		 
 		 JPanel upperPanel=new JPanel();
 		 allSuppliers=new JButton("all Suppliers");
+		 allSupplies=new JButton("all Supplies");
+		 allSupplyOrders=new JButton("all Supply Orders");
 		 upperPanel.add(allSuppliers);
-		 allSupplies=new JButton("all Supplies"); 
-		 upperPanel.add(allSupplies); 
-		 allSupplyOrders=new JButton("all Supply Orders"); 
+		 upperPanel.add(allSupplies);  
 		 upperPanel.add(allSupplyOrders);  
 		 
 		 this.setLayout(new BorderLayout());
@@ -52,7 +52,7 @@ public class SupplyPanel extends JPanel{
 	     JTextField emailField = new JTextField(30);
 	     JTextField addressField = new JTextField(30);
 
-	     JPanel panel = new JPanel(new GridLayout(0, 2)); //n°righe qualsiasi
+	     JPanel panel = new JPanel(new GridLayout(0, 2)); 
 	     panel.setPreferredSize(new Dimension(300, 400));
 	     panel.add(new JLabel("Id:"));
 	     panel.add(idsField);
@@ -64,7 +64,12 @@ public class SupplyPanel extends JPanel{
 	     panel.add(addressField);
 	        
 	     int result = JOptionPane.showConfirmDialog(this, panel, "Insert new Supplier", JOptionPane.OK_CANCEL_OPTION);
-	     if (result == JOptionPane.OK_OPTION) {   //gestire anche quando schiacci cancel
+	     if (result == JOptionPane.OK_OPTION) {
+	    	 if(idsField.getText().isEmpty() || fullnameField.getText().isEmpty() || emailField.getText().isEmpty() || addressField.getText().isEmpty()) {
+	    		 JOptionPane.showMessageDialog(this, "empty fields" , "Error", JOptionPane.WARNING_MESSAGE);
+	    		 return null;
+	    	 }
+	    	 
 	    	 String ids = idsField.getText();
 	    	 String fullname = fullnameField.getText();
 	    	 String email = emailField.getText();
@@ -93,7 +98,12 @@ public class SupplyPanel extends JPanel{
 	    panel.add(maxqtyField);
 	        
 	    int result = JOptionPane.showConfirmDialog(this, panel, "Insert new Supply", JOptionPane.OK_CANCEL_OPTION);
-	    if (result == JOptionPane.OK_OPTION) {   //gestire anche quando schiacci cancel
+	    if (result == JOptionPane.OK_OPTION) {   
+	    	if(skuField.getText().isEmpty() || idsField.getText().isEmpty() || priceField.getText().isEmpty() || maxqtyField.getText().isEmpty()) {
+	    		JOptionPane.showMessageDialog(this, "empty fields" , "Error", JOptionPane.WARNING_MESSAGE);
+	    		return null;
+	    	} 
+	    		
 	    	 String sku = skuField.getText();
 	    	 String ids = idsField.getText();
 	    	 double price;
@@ -102,8 +112,7 @@ public class SupplyPanel extends JPanel{
 	 	        price = Double.parseDouble(priceField.getText());
 	 	        maxqty = Integer.parseInt(maxqtyField.getText());
 	 	    } catch (NumberFormatException ex) {
-	 	        // Gestisci il caso in cui il valore inserito non sia un numero valido
-	 	        JOptionPane.showMessageDialog(this, "Inserire valori numerici validi per prezzo e quantità massima.", "Errore", JOptionPane.ERROR_MESSAGE);
+	 	        JOptionPane.showMessageDialog(this, "Insert values valid for price and maximum quantity", "Errore", JOptionPane.ERROR_MESSAGE);
 	 	        return null;
 	 	    }
 	        return new Object[] { sku, ids, price, maxqty }; 

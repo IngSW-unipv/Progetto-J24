@@ -66,6 +66,9 @@ public class SupplyDAOFacade {
 		return supplyDAO.deleteSupply(s); 
 	} 
 
+	public boolean deleteSupplyOfSupplier(Supplier s) {
+		return supplyDAO.deleteSupplyOfSupplier(s);
+	}
 //----------------------------------------------------------
 	
 	public boolean insertSupplyOrder(SupplyOrder o) {

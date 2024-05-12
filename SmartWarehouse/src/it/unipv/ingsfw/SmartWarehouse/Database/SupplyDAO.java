@@ -3,11 +3,11 @@ package it.unipv.ingsfw.SmartWarehouse.Database;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supplier;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supply;
 
 public class SupplyDAO implements ISupplyDAO {
@@ -21,7 +21,7 @@ public class SupplyDAO implements ISupplyDAO {
 	
 	public List<Supply> selectAllSupplies() {
 		conn=DBConnection.startConnection(conn,schema);
-		java.sql.Statement st1;
+		Statement st1;
 		ResultSet rs1;
 		List<Supply> supplies=new ArrayList<>();
 		
@@ -89,7 +89,6 @@ public class SupplyDAO implements ISupplyDAO {
 		return result;
 	}
 	
-	//tutti gli attributi di supply non devono essere null
 	public boolean insertSupply(Supply s) {
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;
@@ -122,6 +121,26 @@ public class SupplyDAO implements ISupplyDAO {
 			st1 = conn.prepareStatement(query);
 			st1.setString(1, s.getID_Supply());
 			st1.executeUpdate(); //non mettere query tra parentesi
+			
+		} catch  (Exception e) {
+			e.printStackTrace();
+			result=false;
+		} finally {
+	        DBConnection.closeConnection(conn);
+	    }
+		return result;
+	}
+	
+	public boolean deleteSupplyOfSupplier(Supplier s) {
+		conn=DBConnection.startConnection(conn,schema);
+		PreparedStatement st1;
+		boolean result=true;
+		
+		try {
+			String query="delete from supply where ids=?";
+			st1 = conn.prepareStatement(query);
+			st1.setString(1, s.getIDS());
+			st1.executeUpdate();
 			
 		} catch  (Exception e) {
 			e.printStackTrace();

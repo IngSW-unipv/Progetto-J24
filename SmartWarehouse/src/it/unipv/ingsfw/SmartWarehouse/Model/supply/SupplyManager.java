@@ -1,6 +1,9 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.supply;
 
+import java.util.Collections;
 import java.util.List;
+
+import com.mysql.cj.x.protobuf.MysqlxCrud.Collection;
 
 
 public class SupplyManager {
@@ -37,5 +40,9 @@ public class SupplyManager {
 	public List<SupplyOrder> getSupplyOrders(){
 		 return supplyDAOFacade.viewSupplyOrders();
 	}  
+	
+	public void getOrderedSupplyOrders(List<SupplyOrder> orders){
+		 Collections.sort(orders);
+	} 
 }
  

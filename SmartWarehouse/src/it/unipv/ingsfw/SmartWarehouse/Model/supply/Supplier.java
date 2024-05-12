@@ -5,6 +5,7 @@ import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyFieldException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.supplier.InvalidSupplierException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.supplier.SupplierAlreadyExistsException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.supplier.SupplierDoesNotExistException;
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
 import it.unipv.ingsfw.SmartWarehouse.Model.operator.SupplyOperator;
 import it.unipv.ingsfw.SmartWarehouse.Model.operator.WarehouseOperator;
 
@@ -51,19 +52,10 @@ public class Supplier {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	@Override
-	public String toString() {
-		// qui ci sarà n super.toString magari dato che implementa utente
-		return "IDS: "+IDS +", fullname: "+ fullname + ", address: "+address+ ", email: "+email;
-	}
 	 
 	//check valid fields
-	public void add(WarehouseOperator op) throws InvalidSupplierException, AuthorizationDeniedException, EmptyFieldException {
-		this.checkSupplierAuthorization(op); 
-		if(IDS.isEmpty() || fullname.isEmpty() || address.isEmpty() || email.isEmpty()) {
-			throw new EmptyFieldException();
-		}
+	public void add() throws InvalidSupplierException, AuthorizationDeniedException {
+		this.checkSupplierAuthorization(); 
 		if(supplyDAOFacade.findSupplier(IDS)==null) {
 			supplyDAOFacade.insertNewSupplier(this);
 		} else {
@@ -71,17 +63,20 @@ public class Supplier {
 		}	 
 	}
 	
-	public boolean delete(WarehouseOperator op) throws InvalidSupplierException, AuthorizationDeniedException { 
-		this.checkSupplierAuthorization(op); 
-		if(supplyDAOFacade.findSupplier(IDS)!=null) { 
+	public boolean delete() throws InvalidSupplierException, AuthorizationDeniedException { 
+		this.checkSupplierAuthorization(); 
+		if(supplyDAOFacade.findSupplier(IDS)!=null) {
+			//delete also the supplies associated with this supplier
+			supplyDAOFacade.deleteSupplyOfSupplier(this);
 			return supplyDAOFacade.deleteSupplier(this);
 		} else {
 			throw new SupplierDoesNotExistException();
 		} 
 	} 
 	
-	private boolean checkSupplierAuthorization(WarehouseOperator op) throws AuthorizationDeniedException {
+	private boolean checkSupplierAuthorization() throws AuthorizationDeniedException {
 		try {
+			WarehouseOperator op=SingletonUser.getInstance().getOp();
 			SupplyOperator su = (SupplyOperator) op;
 			return true;
 		} catch(ClassCastException e) {

@@ -1,15 +1,13 @@
 package it.unipv.ingsfw.SmartWarehouse.Database;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supplier;
-
-
 
 public class SupplierDAO implements ISupplierDAO{ 
 	private String schema;
@@ -19,12 +17,11 @@ public class SupplierDAO implements ISupplierDAO{
 	public SupplierDAO() {
 		super();
 		this.schema = "warehouse2";
-//		conn=DBConnection.startConnection(conn,schema);
 	}
 	
 	public List<Supplier> selectAllSupplier(){
 		conn=DBConnection.startConnection(conn,schema);
-		java.sql.Statement st1; 
+		Statement st1;  
 		ResultSet rs1;
 		List<Supplier> suppliers=new ArrayList<>();
 		
@@ -68,7 +65,6 @@ public class SupplierDAO implements ISupplierDAO{
 		return result;
 	}
 	
-	//NON QUI quando inserisco un fornitore devo anche indicare l'item che intende fornire (deve essere tra quelli gia presenti nell'inventario)
 	public boolean insertSupplier(Supplier f) {
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;
@@ -81,24 +77,17 @@ public class SupplierDAO implements ISupplierDAO{
 			st1.setString(2, f.getFullName());
 			st1.setString(3, f.getAddress());
 			st1.setString(4, f.getEmail());
-			st1.executeUpdate(); //non mettere query tra parentesi
+			st1.executeUpdate(); 
 			
-		} catch (java.sql.SQLIntegrityConstraintViolationException e) {
-	        System.out.println("Violazione del vincolo di integrità: " + e.getMessage());
-	        result=false;
-		} catch (java.sql.SQLException e) {
-	        System.out.println("Errore SQL: " + e.getMessage());
-	        result=false;
 		} catch  (Exception e) {
 			e.printStackTrace();
 			result=false;
 		} finally {
-	        DBConnection.closeConnection(conn); // Chiudi la connessione nel blocco finally
+	        DBConnection.closeConnection(conn); 
 	    }
 		return result;
 	}
 	
-	//delete also the supplies associated
 	public boolean deleteSupplier(Supplier s) {
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;

@@ -18,7 +18,6 @@ public class SupplyOrderDAO implements ISupplyOrderDAO {
 	public SupplyOrderDAO() {
 		super();
 		this.schema="warehouse2"; 
-		//conn=DBConnection.startConnection(conn,schema);  
 	} 
 	
 	public List<SupplyOrder> selectAllSupplyOrders(){
@@ -72,7 +71,7 @@ public class SupplyOrderDAO implements ISupplyOrderDAO {
 		return b; 
 	}
 	
-	//metodo che restituisce il numero d'ordine dell'ultimo ordine
+	//returns NOrder of the next supply order
 	public int nextNOrder() {
 		conn=DBConnection.startConnection(conn, schema);
 		Statement st1;

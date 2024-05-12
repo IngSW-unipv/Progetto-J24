@@ -3,7 +3,8 @@ package it.unipv.ingsfw.SmartWarehouse.Model.supply;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class SupplyOrder {   //ipotesi: una fornitura per ordine
+//only one type of supply for the order
+public class SupplyOrder implements Comparable<SupplyOrder> {   
 	private int n_order;
 	private Supply supply;
 	private int qty;
@@ -62,6 +63,12 @@ public class SupplyOrder {   //ipotesi: una fornitura per ordine
 	public String toString() {
 		DateTimeFormatter formatter=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		return n_order+ " "+ supply.getID_Supply()+" "+qty+" "+totPrice+" "+date.format(formatter);
+	}
+
+	//most recent date first
+	@Override
+	public int compareTo(SupplyOrder o) {
+		return o.getDate().compareTo(date);
 	} 
 
 }

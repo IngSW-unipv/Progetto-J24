@@ -10,6 +10,7 @@ import it.unipv.ingsfw.SmartWarehouse.Exception.supply.InvalidPriceException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.supply.InvalidSupplyException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.supply.SupplyAlreadyExistsException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.supply.SupplyDoesNotExistException;
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.operator.SupplyOperator;
@@ -23,7 +24,6 @@ public class Supply {
 	private double price;
 	private int maxqty; 
 	
-	//serve?
 	public Supply(String ID_Supply, Supplier supplier, InventoryItem inventoryItem, double price, int maxqty) {
 		this.ID_Supply = ID_Supply;
 		this.supplier = supplier;
@@ -31,6 +31,7 @@ public class Supply {
 		this.price = price; 
 		this.maxqty = maxqty;
 	} 
+	
 	//useful to dao
 	public Supply(String ID_Supply, String sku, String ids, double price, int maxqty) {
 		this.ID_Supply = ID_Supply;
@@ -39,7 +40,7 @@ public class Supply {
 		this.price = price; 
 		this.maxqty = maxqty;
 	} 
-	//useful to view
+
 	public Supply(String sku, String ids, double price, int maxqty) {
 		this.ID_Supply=this.generateUnivoqueID_Supply();
 		this.supplier = SupplyDAOFacade.getInstance().findSupplier(ids);
@@ -93,9 +94,9 @@ public class Supply {
 		return ID_Supply+" "+ supplier.getIDS()+" "+inventoryItem.getSku()+" "+price+" "+maxqty;
 	}
 	
-	//metodo chiamato su una supply costruita con il terzo costruttore
-	public void add(WarehouseOperator op) throws InvalidSupplyException, AuthorizationDeniedException, ItemNotFoundException, SupplierDoesNotExistException {
-		this.checkSupplierAuthorization(op);
+	//method called on a supply built whit the third constructor
+	public void add() throws InvalidSupplyException, AuthorizationDeniedException, ItemNotFoundException, SupplierDoesNotExistException {
+		this.checkSupplierAuthorization();
 		if(price<=0) {
 			throw new InvalidPriceException();
 		} 
@@ -118,8 +119,8 @@ public class Supply {
 		}			 
 	} 
 	
-	public void delete(WarehouseOperator op) throws InvalidSupplyException, AuthorizationDeniedException {
-		this.checkSupplierAuthorization(op);
+	public void delete() throws InvalidSupplyException, AuthorizationDeniedException {
+		this.checkSupplierAuthorization();
 		//check the presence of the supply
 		if(SupplyDAOFacade.getInstance().findSupply(ID_Supply)!=null) {
 			SupplyDAOFacade.getInstance().deleteSupply(this);
@@ -128,10 +129,9 @@ public class Supply {
 		}
 	}
 
-	//controllare non superi il massimo ordinabile maxqty
-	//controllo che la supply sia effettivamente presente 
-	public SupplyOrder buy(WarehouseOperator op, int qty) throws AuthorizationDeniedException, SupplyDoesNotExistException, IllegalArgumentException {
-		this.checkSupplierAuthorization(op);
+	//check that qty is less than maxQty
+	public SupplyOrder buy(int qty) throws AuthorizationDeniedException, SupplyDoesNotExistException, IllegalArgumentException {
+		this.checkSupplierAuthorization();
 		//check the presence of the supply
 		if(SupplyDAOFacade.getInstance().findSupply(ID_Supply)==null) {
 			throw new SupplyDoesNotExistException();
@@ -145,10 +145,11 @@ public class Supply {
 		SupplyOrder o=new SupplyOrder(SupplyDAOFacade.getInstance().nextNOrder(), ID_Supply, qty, price*qty, LocalDateTime.now());
 		SupplyDAOFacade.getInstance().insertSupplyOrder(o);
 		return o;
-	}
-	 
-	private void checkSupplierAuthorization(WarehouseOperator op) throws AuthorizationDeniedException {
+	} 
+	  
+	private void checkSupplierAuthorization() throws AuthorizationDeniedException {
 		try {
+			WarehouseOperator op=SingletonUser.getInstance().getOp();
 			SupplyOperator su = (SupplyOperator) op;
 		} catch(ClassCastException e) {
 			throw new AuthorizationDeniedException();

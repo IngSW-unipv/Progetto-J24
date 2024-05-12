@@ -8,7 +8,6 @@ import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supplier;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supply;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyManager;
@@ -17,8 +16,6 @@ import it.unipv.ingsfw.SmartWarehouse.View.inventory.SuppliersDialog;
 import it.unipv.ingsfw.SmartWarehouse.View.inventory.SuppliesDialog;
 import it.unipv.ingsfw.SmartWarehouse.View.inventory.SupplyOrderDialog;
 import it.unipv.ingsfw.SmartWarehouse.View.inventory.SupplyPanel;
-
-
 
 public class SupplyController {
 	private SupplyPanel supplyPanel;
@@ -42,17 +39,16 @@ public class SupplyController {
 				manageAction();	
 			}
 			
-			private void manageAction() {
-				
-					Object[] input= supplyPanel.showSupplierInsert();
-					if(input!=null) {
-						try {
-							Supplier s=new Supplier((String)input[0], (String)input[1], (String)input[2], (String)input[3]);
-							s.add(SingletonUser.getInstance().getOp());
-						} catch(Exception e) {
-							JOptionPane.showMessageDialog(supplyPanel, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-						}	
-					}
+			private void manageAction() {			
+				Object[] input= supplyPanel.showSupplierInsert();
+				if(input!=null) {
+					try {
+						Supplier s=new Supplier((String)input[0], (String)input[1], (String)input[2], (String)input[3]);
+						s.add();
+					} catch(Exception e) {
+						JOptionPane.showMessageDialog(supplyPanel, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					}	
+				}
 			}
 		}; 
 		supplyPanel.getNewSupplier().addActionListener(newSupplierListener);
@@ -71,8 +67,7 @@ public class SupplyController {
 				if(input!=null) {
 					try { 
 						Supply s=new Supply((String)input[0], (String)input[1], (Double)input[2], (Integer)input[3]);
-						s.add(SingletonUser.getInstance().getOp());
-						
+						s.add();						
 					} catch(Exception e) {
 						JOptionPane.showMessageDialog(supplyPanel, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					}	
@@ -119,7 +114,7 @@ public class SupplyController {
 								ids+" remove option", JOptionPane.YES_NO_OPTION);
 						if(choice==JOptionPane.YES_OPTION) {
 							try {
-								supplyManager.findSupplier(ids).delete(SingletonUser.getInstance().getOp());
+								supplyManager.findSupplier(ids).delete();
 								updateSuppliers();
 							} catch(Exception ex) {
 								JOptionPane.showMessageDialog(supplyPanel.getSuppliersDialog(), ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -169,7 +164,7 @@ public class SupplyController {
 								idSupply+" remove option", JOptionPane.YES_NO_OPTION);
 						if(choice==JOptionPane.YES_OPTION) {
 							try {
-								supplyManager.findSupply(idSupply).delete(SingletonUser.getInstance().getOp());
+								supplyManager.findSupply(idSupply).delete();
 								updateSupplies();
 							} catch(Exception ex) {
 								JOptionPane.showMessageDialog(supplyPanel.getSuppliesDialog(), ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -180,6 +175,43 @@ public class SupplyController {
 			}
 		}; 
 		supplyPanel.getSuppliesDialog().getTable().getSelectionModel().addListSelectionListener(listSelectionListener);
+    }
+    
+    public void allOrders() {
+    	ActionListener orderListener=new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				manageAction();		
+			}
+			
+			private void manageAction() {
+				if(supplyPanel.getSupplyOrderDialog()==null || !supplyPanel.getSupplyOrderDialog().isVisible()) {
+					supplyPanel.setSupplyOrderDialog(new SupplyOrderDialog());
+					supplyPanel.getSupplyOrderDialog().setVisible(true);
+					updateSupplyOrders(supplyManager.getSupplyOrders());
+					orderTheOrders();
+				}
+			}
+		};
+		supplyPanel.getAllSupplyOrders().addActionListener(orderListener);
+    }
+	
+    public void orderTheOrders() {
+    		ActionListener orderTheOrdersListener=new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				manageAction();		
+			}
+			
+			private void manageAction() {
+				List<SupplyOrder> orders=supplyManager.getSupplyOrders();
+				supplyManager.getOrderedSupplyOrders(orders);
+				updateSupplyOrders(orders);
+			}
+		};
+		supplyPanel.getSupplyOrderDialog().getOrder().addActionListener(orderTheOrdersListener);
     }
     
     private void updateSuppliers() {
@@ -198,61 +230,11 @@ public class SupplyController {
         }	
     }
     
-    private void updateSupplyOrders() {
-    	List<SupplyOrder> orders=supplyManager.getSupplyOrders();
+    private void updateSupplyOrders(List<SupplyOrder> orders) {
     	supplyPanel.getSupplyOrderDialog().getTableModel().setRowCount(0);
         for (SupplyOrder s : orders) {
         	supplyPanel.getSupplyOrderDialog().addSupplyOrderToTable(s.getN_order(), s.getSupply().getID_Supply(), s.getQty(), s.getPrice(), s.getDate());
         }	
     }
     
-    public void allOrders() {
-    	ActionListener orderListener=new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				manageAction();		
-			}
-			
-			private void manageAction() {
-				if(supplyPanel.getSupplyOrderDialog()==null || !supplyPanel.getSupplyOrderDialog().isVisible()) {
-					supplyPanel.setSupplyOrderDialog(new SupplyOrderDialog());
-					supplyPanel.getSupplyOrderDialog().setVisible(true);
-					updateSupplyOrders();
-				}
-			}
-		};
-		supplyPanel.getAllSupplyOrders().addActionListener(orderListener);
-    }
-    
-    /*
-	if (supplyPanel.getSuppliersDialog().getDeleteSupplierDialog() == null || !supplyPanel.getSuppliersDialog().getDeleteSupplierDialog().isVisible()) {
-		String ids= (String) supplyPanel.getSuppliersDialog().getTable().getValueAt(selectedRowIndex, 0);
-		supplyPanel.getSuppliersDialog().setDeleteSupplierDialog(ids);
-		supplyPanel.getSuppliersDialog().getDeleteSupplierDialog().setVisible(true);
-		deleteSupplier();
-	}
-	*/
-    /*
-    public void deleteSupplier() {
-    	ActionListener deleteSupplierListener=new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				manageAction();	
-			}
-			
-			private void manageAction() {
-				String ids=supplyPanel.getSuppliersDialog().getIds();
-				try{
-					supplyManager.findSupplier(ids).delete(SingletonUser.getInstance().getOp());
-					updateSuppliers();
-				} catch(Exception e) {
-					JOptionPane.showMessageDialog(supplyPanel.getSuppliersDialog().getDeleteSupplierDialog(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-				}
-			}
-		}; 
-		supplyPanel.getSuppliersDialog().getDelete().addActionListener(deleteSupplierListener);
-    }
-    */
 }
