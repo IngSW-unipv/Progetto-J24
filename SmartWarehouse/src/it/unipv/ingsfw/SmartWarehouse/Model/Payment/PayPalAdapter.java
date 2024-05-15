@@ -8,9 +8,9 @@ public class PayPalAdapter implements IPayment {
     }
 
 	@Override
-	public void makePayment(double importo) {
+	public void makePayment(double importo,String senderEmail, String receiverEmail) {
 		// TODO Auto-generated method stub
-		payPal.makePayPalPayment(importo);
+		payPal.makePayPalPayment(importo,senderEmail,receiverEmail);
 		
 	}
 

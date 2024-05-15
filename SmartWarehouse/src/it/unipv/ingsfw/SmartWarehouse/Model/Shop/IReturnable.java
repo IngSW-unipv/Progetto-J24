@@ -6,4 +6,5 @@ public interface IReturnable {
 	public InventoryItem getItemBySku(String sku);
 	public int getQtyBySku(String sku);
 	public String getDescBySku(String sku);
+	public int getId();
 }

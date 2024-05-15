@@ -15,7 +15,9 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Refund.BankTransfer.BankTransfer;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.Voucher.*;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 import it.unipv.ingsfw.SmartWarehouse.View.ReturnView;
-
+// 0) // mettere a posto interfaccia item, e le chiamate al database in returnView ( chiedere di aggiungere un selectAllFromOrder(cliente?) 
+      // + aggiungere al toString di order l'id dell'ordine.)
+// e in ReturnItemsAndReasonsView (chiedere di aggiungere un toString ad OrderLine dove però sarebbe meglio avere la descrizione in questo to string)
 // 1) // Gestire passaggio sku additemtobereturned(passagli item). 
 // 2)!!Gestire bene nel controllore la creazione di voucher e bonifico. considerare coordinate come parametri del metodo setRufundMode
      //Una coordinata può essere returnableOrder.getEmail, l'altra getWarehouseIban() che legge da file ad esempio.

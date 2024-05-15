@@ -88,9 +88,13 @@ public class ReturnItemsAndReasonsView extends JFrame{
         orderDetailsPanel.add(selectedOrderLabel);
 
         orderDetailsPanel.add(ItemAndReasonsLabel);
-   
-        
-        //ArrayList<String> items = SelectItemsWhereOrder(order); //vorrei avere un arrayList di sku.
+        /*
+         *  ArrayList<OrderLine> allItems = SelectOrder(order); //vorrei avere un arrayList di sku.
+         *  ArrayList<String> items= new ArrayList();
+         *  for(OrderLine ol:allItems){
+         *       items.add(ol.toString());
+         *   }
+         */
         ArrayList<String> items= new ArrayList();
         items.add("p1");
         items.add("p1");

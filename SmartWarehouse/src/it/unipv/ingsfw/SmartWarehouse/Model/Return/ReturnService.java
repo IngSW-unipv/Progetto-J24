@@ -1,7 +1,6 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.Return;
 import java.util.HashMap;
 import java.util.Map;
-
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 
@@ -24,16 +23,16 @@ public class ReturnService {
     public void addItemToReturn(String sku,String reason) { //throws ImpossibileToReturnException
     	if(!checkReturnability(sku))
     	{
-    		System.err.println("Quantità massima restituibile raggiunta per l'articolo "+returnableOrder.findNomeBySku(sku)); //gestire eccezione.
+    		System.err.println("Quantità massima restituibile raggiunta per l'articolo "+returnableOrder.getDescBySku(sku)); //gestire eccezione.
     		//System.exit(-1);
     		return;
     	}
-    	ItemToBeReturned itbr=new ItemToBeReturned(returnableOrder.getItem(sku)); //chiedi se è meglio passargli solo this e poi in ItemToBeReturned usare i metodi di this per ricavarsi l'item
+    	ItemToBeReturned itbr=new ItemToBeReturned(returnableOrder.getItemBySku(sku)); //chiedi se è meglio passargli solo this e poi in ItemToBeReturned usare i metodi di this per ricavarsi l'item
     	returnedItems.put(itbr,setReason(reason));
-    	System.out.println(returnableOrder.findNomeBySku(sku)+" è stato aggiunto al reso");
+    	System.out.println(returnableOrder.getDescBySku(sku)+" è stato aggiunto al reso");
     	}
     public boolean checkReturnability(String sku){
-    	if(returnableOrder.getQta(sku)<getQtaReturned(sku)+1) {
+    	if(returnableOrder.getQtyBySku(sku)<getQtaReturned(sku)+1) {
     		return false;
     	}
     	return true;

@@ -56,11 +56,11 @@ public class ReturnView extends JFrame{
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int screenWidth = (int) screenSize.getWidth();
         int screenHeight = (int) screenSize.getHeight();
-        // Imposta le dimensioni della finestra in base alle dimensioni dello schermo
+        // Imposto le dimensioni della finestra in base alle dimensioni dello schermo
         int windowWidth = (int) (screenWidth*0.9); 
         int windowHeight = (int) (screenHeight*0.9); 
         setSize(windowWidth, windowHeight);
-        setLocationRelativeTo(null); // Centra la finestra
+        setLocationRelativeTo(null); // Centro la finestra
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(true);
 
@@ -73,8 +73,16 @@ public class ReturnView extends JFrame{
         JLabel selectOrderLabel = new JLabel("Seleziona un ordine:");
         selectOrderPanel.add(selectOrderLabel);
   
-        //Popola la ComboBox con gli ID degli ordini dal database
-        //ArrayList<int> orders = SelectAllFromOrder //vorrei avere un arrayList di ordini o un arrayList di ID
+        /*
+         * Popola la ComboBox con gli ID degli ordini dal database
+         * ArrayList<Order> allOrders = SelectAllFromOrder(cliente) //vorrei avere un arrayList di ordini + valuta di usare un interfaccia per l'ordine come per item 
+         * 
+         *  ArrayList<String> orders = new ArrayList<>();
+         *  for(Order or: allOrders){
+         *  orders.add(or.toString());
+         *  }
+         */
+         
         ArrayList<String> orders = new ArrayList<>();
         orders.add("Ordine 1");
         orders.add("Ordine 2");

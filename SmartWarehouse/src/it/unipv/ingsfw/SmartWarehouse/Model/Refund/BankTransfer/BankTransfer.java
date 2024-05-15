@@ -3,11 +3,15 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Payment.*;
 
 public class BankTransfer {
 	private double value;
-	public BankTransfer(double value) {
+	private String senderEmail;
+	private String receiverEmail;
+	public BankTransfer(double value,String senderEmail,String receiverEmail) {
 		this.value=value;
+		this.senderEmail=senderEmail;
+		this.receiverEmail=receiverEmail;
 	}
 	public void makeBankTransfer() {
-		PaymentProcess pp= new PaymentProcess(PaymentFactory.getPayPalAdapter());
+		PaymentProcess pp= new PaymentProcess(PaymentFactory.getPayPalAdapter(),senderEmail,receiverEmail );
 		System.out.println("Emissione bonifico in corso.... attendere");
         pp.startPayment(value);
 	}

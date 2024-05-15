@@ -38,6 +38,7 @@ public class ReturnController {
 
 	private void initComponents() {
 		// TODO Auto-generated method stub
+		
 		/*
 		 * Listener for confirmButton: choose the order
 		 */
@@ -59,8 +60,7 @@ public class ReturnController {
 		            if (button.isSelected()) {
 		            	flag=true;
 		                returnView.setVisible(false);
-						riarView= new ReturnItemsAndReasonsView(button.getText());
-		                break;
+						riarView= new ReturnItemsAndReasonsView(button.getText()); // riarView= new ReturnItemsAndReasonsView((button.getText()));
 		            }
 		        }
 			    if (!flag) {

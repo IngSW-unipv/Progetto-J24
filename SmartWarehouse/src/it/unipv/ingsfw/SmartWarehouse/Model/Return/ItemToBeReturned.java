@@ -36,9 +36,6 @@ public class ItemToBeReturned {
 	public String getSkuItem() {
 		return item.getSku();
 	}
-	public String getNomeItem() {
-		return item.getNome();
-	}
 	
 	public double getPriceItem(){
 		return item.getPrice();
