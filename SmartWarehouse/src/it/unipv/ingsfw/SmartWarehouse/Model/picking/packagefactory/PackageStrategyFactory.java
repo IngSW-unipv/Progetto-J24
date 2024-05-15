@@ -1,5 +1,5 @@
-package packagefactory;
-import order.*;
+package it.unipv.ingsfw.SmartWarehouse.packagefactory;
+import it.unipv.ingsfw.SmartWarehouse.orderp.*;
 
 import packagestrategy.*;
 

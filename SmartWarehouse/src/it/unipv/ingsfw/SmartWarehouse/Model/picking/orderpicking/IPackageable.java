@@ -1,4 +1,4 @@
-package order;
+package it.unipv.ingsfw.SmartWarehouse.orderpicking;
 
 import java.util.List;
 
@@ -9,5 +9,5 @@ import inventory.InventoryItem;
 public interface IPackageable {
 	public List<InventoryItem> getSkuqtyAsList();
 	public void selectItemqty(InventoryItem item, int desiredQuantity)throws ItemNotFoundException, QuantityMismatchException;
-	public void changeDate(Order o);
+	public void changeDate(Orderp o);
 }

@@ -1,7 +1,7 @@
-package packagestrategy;
+package it.unipv.ingsfw.SmartWarehouse.packagestrategy;
 
-import order.*;
-import inventory.*;
+import it.unipv.ingsfw.SmartWarehouse.orderpicking.*;
+import it.unipv.ingsfw.SmartWarehouse.inventory.*;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -11,7 +11,7 @@ public class PackageStrategy implements IPackageStrategy {
 	private int maxs=9;
 	private int maxm=12;
 	private int maxl=15;
-	public boolean typePack(Order o,int n) {
+	public boolean typePack(Orderp o,int n) {
 		if(o.calculateTotalSize()<=n) {
 			if(o.tfFragility()==true) {
 				System.out.println("you need a fragility pack:");
@@ -20,7 +20,7 @@ public class PackageStrategy implements IPackageStrategy {
 		}
 		return false;
 	}
-	public void morePack(Order o) {
+	public void morePack(Orderp o) {
 	    int totalsize = o.calculateTotalSize();
 	    int numPacks = totalsize / maxl; //per calcolo dei pacchi
 	    if (totalsize % maxl!= 0) {
@@ -83,7 +83,7 @@ public class PackageStrategy implements IPackageStrategy {
 	}
 	
 	@Override
-	public boolean calculatePackageSizes(Order o) {
+	public boolean calculatePackageSizes(Orderp o) {
 		if(typePack(o,maxs)==true) {
 			System.out.println("use a Small pack");
 		}

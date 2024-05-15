@@ -1,9 +1,6 @@
-package order;
+package it.unipv.ingsfw.SmartWarehouse.orderpicking;
 
 import java.util.*;
-
-
-	
 import DAO.*;
 import exception.*;
 import inventory.*;
@@ -21,7 +18,7 @@ public class Orderp implements IPackageable{
 		this.skuqty=new HashMap<InventoryItem,Integer>();
 		this.skuqty.putAll(skuqty);
 	}
-	public Order(HashMap<InventoryItem,Integer> skuqty,int id,String email,int date) {
+	public Orderp(HashMap<InventoryItem,Integer> skuqty,int id,String email,int date) {
 		this.skuqty=skuqty;
 		this.id=id;
 		this.email=email;
@@ -105,7 +102,7 @@ public class Orderp implements IPackageable{
 		}    
 		return itemList;
 	}
-	public void changeDate(Order o) {
+	public void changeDate(Orderp o) {
 		PackageStrategy s=new PackageStrategy();
 		if (s.calculatePackageSizes(o)==true) {
 			LocalDate now = LocalDate.now();

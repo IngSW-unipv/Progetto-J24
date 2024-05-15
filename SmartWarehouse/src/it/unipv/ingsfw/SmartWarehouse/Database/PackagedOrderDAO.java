@@ -1,4 +1,4 @@
-package DAO;
+package it.unipv.ingsfw.SmartWarehouse.Database
 
 import java.sql.*;
 import java.util.*;
