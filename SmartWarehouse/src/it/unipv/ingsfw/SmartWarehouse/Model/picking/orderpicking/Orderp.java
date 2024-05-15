@@ -1,13 +1,13 @@
 package it.unipv.ingsfw.SmartWarehouse.orderpicking;
 
 import java.util.*;
-import DAO.*;
-import exception.*;
-import inventory.*;
+import it.unipv.ingsfw.SmartWarehouse.database.*;
+import it.unipv.ingsfw.SmartWarehouse.exception.*;
+import it.unipv.ingsfw.SmartWarehouse.inventory.*;
 import java.util.Map.Entry;
-import exception.QuantityMismatchException;
+import it.unipv.ingsfw.SmartWarehouse.exception.*;
 import java.time.*;
-import packagastrategy.*;
+import it.unipv.ingsfw.SmartWarehouse.packagastrategy.*;
 
 public class Orderp implements IPackageable{		
 	private int id;

@@ -2,9 +2,8 @@ package it.unipv.ingsfw.SmartWarehouse.orderpicking;
 
 import java.util.List;
 
-import exception.ItemNotFoundException;
-import exception.QuantityMismatchException;
-import inventory.InventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.exception.*;
+import it.unipv.ingsfw.SmartWarehouse.inventory.*;
 
 public interface IPackageable {
 	public List<InventoryItem> getSkuqtyAsList();
