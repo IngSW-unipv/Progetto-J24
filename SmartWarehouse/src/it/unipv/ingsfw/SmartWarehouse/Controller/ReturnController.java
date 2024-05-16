@@ -60,7 +60,7 @@ public class ReturnController {
 		            if (button.isSelected()) {
 		            	flag=true;
 		                returnView.setVisible(false);
-						riarView= new ReturnItemsAndReasonsView(button.getText()); // riarView= new ReturnItemsAndReasonsView((button.getText()));
+						riarView= new ReturnItemsAndReasonsView(Integer.parseInt(button.getActionCommand())); 
 		            }
 		        }
 			    if (!flag) {
@@ -104,7 +104,7 @@ public class ReturnController {
 
 					if (checkBox.isSelected()) {
 						itemSelected=true;
-						String sku = checkBox.getText();
+						String sku = checkBox.getActionCommand();
 						String reason = comboBox.getSelectedItem().toString();
 						if(reason.equals("Altro")) {
 							 reason = riarView.getCustomReasonAreaList().get(i).getText();

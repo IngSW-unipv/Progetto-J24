@@ -28,6 +28,18 @@ public class RegisterFacade {
 		return rebuildOrder(red.selectOrder(id),id);
 	}
 	
+	/*
+	public ArrayList<Order> selectOrderWhereClient(String email){
+		ArrayList< ArrayList<OrderLine> > orderLineList=red.selectOrderWhereClient(email);
+		ArrayList<Order> orders=new ArrayList<Order>();
+		for(ArrayList<OrderLine> o:orderLineList) {
+			orders.add(rebuildOrder(o,o.get(0).getId()));
+		}
+		return orders;
+	}
+	*/
+	
+	
 	private Order rebuildOrder(ArrayList<OrderLine> o, int id) { 
 		HashMap<InventoryItem, Integer> hs = new HashMap<InventoryItem, Integer>();
 		OrderLine temp=o.get(0);

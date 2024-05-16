@@ -2,10 +2,9 @@ package it.unipv.ingsfw.SmartWarehouse.Database;
 
 import java.util.ArrayList;
 import java.util.Map;
-
-import it.unipv.ingsfw.SmartWarehouse.Model.Return.IReturnable;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ItemToBeReturned;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnService;
+import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 
 public interface IReturnServiceDAO {

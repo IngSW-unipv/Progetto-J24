@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 import javax.swing.AbstractButton;
@@ -30,7 +31,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.Reasons;
+import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
+import it.unipv.ingsfw.SmartWarehouse.Model.Shop.OrderLine;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 
 public class ReturnItemsAndReasonsView extends JFrame{
 	 private JPanel mainPanel;
@@ -53,7 +59,7 @@ public class ReturnItemsAndReasonsView extends JFrame{
 	 
 
 
-	 public ReturnItemsAndReasonsView(String order) {
+	 public ReturnItemsAndReasonsView(int orderId) {
 	    setTitle("Items and Reasons");
         setSize(600,400);
         
@@ -82,38 +88,62 @@ public class ReturnItemsAndReasonsView extends JFrame{
         
         orderDetailsPanel=new JPanel();
         orderDetailsPanel.setLayout(new BoxLayout(orderDetailsPanel, BoxLayout.Y_AXIS));
-        JLabel selectedOrderLabel = new JLabel("Ordine selezionato: " +order);
+        JLabel selectedOrderLabel = new JLabel("Ordine selezionato: " +orderId);
         JLabel ItemAndReasonsLabel = new JLabel("Seleziona gli item che vuoi restituire");
 
         orderDetailsPanel.add(selectedOrderLabel);
 
         orderDetailsPanel.add(ItemAndReasonsLabel);
-        /*
-         *  ArrayList<OrderLine> allItems = SelectOrder(order); //vorrei avere un arrayList di sku.
-         *  ArrayList<String> items= new ArrayList();
-         *  for(OrderLine ol:allItems){
-         *       items.add(ol.toString());
-         *   }
-         */
-        ArrayList<String> items= new ArrayList();
-        items.add("p1");
-        items.add("p1");
-        items.add("p2");
-        items.add("p1");
-        items.add("p1");
-        items.add("p2");
-        items.add("p1");
-        items.add("p1");
-        items.add("p3");
         
+        
+          // Valutare di fare così:
+        
+           Order order = SingletonManager.getInstance().getRegisterFacade().selectOrder(orderId); //RegisterFacade.getInstance().selectOrder(orderId)
+           String skuForActionCommand[]=new String[order.getQtyTotal()];
+           ArrayList<InventoryItem> inventoryItem_keyOfOrderMap= new ArrayList<>(order.getMap().keySet());
+           ArrayList<String> itemsDescriptionsForButton= new ArrayList<>();
+           int count=0;
+           for(InventoryItem i:inventoryItem_keyOfOrderMap) {
+        	   for(int count2=0;count<order.getQtyOfItem(i);count2++) {
+        		   itemsDescriptionsForButton.add(i.getItem().getDescription());
+        		   skuForActionCommand[count]=i.getSku();
+            	   count++;
+        	   }
+           }
+        
+           /* alternativa
+        ArrayList<OrderLine> allItems = SingletonManager.getInstance().getRegisterDAO().selectOrder(orderId);
+        ArrayList<String> items= new ArrayList<String>();
+        String sku[]=new String[allItems.size()];
+        for(int count=0;count<allItems.size();count++) {
+        	items.add(SingletonManager.getInstance().getInventoryDAO().getInventoryItemBySku(allItems.get(count).getSku()).getItem().getDescription());
+        	sku[count]=allItems.get(count).getSku();
+        }
+        */
+           
+           /*
+        itemsDescriptionsForButton.add("p1");
+        itemsDescriptionsForButton.add("p1");
+        itemsDescriptionsForButton.add("p2");
+        itemsDescriptionsForButton.add("p1");
+        itemsDescriptionsForButton.add("p1");
+        itemsDescriptionsForButton.add("p2");
+        itemsDescriptionsForButton.add("p1");
+        itemsDescriptionsForButton.add("p1");
+        itemsDescriptionsForButton.add("p3");
+        */
+           
         Reasons.initializeReasons();
         reasons=Reasons.getReasons();
-        for (String i : items) {
+        int count3=0;
+        for (String i : itemsDescriptionsForButton) {
         	
         	itemAndReasonsPanel = new JPanel();
         	itemAndReasonsPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         	
         	JCheckBox checkBox=new JCheckBox(i);
+        	checkBox.setActionCommand(skuForActionCommand[count3]);
+        	count3++;
             checkBoxList.add(checkBox);
             itemAndReasonsPanel.add(checkBox);
             

@@ -8,10 +8,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import it.unipv.ingsfw.SmartWarehouse.Model.Return.IReturnable;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ItemToBeReturned;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnService;
+import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 
 public class ReturnServiceDAO implements IReturnServiceDAO{
@@ -22,7 +21,7 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 
 	public ReturnServiceDAO() {
 		super();
-		this.schema = "vince";
+		this.schema = "smartwarehouse";
 	}
 	@Override
 	public ReturnService selectByOrder(IReturnable returnableOrder) {

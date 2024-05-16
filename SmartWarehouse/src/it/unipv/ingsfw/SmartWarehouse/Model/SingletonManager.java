@@ -14,12 +14,12 @@ import it.unipv.ingsfw.SmartWarehouse.Database.ReturnServiceDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.SupplierDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.SupplyDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.SupplyOrderDAO;
+import it.unipv.ingsfw.SmartWarehouse.Model.Shop.RegisterFacade;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.operator.InventoryOperator;
 import it.unipv.ingsfw.SmartWarehouse.Model.operator.WarehouseOperator;
 
 public class SingletonManager {
-	
-	
 	
 	private static SingletonManager instance= null;
 	private WarehouseOperator op;
@@ -30,6 +30,7 @@ public class SingletonManager {
 	private ISupplierDAO supplierDAO;
 	private ISupplyDAO supplyDAO;
 	private ISupplyOrderDAO supplyOrderDAO;
+	private RegisterFacade registerFacade;
 	private User loggedUser;
 	
 	private SingletonManager() {
@@ -41,7 +42,7 @@ public class SingletonManager {
 		supplierDAO=new SupplierDAO();
 		supplyDAO=new SupplyDAO();
 		supplyOrderDAO=new SupplyOrderDAO();
-		
+		registerFacade=new RegisterFacade(registerDAO, new InventoryManager()); //DA VALUTARE ATTENTAMENTE
 	}   
 	
 	public static synchronized SingletonManager getInstance() {
@@ -125,6 +126,16 @@ public class SingletonManager {
 	public void setLoggedUser(User loggedUser) {
 		this.loggedUser = loggedUser;
 	}
+
+	public RegisterFacade getRegisterFacade() {
+		return registerFacade;
+	}
+
+	public void setRegisterFacade(RegisterFacade registerFacade) {
+		this.registerFacade = registerFacade;
+	}
+
+
 	
 	
 	

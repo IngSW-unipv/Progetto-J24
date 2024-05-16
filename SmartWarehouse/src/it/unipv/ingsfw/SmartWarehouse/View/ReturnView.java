@@ -30,7 +30,10 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 import it.unipv.ingsfw.SmartWarehouse.Database.ReturnServiceFacade;
+import it.unipv.ingsfw.SmartWarehouse.Model.Client;
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.IReturnable;
+import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
 
 public class ReturnView extends JFrame{
 
@@ -39,82 +42,88 @@ public class ReturnView extends JFrame{
 	private JPanel confirmPanel;
 	private JPanel backPanel;
 	private ButtonGroup orderButtonGroup;
-    private JButton confirmButton;
-    private JButton backButton;
-    
+	private JButton confirmButton;
+	private JButton backButton;
 
-    public ReturnView() {
-        setTitle("Return Service");
-        setSize(400, 200);
-        
-        try {
-            UIManager.setLookAndFeel(new NimbusLookAndFeel());
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
-       
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenWidth = (int) screenSize.getWidth();
-        int screenHeight = (int) screenSize.getHeight();
-        // Imposto le dimensioni della finestra in base alle dimensioni dello schermo
-        int windowWidth = (int) (screenWidth*0.9); 
-        int windowHeight = (int) (screenHeight*0.9); 
-        setSize(windowWidth, windowHeight);
-        setLocationRelativeTo(null); // Centro la finestra
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(true);
 
-        mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
-        getContentPane().add(mainPanel);
-        
-        selectOrderPanel = new JPanel();
-        selectOrderPanel.setLayout(new GridLayout(0, 1)); // 0 righe per una colonna dinamica
-        JLabel selectOrderLabel = new JLabel("Seleziona un ordine:");
-        selectOrderPanel.add(selectOrderLabel);
-  
-        /*
-         * Popola la ComboBox con gli ID degli ordini dal database
-         * ArrayList<Order> allOrders = SelectAllFromOrder(cliente) //vorrei avere un arrayList di ordini + valuta di usare un interfaccia per l'ordine come per item 
-         * 
-         *  ArrayList<String> orders = new ArrayList<>();
-         *  for(Order or: allOrders){
-         *  orders.add(or.toString());
-         *  }
-         */
-         
-        ArrayList<String> orders = new ArrayList<>();
-        orders.add("Ordine 1");
-        orders.add("Ordine 2");
-        orders.add("<html> Ordine 3 <br> Ordine con una descrizione molto lunga e <br> dettagliata <br> Elenco Item comprati e data");
-        orders.add("Ordine 4");
-        orders.add("Ordine 5");
-        orders.add("Ordine 6");
-        orders.add("Ordine 7");
-        orders.add("Ordine 8");
-        orderButtonGroup = new ButtonGroup();
-        for (String i : orders) {
-            JRadioButton radioButton = new JRadioButton(i);
-            orderButtonGroup.add(radioButton);
-            selectOrderPanel.add(radioButton, BorderLayout.LINE_START);
-        }
-        mainPanel.add(selectOrderPanel, BorderLayout.CENTER);
+	public ReturnView(Client client) {
+		setTitle("Return Service");
+		setSize(400, 200);
 
-        confirmPanel = new JPanel();
-        confirmButton = new JButton("Conferma Scelta");
-        //confirmButton.setIcon(new ImageIcon("check_icon.png")); // Aggiungo un'icona al pulsante
-        confirmPanel.add(confirmButton);
-        mainPanel.add(confirmPanel, BorderLayout.SOUTH);
-        
-     
-        backPanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); // Layout per posizionare il pulsante a sinistra
-        backButton = new JButton("Back",UIManager.getIcon("FileView.directoryIcon"));
-        backPanel.add(backButton);
-        mainPanel.add(backPanel, BorderLayout.NORTH);
-        //pack();
-        setVisible(true);
-	
-    }
+		try {
+			UIManager.setLookAndFeel(new NimbusLookAndFeel());
+		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
+
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int screenWidth = (int) screenSize.getWidth();
+		int screenHeight = (int) screenSize.getHeight();
+		// Imposto le dimensioni della finestra in base alle dimensioni dello schermo
+		int windowWidth = (int) (screenWidth*0.9); 
+		int windowHeight = (int) (screenHeight*0.9); 
+		setSize(windowWidth, windowHeight);
+		setLocationRelativeTo(null); // Centro la finestra
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(true);
+
+		mainPanel = new JPanel();
+		mainPanel.setLayout(new BorderLayout());
+		getContentPane().add(mainPanel);
+
+		selectOrderPanel = new JPanel();
+		selectOrderPanel.setLayout(new GridLayout(0, 1)); // 0 righe per una colonna dinamica
+		JLabel selectOrderLabel = new JLabel("Seleziona un ordine:");
+		selectOrderPanel.add(selectOrderLabel);
+
+
+		ArrayList<Order> allClientOrders = SingletonManager.getInstance().getRegisterFacade().selectOrderWhereClient(client.getEmail()); 
+		ArrayList<String> ordersDescriptionsForButton = new ArrayList<>();
+		Integer[] orderIdForActionCommand=new Integer[allClientOrders.size()];
+		int count=0;
+		for(Order or: allClientOrders){
+			ordersDescriptionsForButton.add(or.toString());
+			orderIdForActionCommand[count]=or.getId();
+			count++;
+		}
+
+		/*
+		ArrayList<String> orders = new ArrayList<>();
+		orders.add("Ordine 1");
+		orders.add("Ordine 2");
+		orders.add("<html> Ordine 3 <br> Ordine con una descrizione molto lunga e <br> dettagliata <br> Elenco Item comprati e data");
+		orders.add("Ordine 4");
+		orders.add("Ordine 5");
+		orders.add("Ordine 6");
+		orders.add("Ordine 7");
+		orders.add("Ordine 8");
+		*/
+		orderButtonGroup = new ButtonGroup();
+		count=0;
+		for (String i : ordersDescriptionsForButton) {
+			JRadioButton radioButton = new JRadioButton(i);
+			orderButtonGroup.add(radioButton);
+			radioButton.setActionCommand(orderIdForActionCommand[count].toString());
+			count++;
+			selectOrderPanel.add(radioButton, BorderLayout.LINE_START);
+		}
+		mainPanel.add(selectOrderPanel, BorderLayout.CENTER);
+
+		confirmPanel = new JPanel();
+		confirmButton = new JButton("Conferma Scelta");
+		//confirmButton.setIcon(new ImageIcon("check_icon.png")); // Aggiungo un'icona al pulsante
+		confirmPanel.add(confirmButton);
+		mainPanel.add(confirmPanel, BorderLayout.SOUTH);
+
+
+		backPanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); // Layout per posizionare il pulsante a sinistra
+		backButton = new JButton("Back",UIManager.getIcon("FileView.directoryIcon"));
+		backPanel.add(backButton);
+		mainPanel.add(backPanel, BorderLayout.NORTH);
+		//pack();
+		setVisible(true);
+
+	}
 
 
 	public ButtonGroup getOrderButtonGroup() {
@@ -124,26 +133,25 @@ public class ReturnView extends JFrame{
 		return confirmButton;
 	}
 }
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 
 
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

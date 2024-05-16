@@ -1,6 +1,7 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.Return;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 // Mettere i vari contorrni alla label ecc.
 // Fare GUI pagamenti 
@@ -8,25 +9,33 @@ import java.util.ArrayList;
 // dividere costruttore GUI dalle init
 // Mttere privati i metodi non usabili all'esterno
 import it.unipv.ingsfw.SmartWarehouse.Controller.ReturnController;
-import it.unipv.ingsfw.SmartWarehouse.Model.Item.Item;
+import it.unipv.ingsfw.SmartWarehouse.Model.Client;
 import it.unipv.ingsfw.SmartWarehouse.Model.Ordine.Ordine;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.RefundFactory;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.BankTransfer.BankTransfer;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.Voucher.*;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
+import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Item;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.ItemDetails;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Position;
 import it.unipv.ingsfw.SmartWarehouse.View.ReturnView;
-// 0) // mettere a posto interfaccia item, e le chiamate al database in returnView ( chiedere di aggiungere un selectAllFromOrder(cliente?) 
-      // + aggiungere al toString di order l'id dell'ordine.)
-// e in ReturnItemsAndReasonsView (chiedere di aggiungere un toString ad OrderLine dove però sarebbe meglio avere la descrizione in questo to string)
+// 0) // mettere a posto interfaccia item.
+       // in returnView tutto ok, provare se funziona. ovviamente implementare i metodi commentati in RgisterFacade e RegisterDAO
+       // e valutare se al posto del singleton manager con IDAO usare le facade--> fare un FacadeDAO Manager.
+       // e in ReturnItemsAndReasonsView (fatto solo da vedere se funziona). Valuta metodo alternativo che ho scritto lì.
 // 1) // Gestire passaggio sku additemtobereturned(passagli item). 
 // 2)!!Gestire bene nel controllore la creazione di voucher e bonifico. considerare coordinate come parametri del metodo setRufundMode
      //Una coordinata può essere returnableOrder.getEmail, l'altra getWarehouseIban() che legge da file ad esempio.
 // 3) creare eccezioni.
 // 4) gestire ReturnFACADE come viene istanziato.
+// 5) usare versione compatta if-else.
 
 
 public class ZMainReso {
 	public static void main(String[] args) {
+		/*
 		Item item1=new Item("p1","prodotto1",1.0);
 		Item item2=new Item("p2","prodotto2",1.0);
 		Item item3=new Item("p3","prodotto3",9.0);
@@ -40,9 +49,23 @@ public class ZMainReso {
 		IReturnable[] listaOrdini=new IReturnable[2];
 		listaOrdini[0]=ordine1;
 		listaOrdini[1]=ordine2;
+		*/
 		//-----------------------------------------------------------
-		ReturnView rv= new ReturnView();
-		ReturnFACADE rf=new ReturnFACADE(ordine1);
+		
+		Client client1= new Client("John", "Doe", "john.doe@example.com", "123 Main St, Anytown, USA", "password123");
+		
+		Position pos1=new Position("linea1","pod1","bin1");
+		ItemDetails itemDetails1=new ItemDetails(1, 1);
+		Item item1=new Item("Smartphone",itemDetails1);
+		InventoryItem inventoryItem1=new InventoryItem(item1,"SKU001",599.99,2,1000,pos1);
+		
+		HashMap<InventoryItem, Integer> skuqty=new HashMap<InventoryItem, Integer>();
+		skuqty.put(inventoryItem1, 5);
+		Order order1_client1=new Order(skuqty,client1.getEmail());
+		
+		System.out.println("ciao");
+		ReturnView rv= new ReturnView(client1);
+		ReturnFACADE rf=new ReturnFACADE(order1_client1);
 		ReturnController rc=new ReturnController(rf,rv);
 		
 		//-------------------------------------
