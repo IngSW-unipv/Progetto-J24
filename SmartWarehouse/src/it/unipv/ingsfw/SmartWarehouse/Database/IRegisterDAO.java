@@ -8,5 +8,5 @@ public interface IRegisterDAO {
 	public ArrayList<OrderLine>  selectOrder(int id);
 	public void insertOrder(ArrayList<OrderLine> o);
 	public int selectLastId();
-	//public ArrayList< ArrayList<OrderLine> > selectOrderWhereClient(String email);
+	public ArrayList< ArrayList<OrderLine> > selectOrderWhereClient(String email);
 }

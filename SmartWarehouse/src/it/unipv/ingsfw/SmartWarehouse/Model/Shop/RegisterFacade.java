@@ -28,7 +28,7 @@ public class RegisterFacade {
 		return rebuildOrder(red.selectOrder(id),id);
 	}
 	
-	/*
+	
 	public ArrayList<Order> selectOrderWhereClient(String email){
 		ArrayList< ArrayList<OrderLine> > orderLineList=red.selectOrderWhereClient(email);
 		ArrayList<Order> orders=new ArrayList<Order>();
@@ -37,7 +37,7 @@ public class RegisterFacade {
 		}
 		return orders;
 	}
-	*/
+	
 	
 	
 	private Order rebuildOrder(ArrayList<OrderLine> o, int id) { 

@@ -38,14 +38,14 @@ public class RegisterDAO implements IRegisterDAO {
 	}
 	
 	
-	 	/*public ArrayList< ArrayList<OrderLine> > selectOrderWhereClient(String email) { 
+	 	public ArrayList< ArrayList<OrderLine> > selectOrderWhereClient(String email) { 
 		conn=DBConnection.startConnection(conn,schema);
 		Statement st1;
 		ResultSet rs1;
 		
 		try {
 			st1 = conn.createStatement();
-			String query1="select * from clientorders where email="+email+"order by id";
+			String query1="select * from clientorders where email= \""+email+"\" order by id";
 			rs1=st1.executeQuery(query1);
 			
 			ArrayList< ArrayList<OrderLine> > aao=new ArrayList< ArrayList<OrderLine> >();
@@ -72,7 +72,7 @@ public class RegisterDAO implements IRegisterDAO {
 			 
 		}
 		catch (Exception e){e.printStackTrace(); return null;}
-	}*/
+	}
 
 	public void insertOrder(ArrayList<OrderLine> o) {
 		conn=DBConnection.startConnection(conn,schema);
