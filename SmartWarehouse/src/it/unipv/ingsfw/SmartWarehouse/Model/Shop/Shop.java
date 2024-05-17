@@ -1,7 +1,10 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.Shop;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyKartExceptio;
+import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
 import it.unipv.ingsfw.SmartWarehouse.Model.Client;
+import it.unipv.ingsfw.SmartWarehouse.Model.Payment.IPayment;
+import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentProcess;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
 
 public class Shop {
@@ -10,10 +13,10 @@ public class Shop {
 	private Kart kart;
 	private Register reg;
 	private Client cl;
-	private final double prcost=50;
+	private final double primeImport=50;
 	
-	public Shop(InventoryManager inv, Register reg, Kart kart, Client c) {	
-		this.kart = kart;
+	public Shop(InventoryManager inv, Register reg, Client c) {	
+		this.kart = new Kart();
 		this.inv = inv;
 		this.reg = reg;
 		this.cl = c;		
@@ -27,24 +30,26 @@ public class Shop {
 		kart.remove(inv.findInventoryItem(sku));
 	}
 	
-	public void makeOrder() {
+	public void makeOrder(IPayment mode) {
 		try {
-			reg.addOrd(kart.PayAndOrder(cl));
+			reg.addOrd(kart.PayAndOrder(cl, mode));
 		} catch (EmptyKartExceptio e) {
 			System.err.println("the kart is empty, please retry");
 		} 
 	}
 	
-	/*
-	**
-	public void setPrime() {
-		if(!Payment.getIstance().pay(cl, prcost) || cl.getPrime()) {
-			cl.setPrime(false);
-			System.err.println("pagamento non riuscito.");
-		} else cl.setPrime(true);
+	
+	public void setPrime(IPayment mode) {
+		PaymentProcess pay=new PaymentProcess(mode, cl.getEmail(), "magazzo");
+		try {
+			pay.startPayment(primeImport);
+			cl.setPrime(true);
+		} catch (PaymentException e) {
+			//TODO SISTEMARE
+			System.err.println("è stato impossibile effettuare l'abbonamento a prime");
+		}
+		
 	}
-	**
-	*/
 
 	public InventoryManager getInv() {
 		return inv;

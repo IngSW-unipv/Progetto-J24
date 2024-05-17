@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyKartExceptio;
+import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
 import it.unipv.ingsfw.SmartWarehouse.Model.Client;
+import it.unipv.ingsfw.SmartWarehouse.Model.Payment.IPayment;
+import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentProcess;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Item;
 
 public class Kart {
 	HashMap<InventoryItem,Integer> skuqty;
@@ -29,12 +31,19 @@ public class Kart {
 		 skuqty.remove(it);
 	}
 		
-	public Order PayAndOrder(Client cl) throws EmptyKartExceptio {
+	public Order PayAndOrder(Client cl, IPayment mode) throws EmptyKartExceptio {
 		if(skuqty.isEmpty()) {
 			throw(new EmptyKartExceptio());
-		}
+		}		
 		Order o=new Order(skuqty, cl.getEmail());
-		//Payment.getIstance().pay(cl, getTotal());
+		PaymentProcess pay=new PaymentProcess(mode, cl.getEmail(), "magazzo");		
+		try {
+			pay.startPayment(getTotal());
+		} catch (PaymentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		skuqty.clear();
 		return o;
 	}
