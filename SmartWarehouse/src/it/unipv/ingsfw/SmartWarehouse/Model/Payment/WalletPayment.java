@@ -9,7 +9,7 @@ public class WalletPayment {
 			// Logica per il pagamento tramite PayPal
 			Client c=SingletonManager.getInstance().getClientDAO().selectClient(senderEmail);
 			if(c.getWallet()<importo) {
-				System.err.println("GESTIRE L'ECCEZIONE");
+				System.err.println("GESTIRE L'ECCEZIONE DI PAGAMENTO");
 			}
 			else {
 				c.setWallet(c.getWallet()-importo);

@@ -1,6 +1,4 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.inventory;
-
-import java.util.List;
 public interface IInventoryItem {
 	
 	public Item getItem();

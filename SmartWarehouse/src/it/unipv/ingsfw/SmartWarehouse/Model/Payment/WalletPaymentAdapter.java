@@ -9,7 +9,6 @@ public class WalletPaymentAdapter implements IPayment {
 
 		@Override
 		public void makePayment(double importo,String senderEmail,String receiverEmail) {
-			// TODO Auto-generated method stub
 			walletPayment.makeWalletPayment(importo,senderEmail,receiverEmail);
 		}
 
