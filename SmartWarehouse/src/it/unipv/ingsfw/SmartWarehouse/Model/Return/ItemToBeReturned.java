@@ -33,7 +33,7 @@ public class ItemToBeReturned {
 		this.id = id;
 	}
 	
-	public String getSkuItem() {
+	public String getSku() {
 		return item.getSku();
 	}
 	

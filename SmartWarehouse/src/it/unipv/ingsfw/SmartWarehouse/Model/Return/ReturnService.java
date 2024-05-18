@@ -18,7 +18,7 @@ public class ReturnService {
     }
     
  /*
-  * Methods related to the Returns process
+  * Methods related to the Return process
   */
     public void addItemToReturn(String sku,String reason) { //throws ImpossibileToReturnException
     	if(!checkReturnability(sku))
@@ -31,8 +31,7 @@ public class ReturnService {
     	returnedItems.put(itbr,setReason(reason));
     	System.out.println(returnableOrder.getDescBySku(sku)+" è stato aggiunto al reso");
     	}
-    public boolean checkReturnability(String sku){
-    	System.out.println(returnableOrder.getQtyBySku(sku));
+    private boolean checkReturnability(String sku){
     	if(returnableOrder.getQtyBySku(sku)<getQtaReturned(sku)+1) {
     		return false;
     	}
@@ -41,7 +40,7 @@ public class ReturnService {
     public int getQtaReturned(String sku) {
     	int count=0;
     	for(ItemToBeReturned itbr:returnedItems.keySet()) {
-    		if(itbr.getSkuItem().equals(sku)) {
+    		if(itbr.getSku().equals(sku)) {
     			count++; 
     		}
     	}
@@ -78,7 +77,7 @@ public class ReturnService {
     	s.append("Reso dell'ordine: ").append(returnableOrder.getId());
     	s.append("\ngli articoli restituiti sono: \n");
     	for(ItemToBeReturned itbr:returnedItems.keySet()) {
-    		s.append(itbr.getSkuItem()).append(" ").append(itbr.getDescription()).append(" la cui motivazione è: ").append(returnedItems.get(itbr)).append("\n");
+    		s.append(itbr.getSku()).append(" ").append(itbr.getDescription()).append(" la cui motivazione è: ").append(returnedItems.get(itbr)).append("\n");
     	}
     	return s.toString();
     	

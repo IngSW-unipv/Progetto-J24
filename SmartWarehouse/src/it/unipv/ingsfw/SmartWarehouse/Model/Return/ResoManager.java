@@ -4,8 +4,6 @@ import it.unipv.ingsfw.SmartWarehouse.Database.ReturnServiceFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 
-
-
 public class ResoManager {
 	private ReturnServiceFacade returnServiceFacade;
 	private static ResoManager istance;
