@@ -32,6 +32,7 @@ public class ReturnService {
     	System.out.println(returnableOrder.getDescBySku(sku)+" è stato aggiunto al reso");
     	}
     public boolean checkReturnability(String sku){
+    	System.out.println(returnableOrder.getQtyBySku(sku));
     	if(returnableOrder.getQtyBySku(sku)<getQtaReturned(sku)+1) {
     		return false;
     	}
@@ -77,7 +78,7 @@ public class ReturnService {
     	s.append("Reso dell'ordine: ").append(returnableOrder.getId());
     	s.append("\ngli articoli restituiti sono: \n");
     	for(ItemToBeReturned itbr:returnedItems.keySet()) {
-    		s.append(itbr.getSkuItem()).append(" ").append(itbr.getNomeItem()).append(" la cui motivazione è: ").append(returnedItems.get(itbr)).append("\n");
+    		s.append(itbr.getSkuItem()).append(" ").append(itbr.getDescription()).append(" la cui motivazione è: ").append(returnedItems.get(itbr)).append("\n");
     	}
     	return s.toString();
     	

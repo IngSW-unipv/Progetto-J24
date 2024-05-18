@@ -32,7 +32,6 @@ import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import it.unipv.ingsfw.SmartWarehouse.Database.ReturnServiceFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.Client;
 import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
-import it.unipv.ingsfw.SmartWarehouse.Model.Return.IReturnable;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
 
 public class ReturnView extends JFrame{
@@ -86,18 +85,6 @@ public class ReturnView extends JFrame{
 			orderIdForActionCommand[count]=or.getId();
 			count++;
 		}
-
-		/*
-		ArrayList<String> orders = new ArrayList<>();
-		orders.add("Ordine 1");
-		orders.add("Ordine 2");
-		orders.add("<html> Ordine 3 <br> Ordine con una descrizione molto lunga e <br> dettagliata <br> Elenco Item comprati e data");
-		orders.add("Ordine 4");
-		orders.add("Ordine 5");
-		orders.add("Ordine 6");
-		orders.add("Ordine 7");
-		orders.add("Ordine 8");
-		*/
 		orderButtonGroup = new ButtonGroup();
 		count=0;
 		for (String i : ordersDescriptionsForButton) {

@@ -72,7 +72,7 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 			{
 				String id=rs1.getString(1);
 
-				ItemToBeReturned itbr=new ItemToBeReturned(returnableOrder.getItem(id.substring(0,id.indexOf("-"))),id);
+				ItemToBeReturned itbr=new ItemToBeReturned(returnableOrder.getItemBySku(id.substring(0,id.indexOf("-"))),id);
 			
 				result.put(itbr,rs1.getString(2));
 			}
@@ -86,7 +86,6 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;
-	
 		ResultSet rs1;
 
 		try

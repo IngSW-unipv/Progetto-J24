@@ -23,7 +23,7 @@ public class RefundFactory {
 
 				try {
 					Properties p = new Properties(System.getProperties());
-					p.load(new FileInputStream("src\\FactoryFile"));
+					p.load(new FileInputStream("properties\\FactoryFile"));
 					voucherAdaptClassName=p.getProperty(V_PROPERTYNAME); 
 					//Ottengo il nome completo della classe dell'adapter che mi interessa
 
@@ -45,7 +45,7 @@ public class RefundFactory {
 
 				try {
 					Properties p = new Properties(System.getProperties());
-					p.load(new FileInputStream("src\\FactoryFile"));
+					p.load(new FileInputStream("properties\\FactoryFile"));
 					bonificoAdaptClassName=p.getProperty(B_PROPERTYNAME); 
 					//Ottengo il nome completo della classe dell'adapter che mi interessa
 

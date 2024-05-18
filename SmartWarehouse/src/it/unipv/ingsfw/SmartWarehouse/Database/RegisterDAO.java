@@ -1,6 +1,7 @@
 package it.unipv.ingsfw.SmartWarehouse.Database;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -38,15 +39,17 @@ public class RegisterDAO implements IRegisterDAO {
 	}
 	
 	
-	 	/*public ArrayList< ArrayList<OrderLine> > selectOrderWhereClient(String email) { 
+	 	public ArrayList< ArrayList<OrderLine> > selectOrderWhereClient(String email) { 
 		conn=DBConnection.startConnection(conn,schema);
-		Statement st1;
+		PreparedStatement st1;
 		ResultSet rs1;
 		
 		try {
-			st1 = conn.createStatement();
-			String query1="select * from clientorders where email="+email+"order by id";
-			rs1=st1.executeQuery(query1);
+			
+			String query1="SELECT * FROM clientorders WHERE email = ? ORDER BY id";
+			st1 = conn.prepareStatement(query1);
+			st1.setString(1,email); 
+			rs1=st1.executeQuery();
 			
 			ArrayList< ArrayList<OrderLine> > aao=new ArrayList< ArrayList<OrderLine> >();
 			ArrayList<OrderLine> o = new ArrayList<OrderLine>();
@@ -72,7 +75,7 @@ public class RegisterDAO implements IRegisterDAO {
 			 
 		}
 		catch (Exception e){e.printStackTrace(); return null;}
-	}*/
+	}
 
 	public void insertOrder(ArrayList<OrderLine> o) {
 		conn=DBConnection.startConnection(conn,schema);

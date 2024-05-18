@@ -6,6 +6,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Map;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
@@ -17,6 +18,7 @@ import javax.swing.JOptionPane;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.RefundFactory;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.BankTransfer.BankTransfer;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.Voucher.VoucherRefund;
+import it.unipv.ingsfw.SmartWarehouse.Model.Return.Reasons;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnFACADE;
 import it.unipv.ingsfw.SmartWarehouse.View.ReturnItemsAndReasonsView;
 import it.unipv.ingsfw.SmartWarehouse.View.ReturnView;
@@ -25,6 +27,7 @@ public class ReturnController {
 	private ReturnFACADE returnFacade;
 	private ReturnView returnView;
 	private ReturnItemsAndReasonsView riarView;
+	private static final String NESSUNA_MOTIVAZIONE = "Scegli una motivazione";
 
 	public ReturnController(ReturnFACADE returnFacade,ReturnView returnView) {
 		this.returnFacade=returnFacade;
@@ -60,7 +63,9 @@ public class ReturnController {
 		            if (button.isSelected()) {
 		            	flag=true;
 		                returnView.setVisible(false);
-						riarView= new ReturnItemsAndReasonsView(Integer.parseInt(button.getActionCommand())); 
+		                Reasons.initializeReasons();
+		                Map<String, String> reasons = Reasons.getReasons();
+						riarView= new ReturnItemsAndReasonsView(Integer.parseInt(button.getActionCommand()),reasons); 
 		            }
 		        }
 			    if (!flag) {
@@ -73,7 +78,6 @@ public class ReturnController {
 
 		};
 		returnView.getConfirmButton().addActionListener(confirmButtonLister);
-
 	}
 	
 	
@@ -116,14 +120,13 @@ public class ReturnController {
 		                    returnFacade.removeAllFromReturn();
 		                    return;
 		                }
-						if(reason.equals("Scegli una motivazione")) {
+						if(reason.equals(NESSUNA_MOTIVAZIONE)) {
 							riarView.setVisible(true);
 					        riarView.showAlert("Selezionare una motivazione valida per ogni prodotto che si intende restituire");
 					        returnFacade.removeAllFromReturn();
 					        return; 
 						}
-						returnFacade.addItemToReturn(sku, reason); 
-						//al posto che sku ci starebbe passargli IstanzaDiQualcosa.getItemBySku(sku) cioè gli passo l'item
+						returnFacade.addItemToReturn(sku, reason); //returnFacade.addItemToReturn(InventoryDAOFacade.getInstance().findInventoryItemBySku(sku), reason);
 					}
 				}
 				if (!itemSelected) {
@@ -156,7 +159,7 @@ public class ReturnController {
 			   
 			    if(popup==JOptionPane.OK_OPTION) {
 			        if (button.getText().equals(riarView.getBankTransferRadioText())) {
-			            BankTransfer br = new BankTransfer(returnFacade.getMoneyToBeReturned()); //chi istanzia bonifico?
+			            BankTransfer br = new BankTransfer(returnFacade.getMoneyToBeReturned(),"EMAIL MAGAZZINO DA DEFINIRE","EMAIL CLIENTE DA PASSARE COME PARAMETRO "); //chi istanzia bonifico?
 			            returnFacade.setRefundMode(RefundFactory.getBankTransferAdapter(br));
 			        } else {
 			            VoucherRefund vr = new VoucherRefund(returnFacade.getMoneyToBeReturned());

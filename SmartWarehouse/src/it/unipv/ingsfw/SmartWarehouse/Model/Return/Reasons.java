@@ -8,7 +8,7 @@ public class Reasons {
 	    public static  void initializeReasons() {
 	        reasons = new HashMap<>();
 	        try {
-	            BufferedReader reader = new BufferedReader(new FileReader("src\\MotivazioniReso"));
+	            BufferedReader reader = new BufferedReader(new FileReader("properties\\MotivazioniReso"));
 	            String line;
 	            while ((line = reader.readLine()) != null) {
 	                String[] parts = line.split("=", 2); // Divide la linea in due parti usando "=" come delimitatore

@@ -3,17 +3,18 @@ package it.unipv.ingsfw.SmartWarehouse.Model.Return;
 import java.util.UUID;
 
 import it.unipv.ingsfw.SmartWarehouse.Model.Item.InterfacciaItem;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 
 public class ItemToBeReturned {
-	private InterfacciaItem item;
+	private IInventoryItem item;
 	private String id;
 
 	
-	public ItemToBeReturned(InterfacciaItem item){
+	public ItemToBeReturned(IInventoryItem item){
 		this.item=item;
 		this.id = identifierBuilder(UUID.randomUUID());
 	}
-	public ItemToBeReturned(InterfacciaItem item,String id){
+	public ItemToBeReturned(IInventoryItem item,String id){
 		this.item=item;
 		this.id = id;
 	}
@@ -23,10 +24,10 @@ public class ItemToBeReturned {
 		idBuilder.append(uuid);
 		return idBuilder.toString();
 	}
-	public InterfacciaItem getItem() {
+	public IInventoryItem getItem() {
 		return item;
 	}
-	public void setItem(InterfacciaItem item) {
+	public void setItem(IInventoryItem item) {
 		this.item = item;
 	}
 	public void setId(String id) {
@@ -42,6 +43,9 @@ public class ItemToBeReturned {
 	}
 	public String getID() {
 		return id;
+	}
+	public String getDescription() {
+		return item.getItem().getDescription();
 	}
 	
 	

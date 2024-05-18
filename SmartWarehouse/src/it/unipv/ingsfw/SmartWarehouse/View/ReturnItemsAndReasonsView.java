@@ -55,11 +55,10 @@ public class ReturnItemsAndReasonsView extends JFrame{
 
 	private JButton backButton;
 	 private JButton nextButton;
-	 private Map<String, String> reasons;
 	 
 
 
-	 public ReturnItemsAndReasonsView(int orderId) {
+	 public ReturnItemsAndReasonsView(int orderId,Map<String, String> reasonsFromController) {
 	    setTitle("Items and Reasons");
         setSize(600,400);
         
@@ -104,37 +103,14 @@ public class ReturnItemsAndReasonsView extends JFrame{
            ArrayList<String> itemsDescriptionsForButton= new ArrayList<>();
            int count=0;
            for(InventoryItem i:inventoryItem_keyOfOrderMap) {
-        	   for(int count2=0;count<order.getQtyOfItem(i);count2++) {
+        	   for(int count2=0;count2<order.getQtyOfItem(i);count2++) {
         		   itemsDescriptionsForButton.add(i.getItem().getDescription());
         		   skuForActionCommand[count]=i.getSku();
             	   count++;
         	   }
            }
-        
-           /* alternativa
-        ArrayList<OrderLine> allItems = SingletonManager.getInstance().getRegisterDAO().selectOrder(orderId);
-        ArrayList<String> items= new ArrayList<String>();
-        String sku[]=new String[allItems.size()];
-        for(int count=0;count<allItems.size();count++) {
-        	items.add(SingletonManager.getInstance().getInventoryDAO().getInventoryItemBySku(allItems.get(count).getSku()).getItem().getDescription());
-        	sku[count]=allItems.get(count).getSku();
-        }
-        */
            
-           /*
-        itemsDescriptionsForButton.add("p1");
-        itemsDescriptionsForButton.add("p1");
-        itemsDescriptionsForButton.add("p2");
-        itemsDescriptionsForButton.add("p1");
-        itemsDescriptionsForButton.add("p1");
-        itemsDescriptionsForButton.add("p2");
-        itemsDescriptionsForButton.add("p1");
-        itemsDescriptionsForButton.add("p1");
-        itemsDescriptionsForButton.add("p3");
-        */
-           
-        Reasons.initializeReasons();
-        reasons=Reasons.getReasons();
+        Map<String, String> reasons=reasonsFromController;
         int count3=0;
         for (String i : itemsDescriptionsForButton) {
         	
@@ -254,6 +230,6 @@ public class ReturnItemsAndReasonsView extends JFrame{
 	}
 	public ButtonGroup getRefundButtonGroup() {
 		return refundButtonGroup;
-	} 
+	}
 }
 

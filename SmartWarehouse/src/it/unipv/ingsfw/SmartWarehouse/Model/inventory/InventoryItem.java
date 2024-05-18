@@ -4,11 +4,11 @@ import java.util.List;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.AuthorizationDeniedException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.operator.InventoryOperator;
 import it.unipv.ingsfw.SmartWarehouse.Model.operator.WarehouseOperator;
 
-public class InventoryItem implements Comparable<InventoryItem> {
+public class InventoryItem implements Comparable<InventoryItem>,IInventoryItem {
 	private Item item;
 	private String sku;
 	private double price;
@@ -81,7 +81,7 @@ public class InventoryItem implements Comparable<InventoryItem> {
 	//check that the operator is an InventoryOperator
 	public void delete() throws ItemNotFoundException, AuthorizationDeniedException {
 		try {
-			WarehouseOperator op = SingletonUser.getInstance().getOp(); 
+			WarehouseOperator op = SingletonManager.getInstance().getOp(); 
 			InventoryOperator InventoryOperator = (InventoryOperator) op; 
 			InventoryManager im=new InventoryManager();
 			if(im.findInventoryItem(sku)!=null) { 

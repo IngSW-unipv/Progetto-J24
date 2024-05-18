@@ -14,7 +14,12 @@ import it.unipv.ingsfw.SmartWarehouse.View.ReturnView;
 
 public class MainClassForTest {
 	
+	public MainClassForTest() {
+		System.out.println("QUESTO è il main");
+	}
+	
 	public static void main(String[] args) {
+		new MainClassForTest();
 		Client client1= new Client("John", "Doe", "john.doe@example.com", "123 Main St, Anytown, USA", "password123");
 
 		Position pos1=new Position("linea1","pod1","bin1");
@@ -24,7 +29,7 @@ public class MainClassForTest {
 
 		HashMap<InventoryItem, Integer> skuqty=new HashMap<InventoryItem, Integer>();
 		skuqty.put(inventoryItem1, 5);
-		Order order1_client1=new Order(skuqty,client1.getEmail());
+		Order order1_client1=new Order(skuqty,1,client1.getEmail(),"oggi");
 		ReturnView rv= new ReturnView(client1);
 		ReturnFACADE rf=new ReturnFACADE(order1_client1);
 		ReturnController rc=new ReturnController(rf,rv);

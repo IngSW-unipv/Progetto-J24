@@ -18,7 +18,7 @@ public class PaymentFactory {
 
 			try {
 				Properties p = new Properties(System.getProperties());
-				p.load(new FileInputStream("src\\FactoryFile"));
+				p.load(new FileInputStream("properties\\FactoryFile"));
 				paypalAdaptClassName=p.getProperty(PP_PROPERTYNAME); 
 				//Ottengo il nome completo della classe dell'adapter che mi interessa
 

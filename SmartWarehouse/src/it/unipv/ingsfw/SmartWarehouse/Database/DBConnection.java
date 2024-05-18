@@ -20,7 +20,7 @@ package it.unipv.ingsfw.SmartWarehouse.Database;
 			Properties p = new Properties(System.getProperties());
 			try {
 				//src/propertiesGiulia.txt
-				p.load(new FileInputStream("src\\\\DBConnection"));
+				p.load(new FileInputStream("properties\\DBConnection"));
 				username=p.getProperty(PROPERTYNAME);
 				password=p.getProperty(PROPERTYPSW);
 				dbDriver =p.getProperty(PROPERTYDBDRIVER);

@@ -23,7 +23,6 @@ public class ResoManager {
     	ReturnService rs=returnServiceFacade.findByOrder(returnableOrder);
     	System.out.println(rs);
     	 if(rs==null) {
-    		 System.out.println("ECCOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
     		 return new ReturnService(returnableOrder);
     	 }
     	 rs.setReturnedItems(returnServiceFacade.readItemAndReason(returnableOrder)); //valutare se devo passare solo rs oppure se è giusto come ho fatto

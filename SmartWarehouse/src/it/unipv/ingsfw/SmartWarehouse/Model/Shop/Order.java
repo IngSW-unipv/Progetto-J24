@@ -105,11 +105,11 @@ public class Order implements IReturnable{
 		return s;
 	}
 	
-	/*public int getQtyTotal() {
+	public int getQtyTotal() {
 		int totalQty = 0;
 		for (int qty : skuqty.values()) {
 			totalQty += qty;
 		}
 		return totalQty;
-	}*/
+	}
 }
