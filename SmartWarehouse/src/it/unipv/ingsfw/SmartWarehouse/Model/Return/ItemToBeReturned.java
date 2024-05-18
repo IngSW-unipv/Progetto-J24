@@ -2,7 +2,6 @@ package it.unipv.ingsfw.SmartWarehouse.Model.Return;
 
 import java.util.UUID;
 
-import it.unipv.ingsfw.SmartWarehouse.Model.Item.InterfacciaItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 
 public class ItemToBeReturned {

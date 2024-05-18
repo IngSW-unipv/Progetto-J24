@@ -50,7 +50,6 @@ public class RegisterDAO implements IRegisterDAO {
 			st1 = conn.prepareStatement(query1);
 			st1.setString(1,email); 
 			rs1=st1.executeQuery();
-			
 			ArrayList< ArrayList<OrderLine> > aao=new ArrayList< ArrayList<OrderLine> >();
 			ArrayList<OrderLine> o = new ArrayList<OrderLine>();
 			int currentOrderId = -1;

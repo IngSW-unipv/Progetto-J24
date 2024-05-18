@@ -7,11 +7,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
+import it.unipv.ingsfw.SmartWarehouse.Model.Payment.IPayment;
+import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentFactory;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
 
@@ -130,6 +133,30 @@ public class ShopFrame extends JFrame{
 			throw ex;
 		}
 		return ret;
+	}
+	
+	public IPayment displayPaymentOption() throws NumberFormatException{
+		String[] option = {"PayPall", "Wallet"};
+		int met=JOptionPane.showOptionDialog(
+                null,                               
+                "Scegli il metodo di pagamento:",    
+                "Metodo di Pagamento",               
+                JOptionPane.DEFAULT_OPTION,          
+                JOptionPane.INFORMATION_MESSAGE,     
+                null,                                
+                option,                            
+                option[0]                          
+        );
+		IPayment mode=null;
+		switch (met) {
+	    case 0:
+	        mode = PaymentFactory.getPayPalAdapter();
+	        break;
+	    case 1:
+	        mode = null;
+	        break;
+		}
+		return mode;
 	}
 	
 	public int displayConfirm() {

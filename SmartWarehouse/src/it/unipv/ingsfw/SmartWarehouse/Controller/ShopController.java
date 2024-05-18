@@ -74,7 +74,7 @@ public class ShopController {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				if(view.displayConfirm()==0) {
-					model.makeOrder();
+					model.makeOrder(view.displayPaymentOption());
 				}
 			}
 		};
@@ -113,7 +113,7 @@ public class ShopController {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				if(view.displayConfirm()==0) {
-					//model.setPrime();
+					model.setPrime(view.displayPaymentOption());
 					System.err.println("in teoria si setta il prime");
 				}
 				if(model.getCl().getPrime()) {

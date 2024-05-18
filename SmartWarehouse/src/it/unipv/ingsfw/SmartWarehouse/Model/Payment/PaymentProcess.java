@@ -1,5 +1,7 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.Payment;
 
+import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
+
 public class PaymentProcess {
     private IPayment paymentMode;
     private String senderEmail;
@@ -11,11 +13,11 @@ public class PaymentProcess {
     	this.receiverEmail=receiverEmail;
     }
 
-    public void startPayment(double importo) {
+    public void startPayment(double importo) throws PaymentException{
         if (paymentMode != null) {
         	paymentMode.makePayment(importo,senderEmail,receiverEmail);
         } else {
-            System.out.println("Metodo di pagamento non impostato.");
+            throw new PaymentException();
         }
     }
 }
