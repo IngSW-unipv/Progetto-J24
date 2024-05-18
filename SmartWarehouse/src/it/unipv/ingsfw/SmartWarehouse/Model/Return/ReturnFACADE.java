@@ -1,5 +1,6 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.Return;
 
+import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 
@@ -26,7 +27,7 @@ public class ReturnFACADE {
 	
 		return rs.toString();
 	}
-	public void setRefundMode(IRefund rm) {
+	public void setRefundMode(IRefund rm) throws PaymentException {
 		rs.setRefundMode(rm);
 	}
 	public ReturnService getRs() {

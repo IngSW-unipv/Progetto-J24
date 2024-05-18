@@ -15,6 +15,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
+import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.RefundFactory;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.BankTransfer.BankTransfer;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.Voucher.VoucherRefund;
@@ -160,10 +161,20 @@ public class ReturnController {
 			    if(popup==JOptionPane.OK_OPTION) {
 			        if (button.getText().equals(riarView.getBankTransferRadioText())) {
 			            BankTransfer br = new BankTransfer(returnFacade.getMoneyToBeReturned(),"EMAIL MAGAZZINO DA DEFINIRE","EMAIL CLIENTE DA PASSARE COME PARAMETRO "); //chi istanzia bonifico?
-			            returnFacade.setRefundMode(RefundFactory.getBankTransferAdapter(br));
+			            try {
+							returnFacade.setRefundMode(RefundFactory.getBankTransferAdapter(br));
+						} catch (PaymentException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 			        } else {
 			            VoucherRefund vr = new VoucherRefund(returnFacade.getMoneyToBeReturned());
-			            returnFacade.setRefundMode(RefundFactory.getVoucherAdapter(vr));
+			            try {
+							returnFacade.setRefundMode(RefundFactory.getVoucherAdapter(vr));
+						} catch (PaymentException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 			        }
 			    }
 			    else {

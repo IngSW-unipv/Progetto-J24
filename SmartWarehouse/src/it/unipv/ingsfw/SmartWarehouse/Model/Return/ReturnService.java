@@ -1,6 +1,8 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.Return;
 import java.util.HashMap;
 import java.util.Map;
+
+import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 
@@ -32,12 +34,12 @@ public class ReturnService {
     	System.out.println(returnableOrder.getDescBySku(sku)+" è stato aggiunto al reso");
     	}
     private boolean checkReturnability(String sku){
-    	if(returnableOrder.getQtyBySku(sku)<getQtaReturned(sku)+1) {
+    	if(returnableOrder.getQtyBySku(sku)<getQtyReturned(sku)+1) {
     		return false;
     	}
     	return true;
     }
-    public int getQtaReturned(String sku) {
+    public int getQtyReturned(String sku) {
     	int count=0;
     	for(ItemToBeReturned itbr:returnedItems.keySet()) {
     		if(itbr.getSku().equals(sku)) {
@@ -52,7 +54,7 @@ public class ReturnService {
     public String setReason(String reason) {
     	return Reasons.findReason(reason);
      }
-    public void setRefundMode(IRefund rm) { //valutare la gestione di boolean al posto di void e spostare i metodi scrittura su DB
+    public void setRefundMode(IRefund rm) throws PaymentException { //valutare la gestione di boolean al posto di void e spostare i metodi scrittura su DB
     	rm.issueRefund();
     	
     	
