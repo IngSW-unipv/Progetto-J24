@@ -1,15 +1,15 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.Return;
 
-import it.unipv.ingsfw.SmartWarehouse.Database.ReturnServiceFacade;
+
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 
 public class ResoManager {
-	private ReturnServiceFacade returnServiceFacade;
+	private ReturnServiceDAOFacade returnServiceFacade;
 	private static ResoManager istance;
 	private ResoManager() {
 		super();
-        returnServiceFacade=ReturnServiceFacade.getIstance();
+        returnServiceFacade=ReturnServiceDAOFacade.getIstance();
 	}
 	public static ResoManager getIstance() {
 		if(istance==null){
@@ -34,39 +34,4 @@ public class ResoManager {
 		// TODO Auto-generated method stub
 		return returnServiceFacade.writeRefundMode(rs,rm);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-    /*private static Map<IReturnable, ReturnService> resiCreati = new HashMap<>();
-
-    public static ReturnService getReso(IReturnable returnableOrder) {
-        if (resiCreati.containsKey(returnableOrder)) {
-            System.out.println("---------Restituisco l'istanza di Reso già esistente per l'oggetto rendibile fornito-----------.");
-            return resiCreati.get(returnableOrder);
-        } else {
-        	ReturnService r = new ReturnService(returnableOrder);
-            resiCreati.put(returnableOrder, r);
-            return r;
-        }
-    }*/
 }

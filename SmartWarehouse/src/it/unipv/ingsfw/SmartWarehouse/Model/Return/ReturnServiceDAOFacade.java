@@ -1,25 +1,23 @@
-package it.unipv.ingsfw.SmartWarehouse.Database;
+package it.unipv.ingsfw.SmartWarehouse.Model.Return;
 
 import java.util.Map;
 
-
-import it.unipv.ingsfw.SmartWarehouse.Model.Return.ItemToBeReturned;
-import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnService;
-import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.Database.IReturnServiceDAO;
+import it.unipv.ingsfw.SmartWarehouse.Database.ReturnServiceDAO;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
+import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 
-public class ReturnServiceFacade {
-	private static ReturnServiceFacade istance;
+public class ReturnServiceDAOFacade {
+	private static ReturnServiceDAOFacade istance;
 	private IReturnServiceDAO rsdao;
-	private ReturnServiceFacade() {
+	private ReturnServiceDAOFacade() {
 		super();
 		this.rsdao=new ReturnServiceDAO();
 	}
-	public static ReturnServiceFacade getIstance() {
+	public static ReturnServiceDAOFacade getIstance() {
 		if(istance==null) {
-			istance=new ReturnServiceFacade();
+			istance=new ReturnServiceDAOFacade();
 		}
 		return istance;
 	} 

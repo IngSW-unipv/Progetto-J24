@@ -14,9 +14,11 @@ import javax.swing.ButtonModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
-import it.unipv.ingsfw.SmartWarehouse.Database.ReturnServiceFacade;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import it.unipv.ingsfw.SmartWarehouse.Exception.MissingReasonException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.UnableToReturnException;
@@ -28,6 +30,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Refund.Voucher.VoucherRefund;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.Reasons;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnFACADE;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnService;
+import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnServiceDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.View.ReturnItemsAndReasonsView;
@@ -61,11 +64,11 @@ public class ReturnController {
 			}
 			private void manageAction() {
 				riarView.setVisible(false);
+				
+				/* 1) Management of product choice and reasons */
 				ArrayList<JCheckBox> checkBoxList = riarView.getCheckBoxList();
 				ArrayList<JComboBox<String>> reasonsDropdownList = riarView.getReasonsDropdownList();
 
-				String sku;
-				String reason;
 				boolean itemSelected = false;
 				for (int i = 0; i < checkBoxList.size(); i++) {
 					JCheckBox checkBox = checkBoxList.get(i);
@@ -73,8 +76,8 @@ public class ReturnController {
 
 					if (checkBox.isSelected()) {
 						itemSelected=true;
-						reason = comboBox.getSelectedItem().toString();
-						sku = checkBox.getActionCommand();
+						String reason = comboBox.getSelectedItem().toString();
+						String sku = checkBox.getActionCommand();
 						InventoryItem inventoryItem=InventoryDAOFacade.getInstance().findInventoryItemBySku(sku);
 						if(reason.equals(MOTIVAZIONE_PERSONALIZZATA)) {
 							reason = riarView.getCustomReasonAreaList().get(i).getText();
@@ -103,7 +106,11 @@ public class ReturnController {
 					riarView.showWarningMessagge("Selezionare almeno un prodotto da restituire");
 					return;
 				}
-
+				
+				
+				
+				
+				/* 2) Refund management */
 				StringBuilder message = new StringBuilder(returnFacade.toString()).append("Metodo di rimborso selezionato:\n");
 				ButtonModel button=riarView.getRefundButtonGroup().getSelection();
 				if(button==null) {
@@ -125,6 +132,7 @@ public class ReturnController {
 							returnFacade.setRefundMode(refundMode);
 							returnFacade.setMoneyAlreadyReturned(returnFacade.getMoneyAlreadyReturned()+br.getValue());
 							returnFacade.AddReturnToDB(refundMode);
+							riarView.showSuccessDialog("Pagamento andato a buon fine");
 						} catch (PaymentException e) {
 							// TODO Auto-generated catch block
 							riarView.setVisible(true);
@@ -132,6 +140,7 @@ public class ReturnController {
 							removeItemsNotActuallyReturned();
 							return;
 						}
+						
 					} else {
 						VoucherRefund vr = new VoucherRefund(moneyToBeReturned);
 						try {
@@ -139,6 +148,7 @@ public class ReturnController {
 							returnFacade.setRefundMode(refundMode);
 							returnFacade.setMoneyAlreadyReturned(returnFacade.getMoneyAlreadyReturned()+vr.getValue());
 							returnFacade.AddReturnToDB(refundMode);
+							riarView.showSuccessDialog("Pagamento andato a buon fine");
 						} catch (PaymentException e) {
 							// TODO Auto-generated catch block
 							riarView.setVisible(true);
@@ -152,8 +162,6 @@ public class ReturnController {
 					riarView.setVisible(true);
 					removeItemsNotActuallyReturned();
 				}
-				//System.out.println(returnFacade); //Qui deve apparire su GUI con ok e continua a navigare sullo shop*/
-
 			}
 		};
 		riarView.getNextButton().addActionListener(NextButtonLister);
@@ -163,8 +171,17 @@ public class ReturnController {
 		// TODO Auto-generated method stub
 		returnFacade.removeAllFromReturn();
 		ReturnService returnService=returnFacade.getRs();
-		returnService.setReturnedItems(ReturnServiceFacade.getIstance().readItemAndReason(returnService.getReturnableOrder()));
+		returnService.setReturnedItems(ReturnServiceDAOFacade.getIstance().readItemAndReason(returnService.getReturnableOrder()));
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 
 	private void initActionAndStateOfTheComponent() {
@@ -227,7 +244,7 @@ public class ReturnController {
 			}
 			private void manageAction() {
 				riarView.setVisible(false);
-				//returnView.setVisible(true);
+				//new ReturnView(SingletonManager.getInstance().getLoggedUser());
 			}
 
 		};

@@ -29,10 +29,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
-
-import it.unipv.ingsfw.SmartWarehouse.Database.ReturnServiceFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.Client;
 import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
+import it.unipv.ingsfw.SmartWarehouse.Model.User;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
 
 public class ReturnView extends JFrame{
@@ -46,7 +45,7 @@ public class ReturnView extends JFrame{
 	private JButton backButton;
 
 
-	public ReturnView(Client client) {
+	public ReturnView(User client) {
 		setTitle("Return Service");
 		setSize(400, 200);
 

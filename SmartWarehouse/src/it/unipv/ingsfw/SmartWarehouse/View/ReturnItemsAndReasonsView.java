@@ -194,8 +194,21 @@ public class ReturnItemsAndReasonsView extends JFrame{
 	 public void showErrorMessagge(String message) {
 		    JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
 		}
-	
-	
+	 public void showSuccessDialog(String message) {
+		   String[] options = {"Continua a navigare nello shop", "chiudi"};
+		    int n = JOptionPane.showOptionDialog(this,message,
+		        "Operazione di Reso completata con successo",
+		        JOptionPane.YES_NO_OPTION,
+		        JOptionPane.INFORMATION_MESSAGE,
+		        null,
+		        options,
+		        options[0]);
+		    if (n == JOptionPane.YES_OPTION) {
+		        this.dispose();
+		    } else if (n == JOptionPane.NO_OPTION) {
+		        // new ShopView ecc.
+		    }
+		}
 	public static String getVoucherRadioText() {
 		return VOUCHER_RADIO_TEXT;
 	}
