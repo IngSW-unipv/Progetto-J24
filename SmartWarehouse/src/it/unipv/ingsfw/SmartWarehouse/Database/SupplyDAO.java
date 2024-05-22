@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supplier;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supply;
 
@@ -16,7 +17,7 @@ public class SupplyDAO implements ISupplyDAO {
 
 	public SupplyDAO() {
 		super();
-		this.schema = "warehouse2";
+		this.schema = "warehouse";
 	}
 	
 	public List<Supply> selectAllSupplies() {
@@ -89,6 +90,29 @@ public class SupplyDAO implements ISupplyDAO {
 		return result;
 	}
 	
+	public List<Supply> getSupplyBySku(String sku) {
+		conn=DBConnection.startConnection(conn,schema);
+		PreparedStatement st1;
+		ResultSet rs1;
+		List<Supply> result = new ArrayList<Supply>();
+				
+		try {
+			String query= "select * from supply where sku = ?";
+			st1=conn.prepareStatement(query);
+			st1.setString(1, sku);
+			rs1=st1.executeQuery();
+			if(rs1.next()) {
+				result.add(new Supply(rs1.getString(1),rs1.getString(2), rs1.getString(3),rs1.getDouble(4),rs1.getInt(5)));
+			}
+			
+		} catch  (Exception e) { 
+			e.printStackTrace();
+		} finally {
+	        DBConnection.closeConnection(conn); 
+	    }
+		return result;
+	}
+	
 	public boolean insertSupply(Supply s) {
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;
@@ -117,7 +141,7 @@ public class SupplyDAO implements ISupplyDAO {
 		boolean result=true;
 		
 		try {
-			String query="delete from supply where id_supply=?";
+			String query="delete from supply where idsupply=?";
 			st1 = conn.prepareStatement(query);
 			st1.setString(1, s.getID_Supply());
 			st1.executeUpdate(); //non mettere query tra parentesi
@@ -147,6 +171,30 @@ public class SupplyDAO implements ISupplyDAO {
 			result=false;
 		} finally {
 	        DBConnection.closeConnection(conn);
+	    }
+		return result;
+	}
+	
+	public Supply getCheaperSupplyByInventoryItem(InventoryItem i) {
+		conn=DBConnection.startConnection(conn,schema);
+		PreparedStatement st1;
+		ResultSet rs1;
+		Supply result=null;
+				
+		try {
+			String query= "select * from supply where sku = ? and price=(select max(price) from supply where sku= ?)";
+			st1=conn.prepareStatement(query);
+			st1.setString(1, i.getSku());
+			st1.setString(2, i.getSku());
+			rs1=st1.executeQuery();
+			if(rs1.next()) {
+				result= new Supply(rs1.getString(1),rs1.getString(2), rs1.getString(3),rs1.getDouble(4),rs1.getInt(5));
+			}
+			
+		} catch  (Exception e) { 
+			e.printStackTrace();
+		} finally {
+	        DBConnection.closeConnection(conn); 
 	    }
 		return result;
 	}

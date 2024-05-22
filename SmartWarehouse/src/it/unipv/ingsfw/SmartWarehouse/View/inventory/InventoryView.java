@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -17,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
 
 import it.unipv.ingsfw.SmartWarehouse.Controller.InventoryController;
 import it.unipv.ingsfw.SmartWarehouse.Controller.SupplyController;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Category;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyManager;
@@ -42,7 +44,7 @@ public class InventoryView extends JFrame {
 	    tableModel = new DefaultTableModel();
 	    tableModel.addColumn("Sku");
 	    tableModel.addColumn("Description");
-	    tableModel.addColumn("Price");
+	    tableModel.addColumn("Price");    
 	    tableModel.addColumn("Qty");
 	    tableModel.addColumn("StdLevel");
 	    tableModel.addColumn("Line");
@@ -50,6 +52,7 @@ public class InventoryView extends JFrame {
 	    tableModel.addColumn("Bin");
 	    tableModel.addColumn("Fragility");
 	    tableModel.addColumn("Dimension");
+	    tableModel.addColumn("Category");
 	    table = new JTable(tableModel);
 	    JScrollPane scrollPane = new JScrollPane(table);
 	     
@@ -96,6 +99,7 @@ public class InventoryView extends JFrame {
         JTextField binField = new JTextField(10);
         JTextField fragilityField = new JTextField(10);
         JTextField dimensionField = new JTextField(10);
+        JComboBox<Category> categoryBox = new JComboBox<>(Category.values());
 
         JPanel panel = new JPanel(new GridLayout(0, 2)); //n°righe qualsiasi
         panel.setPreferredSize(new Dimension(300, 400));
@@ -115,6 +119,7 @@ public class InventoryView extends JFrame {
         panel.add(podField);
         panel.add(new JLabel("Bin:"));
         panel.add(binField);
+        panel.add(categoryBox);
         
         int result = JOptionPane.showConfirmDialog(this, panel, "Insert new Item", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {   //gestire anche quando schiacci cancel
@@ -137,23 +142,24 @@ public class InventoryView extends JFrame {
             String pod = podField.getText();
             String bin = binField.getText();
             int fr=Integer.parseInt(fragilityField.getText());
-            int dim=Integer.parseInt(dimensionField.getText());      
+            int dim=Integer.parseInt(dimensionField.getText()); 
+            Category cat = (Category)categoryBox.getSelectedItem();
 
-            return new Object[] { description, fr, dim, price, std_level, line, pod, bin }; 
+            return new Object[] { description, fr, dim, cat, price, std_level, line, pod, bin };  
        }
        return null;
     }
  
 	//add an inventoryItem into the table
-	public void addInventoryItem(String sku, String d, int fr, int dim, double price, int qty, int stdl, String line, String pod, String bin) { 
-        tableModel.addRow(new Object[]{sku, d, price, qty, stdl, line, pod, bin, fr, dim});
+	public void addInventoryItem(String sku, String d, double price, int qty, int stdl, String line, String pod, String bin, int fr, int dim, String cat) { 
+        tableModel.addRow(new Object[]{sku, d, price, qty, stdl, line, pod, bin, fr, dim, cat});
     }
 	 
 	public void viewInventoryItemFound(InventoryItem i) {
 		tableModel.setRowCount(0);
 		if(i!=null) {
-		tableModel.addRow(new Object[]{i.getSku(), i.getItem().getDescription(), i.getPrice(),i.getQty(), i.getStdLevel(), i.getPos().getLine(), i.getPos().getPod(), i.getPos().getBin(),
-						i.getItem().getItemDetails().getFragility(), i.getItem().getItemDetails().getDimension()});
+		tableModel.addRow(new Object[]{i.getSku(), i.getDescription(), i.getPrice(),i.getQty(), i.getStdLevel(), i.getPos().getLine(), i.getPos().getPod(), i.getPos().getBin(),
+						i.getDetails().getFragility(), i.getDetails().getDimension(), i.getDetails().getCategory().getLabel()});
 		}
 	}
 	

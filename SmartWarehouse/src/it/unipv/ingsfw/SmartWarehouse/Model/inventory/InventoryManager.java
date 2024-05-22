@@ -4,13 +4,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import it.unipv.ingsfw.SmartWarehouse.Exception.AuthorizationDeniedException;
+import it.unipv.ingsfw.SmartWarehouse.Exception.supply.SupplyDoesNotExistException;
+import it.unipv.ingsfw.SmartWarehouse.Model.supply.replenishmentStrategy.IReplenishmentStrategy;
+
 public class InventoryManager {  
 	private InventoryDAOFacade invFacade;
 	
 	public InventoryManager() {
 		this.invFacade = InventoryDAOFacade.getInstance();
 	}
-	
+	 
 	public List<InventoryItem> getInventory() {
 		return invFacade.viewInventory();
 	}  
@@ -20,8 +24,8 @@ public class InventoryManager {
 	}  
 	
 	public InventoryItem findInventoryItemByPosition(Position pos) throws IllegalArgumentException {
-		if(pos==null || pos.getLine().isEmpty() || pos.getPod().isEmpty() || pos.getBin().isEmpty()) {
-			throw new IllegalArgumentException("Insert a position valid, without empty fields");
+		if(pos==null) {
+			throw new IllegalArgumentException("Insert a position valid");
 		}
 		return invFacade.checkIfPositionAlreadyUsed(pos);
 	}
@@ -33,7 +37,15 @@ public class InventoryManager {
 	public List<InventoryItem> getInventoryItemsUnderStdLevel(){
 		return invFacade.getInventoryItemsUnderStdLevel();
 	}
-
+	
+	public boolean insertItem(InventoryItem i){ 
+		return invFacade.insertItem(i);
+	}
+	
+	public boolean deleteItem(String sku) {
+		return invFacade.deleteItem(sku);
+	}
+	
 } 
 
 

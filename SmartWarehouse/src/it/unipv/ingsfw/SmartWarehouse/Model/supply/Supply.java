@@ -41,12 +41,13 @@ public class Supply {
 		this.maxqty = maxqty;
 	} 
 
-	public Supply(String sku, String ids, double price, int maxqty) {
+	//used for the creation of a new supply
+	public Supply(String sku, String ids, double price, int maxqty) throws IllegalArgumentException {
 		this.ID_Supply=this.generateUnivoqueID_Supply();
 		this.supplier = SupplyDAOFacade.getInstance().findSupplier(ids);
 		this.inventoryItem = InventoryDAOFacade.getInstance().findInventoryItemBySku(sku); 
-		this.price = price; 
-		this.maxqty = maxqty;
+		this.setPrice(price);; 
+		this.setMaxqty(maxqty);;
 	} 
 
 	public String getID_Supply() {
@@ -77,16 +78,22 @@ public class Supply {
 		return price;
 	}
 
-	public void setPrice(double price) {
-		this.price = price;
+	public void setPrice(double price) throws IllegalArgumentException {
+		if(price<=0) {
+			throw new IllegalArgumentException("Price must be positive");
+		}
+		this.price=price;
 	}
 
 	public int getMaxqty() {
 		return maxqty;
 	}
 
-	public void setMaxqty(int maxqty) {
-		this.maxqty = maxqty;
+	public void setMaxqty(int maxqty) throws IllegalArgumentException  {
+		if(maxqty<=0) {
+			throw new IllegalArgumentException("Maximum quantity that can be ordered must be positive");
+		}
+		this.maxqty=maxqty;
 	}
 	
 	@Override
@@ -95,14 +102,8 @@ public class Supply {
 	}
 	
 	//method called on a supply built whit the third constructor
-	public void add() throws InvalidSupplyException, AuthorizationDeniedException, ItemNotFoundException, SupplierDoesNotExistException {
+	public void add() throws AuthorizationDeniedException, ItemNotFoundException, SupplierDoesNotExistException, SupplyAlreadyExistsException {
 		this.checkSupplierAuthorization();
-		if(price<=0) {
-			throw new InvalidPriceException();
-		} 
-		if(maxqty<=0) {
-			throw new InvalidMaxQuantityExcepion();
-		}
 		//check the presence of the inventoryItem
 		if(inventoryItem==null) { 
 			throw new ItemNotFoundException(); 
@@ -131,7 +132,6 @@ public class Supply {
 
 	//check that qty is less than maxQty
 	public SupplyOrder buy(int qty) throws AuthorizationDeniedException, SupplyDoesNotExistException, IllegalArgumentException {
-		this.checkSupplierAuthorization();
 		//check the presence of the supply
 		if(SupplyDAOFacade.getInstance().findSupply(ID_Supply)==null) {
 			throw new SupplyDoesNotExistException();
@@ -142,11 +142,16 @@ public class Supply {
 		if(qty>maxqty) {
 			throw new IllegalArgumentException("qty can't exceed the maximum orderable limit: "+maxqty);
 		}
+		return replenishSupply(qty);
+	} 
+	  
+	public SupplyOrder replenishSupply(int qty) throws AuthorizationDeniedException {
+		this.checkSupplierAuthorization();
 		SupplyOrder o=new SupplyOrder(SupplyDAOFacade.getInstance().nextNOrder(), ID_Supply, qty, price*qty, LocalDateTime.now());
 		SupplyDAOFacade.getInstance().insertSupplyOrder(o);
 		return o;
 	} 
-	  
+	
 	private void checkSupplierAuthorization() throws AuthorizationDeniedException {
 		try {
 			WarehouseOperator op=SingletonUser.getInstance().getOp();

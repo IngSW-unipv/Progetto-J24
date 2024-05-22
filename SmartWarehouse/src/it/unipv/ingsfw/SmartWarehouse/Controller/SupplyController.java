@@ -8,10 +8,14 @@ import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Category;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supplier;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supply;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyOrder;
+import it.unipv.ingsfw.SmartWarehouse.Model.supply.replenishmentStrategy.CategoryStrategy;
+import it.unipv.ingsfw.SmartWarehouse.Model.supply.replenishmentStrategy.ThresholdStrategy;
 import it.unipv.ingsfw.SmartWarehouse.View.inventory.SuppliersDialog;
 import it.unipv.ingsfw.SmartWarehouse.View.inventory.SuppliesDialog;
 import it.unipv.ingsfw.SmartWarehouse.View.inventory.SupplyOrderDialog;
@@ -29,6 +33,7 @@ public class SupplyController {
 		allSuppliers();
 		allSupplies();
 		allOrders();
+		replenish();
 	}
 	
 	public void newSupplier() {
@@ -235,6 +240,40 @@ public class SupplyController {
         for (SupplyOrder s : orders) {
         	supplyPanel.getSupplyOrderDialog().addSupplyOrderToTable(s.getN_order(), s.getSupply().getID_Supply(), s.getQty(), s.getPrice(), s.getDate());
         }	
+    }
+    
+    public void replenish() {
+    	ActionListener replenishListener=new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				manageAction();		
+			}
+			
+			private void manageAction() {
+				try {
+					String strategy = (String)supplyPanel.getStrategy().getSelectedItem();
+					
+					switch (strategy) {
+					case "Threshold Strategy": {
+						supplyManager.setReplenishmentStrategy(new ThresholdStrategy());
+						break;
+					}
+					case "Category Strategy": {
+						Category cat=supplyPanel.askCategory(); 
+						supplyManager.setReplenishmentStrategy(new CategoryStrategy(cat));
+						break;
+					}
+					}
+					supplyManager.replenishAll(InventoryDAOFacade.getInstance().viewInventory());
+					JOptionPane.showMessageDialog(supplyPanel, "successfull replenishment", "Success", JOptionPane.INFORMATION_MESSAGE);
+				} catch(Exception e) {
+					JOptionPane.showMessageDialog(supplyPanel.getSuppliesDialog(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				
+			}
+		};
+		supplyPanel.getReplenish().addActionListener(replenishListener);
     }
     
 }

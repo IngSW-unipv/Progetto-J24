@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supply;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyOrder;
 
 public class SupplyOrderDAO implements ISupplyOrderDAO {
@@ -17,14 +18,14 @@ public class SupplyOrderDAO implements ISupplyOrderDAO {
 	
 	public SupplyOrderDAO() {
 		super();
-		this.schema="warehouse2"; 
+		this.schema="warehouse"; 
 	} 
 	
 	public List<SupplyOrder> selectAllSupplyOrders(){
 		List<SupplyOrder> orders=new ArrayList<>();
 		conn=DBConnection.startConnection(conn, schema);
 		Statement st1;
-		ResultSet result;
+		ResultSet rs1;
 		
 		String datetimeString;
 		LocalDateTime date;
@@ -32,12 +33,12 @@ public class SupplyOrderDAO implements ISupplyOrderDAO {
 		try {
 			st1=conn.createStatement();
 			String query="select * from supplyOrders";
-			result=st1.executeQuery(query);
+			rs1=st1.executeQuery(query);
 			
-			while(result.next()) { 
-				datetimeString = result.getString(5);
+			while(rs1.next()) { 
+				datetimeString = rs1.getString(5);
 				date=LocalDateTime.parse(datetimeString,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-				orders.add(new SupplyOrder(result.getInt(1),result.getString(2),result.getInt(3),result.getDouble(4),date));
+				orders.add(new SupplyOrder(rs1.getInt(1),rs1.getString(2),rs1.getInt(3),rs1.getDouble(4),date));
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -46,7 +47,36 @@ public class SupplyOrderDAO implements ISupplyOrderDAO {
 		}
 		return orders;
 	} 
+	
 	 
+	public List<SupplyOrder> getSupplyOrdersBySupply(Supply s){
+		conn=DBConnection.startConnection(conn,schema);
+		PreparedStatement st1;
+		ResultSet rs1;
+		List<SupplyOrder> result = new ArrayList<SupplyOrder>();
+		
+		String datetimeString;
+		LocalDateTime date;
+				
+		try {
+			String query= "select * from supplyOrders where idsupply = ?";
+			st1=conn.prepareStatement(query);
+			st1.setString(1, s.getID_Supply());
+			rs1=st1.executeQuery();
+			if(rs1.next()) {
+				datetimeString = rs1.getString(5);
+				date=LocalDateTime.parse(datetimeString,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+				result.add(new SupplyOrder(rs1.getInt(1),rs1.getString(2),rs1.getInt(3),rs1.getDouble(4),date));
+			}
+			
+		} catch  (Exception e) { 
+			e.printStackTrace();
+		} finally {
+	        DBConnection.closeConnection(conn); 
+	    }
+		return result;
+	} 
+	
 	public boolean insertSupplyOrder(SupplyOrder o) {
 		conn=DBConnection.startConnection(conn, schema);
 		PreparedStatement st1;
@@ -94,5 +124,24 @@ public class SupplyOrderDAO implements ISupplyOrderDAO {
 		return nmax+1;
 	} 
 	
+	public boolean deleteSupplyOrder(Supply s) {
+		conn=DBConnection.startConnection(conn,schema);
+		PreparedStatement st1;
+		boolean result=true;
+		
+		try {
+			String query="delete from supplyOrders where idsupply = ?";
+			st1 = conn.prepareStatement(query);
+			st1.setString(1, s.getID_Supply());
+			st1.executeUpdate(); 
+			
+		} catch  (Exception e) {
+			e.printStackTrace();
+			result=false;
+		} finally {
+	        DBConnection.closeConnection(conn);
+	    }
+		return result;
+	}
 		
 }

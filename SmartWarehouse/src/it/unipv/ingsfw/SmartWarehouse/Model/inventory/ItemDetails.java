@@ -2,11 +2,13 @@ package it.unipv.ingsfw.SmartWarehouse.Model.inventory;
 
 public class ItemDetails {
 	private int fragility, dimension;
+	private Category category; 
 
-	public ItemDetails(int fragility, int dimension) {
+	public ItemDetails(int fragility, int dimension, Category category) {
 		super();
 		this.fragility = fragility;
 		this.dimension = dimension;
+		this.category = category; 
 	}
 	
 	public int getFragility() {
@@ -24,12 +26,14 @@ public class ItemDetails {
 	public void setDimension(int dimension) {
 		this.dimension = dimension;
 	}
-	
-	//to try
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return "Fragility: "+fragility+", Dimension: "+dimension;
+
+	public Category getCategory() {
+		return category;
 	}
+ 
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
 	
 }

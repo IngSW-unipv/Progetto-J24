@@ -1,7 +1,6 @@
 package it.unipv.ingsfw.SmartWarehouse.Database;
 
 import java.util.List;
-import java.util.Set;
 
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Position;

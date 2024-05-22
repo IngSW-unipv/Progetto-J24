@@ -7,13 +7,13 @@ import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Category;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Item;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.ItemDetails;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Position;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supplier;
-import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyManager;
+import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.View.inventory.FirstDialog;
 import it.unipv.ingsfw.SmartWarehouse.View.inventory.InventoryView;
 import it.unipv.ingsfw.SmartWarehouse.View.inventory.SecondDialog;
@@ -25,20 +25,21 @@ public class InventoryController {
 	public InventoryController(InventoryManager w, InventoryView iv) {
         this.w = w;
         this.iv = iv;
-        updateInventory(w.getInventory()); // Aggiorna la tabella con gli articoli iniziali
+        updateInventory(w.getInventory()); // Aggiorna la tabella con gli articoli iniziali        
         find();
         findPosition();
         underLevel();
         back();
         insert();
         order();
-        rowSelection();
+        rowSelection();      
     }
 	
 	private void updateInventory(List<InventoryItem> items) {
         iv.getTableModel().setRowCount(0);
         for (InventoryItem i : items) {
-            iv.addInventoryItem(i.getSku(), i.getItem().getDescription(), i.getItem().getItemDetails().getFragility(), i.getItem().getItemDetails().getDimension() , i.getPrice(), i.getQty(), i.getStdLevel(), i.getPos().getLine(), i.getPos().getPod(), i.getPos().getBin());
+            iv.addInventoryItem(i.getSku(), i.getDescription(), i.getPrice(), i.getQty(), i.getStdLevel(), i.getPos().getLine(), i.getPos().getPod(), i.getPos().getBin(),
+            		i.getDetails().getFragility(), i.getDetails().getDimension(), i.getDetails().getCategory().getLabel());
         }
     }
 	
@@ -76,7 +77,7 @@ public class InventoryController {
 						JOptionPane.showMessageDialog(iv.getFirstDialog(), e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
 					}		
 				}
-			}
+			} 
 		};
 		iv.getPosb().addActionListener(actionListener);
 	}
@@ -116,10 +117,11 @@ public class InventoryController {
 			
 			private void manageAction() {
 				Object[] input=iv.showInsertDialog();
-				if (input!=null) {
-					Item i=new Item((String)input[0], new ItemDetails((int)input[1], (int)input[2]));
-					try {
-						i.addToInventory((double)input[3], (int)input[4], new Position((String)input[5], (String)input[6], (String)input[7]));
+				if (input!=null) {   
+					try {   
+						InventoryItem i = new InventoryItem((String)input[0], new ItemDetails((int)input[1], (int)input[2], (Category)input[3]), 
+								(double)input[4], (int)input[5], new Position((String)input[6], (String)input[7], (String)input[8]));
+						i.addToInventory();
 						updateInventory(w.getInventory());
 					} catch(Exception e) {
 			            JOptionPane.showMessageDialog(iv, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
@@ -277,10 +279,8 @@ public class InventoryController {
 			private void manageAction() {
 				try {
 					int qty=Integer.parseInt(iv.getFirstDialog().getSecondDialog().getQty().getText());
-					SupplyManager s=new SupplyManager();
-					s.findSupplyByItemAndSupplier(iv.getFirstDialog().getSku(), iv.getFirstDialog().getSecondDialog().getIds()).buy(qty);
+					SupplyDAOFacade.getInstance().findSupplyBySkuAndIds(iv.getFirstDialog().getSku(), iv.getFirstDialog().getSecondDialog().getIds()).buy(qty);
 					JOptionPane.showMessageDialog(iv.getFirstDialog().getSecondDialog(), "successfull order", "Order", JOptionPane.INFORMATION_MESSAGE);
-
 				} catch(Exception e) {
 					JOptionPane.showMessageDialog(iv.getFirstDialog().getSecondDialog(), e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
 				}			

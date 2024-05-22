@@ -1,7 +1,6 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.supply;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.AuthorizationDeniedException;
-import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyFieldException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.supplier.InvalidSupplierException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.supplier.SupplierAlreadyExistsException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.supplier.SupplierDoesNotExistException;

@@ -16,7 +16,7 @@ public class SupplierDAO implements ISupplierDAO{
 
 	public SupplierDAO() {
 		super();
-		this.schema = "warehouse2";
+		this.schema = "warehouse";
 	}
 	
 	public List<Supplier> selectAllSupplier(){

@@ -1,7 +1,6 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.inventory;
 
 import java.util.List;
-import java.util.Set;
 
 import it.unipv.ingsfw.SmartWarehouse.Database.IInventoryDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.InventoryDAO;

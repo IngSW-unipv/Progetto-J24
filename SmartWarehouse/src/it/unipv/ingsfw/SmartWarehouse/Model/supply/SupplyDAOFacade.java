@@ -8,6 +8,7 @@ import it.unipv.ingsfw.SmartWarehouse.Database.ISupplyOrderDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.SupplierDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.SupplyDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.SupplyOrderDAO;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 
 public class SupplyDAOFacade {
 	private static SupplyDAOFacade instance;
@@ -58,6 +59,10 @@ public class SupplyDAOFacade {
 		return supplyDAO.getSupplyBySkuAndIds(sku, ids);
 	}
 	
+	public List<Supply> findSupplyBySku(String sku) {
+		return supplyDAO.getSupplyBySku(sku);
+	}
+	
 	public boolean insertNewSupply(Supply s) {
 		return supplyDAO.insertSupply(s);
 	}
@@ -69,10 +74,19 @@ public class SupplyDAOFacade {
 	public boolean deleteSupplyOfSupplier(Supplier s) {
 		return supplyDAO.deleteSupplyOfSupplier(s);
 	}
+	
+	public Supply getCheaperSupplyByInventoryItem(InventoryItem i) {
+		return supplyDAO.getCheaperSupplyByInventoryItem(i);
+	}
+ 
 //----------------------------------------------------------
 	
 	public boolean insertSupplyOrder(SupplyOrder o) {
 		return supplyOrderDAO.insertSupplyOrder(o);
+	}
+	
+	public List<SupplyOrder> getSupplyOrdersBySupply(Supply s){
+		return supplyOrderDAO.getSupplyOrdersBySupply(s);
 	}
 	
 	public int nextNOrder() {
@@ -81,5 +95,9 @@ public class SupplyDAOFacade {
 	
 	public List<SupplyOrder> viewSupplyOrders(){
 		return supplyOrderDAO.selectAllSupplyOrders();
+	}
+	
+	public boolean deleteSupplyOrder(Supply s) {
+		return supplyOrderDAO.deleteSupplyOrder(s);
 	}
  }

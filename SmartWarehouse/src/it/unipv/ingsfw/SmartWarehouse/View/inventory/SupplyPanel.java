@@ -1,19 +1,29 @@
 package it.unipv.ingsfw.SmartWarehouse.View.inventory;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Category;
+import it.unipv.ingsfw.SmartWarehouse.Model.supply.replenishmentStrategy.CategoryStrategy;
+import it.unipv.ingsfw.SmartWarehouse.Model.supply.replenishmentStrategy.IReplenishmentStrategy;
+import it.unipv.ingsfw.SmartWarehouse.Model.supply.replenishmentStrategy.ThresholdStrategy;
 
 public class SupplyPanel extends JPanel{
 	 private JButton newSupplier;
@@ -21,17 +31,19 @@ public class SupplyPanel extends JPanel{
 	 private JButton allSuppliers;
 	 private JButton allSupplies;
 	 private JButton allSupplyOrders;
+	 private JButton replenish;
+	 private JComboBox<String> strategy;
 	 private SuppliersDialog suppliersDialog;
 	 private SuppliesDialog suppliesDialog;
 	 private SupplyOrderDialog supplyOrderDialog;
 	 
 	 public SupplyPanel() {
 		 
-		 JPanel lowerPanel=new JPanel();
+		 JPanel centerPanel=new JPanel();
 		 newSupplier=new JButton("new Supplier");
 		 newSupply=new JButton("new Supply");
-		 lowerPanel.add(newSupplier);
-		 lowerPanel.add(newSupply);
+		 centerPanel.add(newSupplier);
+		 centerPanel.add(newSupply);
 		 
 		 JPanel upperPanel=new JPanel();
 		 allSuppliers=new JButton("all Suppliers");
@@ -41,9 +53,19 @@ public class SupplyPanel extends JPanel{
 		 upperPanel.add(allSupplies);  
 		 upperPanel.add(allSupplyOrders);  
 		 
+		 JPanel thirdPanel=new JPanel();
+		 replenish=new JButton("replenish");
+		 strategy=new JComboBox<>();
+		 strategy.addItem(new CategoryStrategy(null).getName());
+		 strategy.addItem(new ThresholdStrategy().getName());
+
+		 thirdPanel.add(strategy);
+		 thirdPanel.add(replenish);
+		 
 		 this.setLayout(new BorderLayout());
 		 this.add(upperPanel, BorderLayout.NORTH);
-		 this.add(lowerPanel, BorderLayout.SOUTH);
+		 this.add(centerPanel, BorderLayout.CENTER);
+		 this.add(thirdPanel, BorderLayout.SOUTH);
 	}
 	 
 	public Object[] showSupplierInsert() {
@@ -116,9 +138,20 @@ public class SupplyPanel extends JPanel{
 	 	        return null;
 	 	    }
 	        return new Object[] { sku, ids, price, maxqty }; 
-	    }
+	    } 
 	    return null;
 	 }
+	
+	public Category askCategory() {
+		JPanel panel=new JPanel();
+		JComboBox<Category> category = new JComboBox<>(Category.values());
+		panel.add(category);
+		int result=JOptionPane.showConfirmDialog(this, panel, "select category", JOptionPane.OK_CANCEL_OPTION);
+		if(result==JOptionPane.OK_OPTION) {
+			return (Category)category.getSelectedItem();
+		}
+		return null;
+	}
 
 	public JButton getNewSupplier() {
 		return newSupplier;
@@ -182,6 +215,22 @@ public class SupplyPanel extends JPanel{
 
 	public void setSupplyOrderDialog(SupplyOrderDialog supplyOrderDialog) {
 		this.supplyOrderDialog = supplyOrderDialog;
+	}
+
+	public JButton getReplenish() {
+		return replenish;
+	}
+
+	public void setReplenish(JButton replenish) {
+		this.replenish = replenish;
+	}
+
+	public JComboBox<String> getStrategy() {
+		return strategy;
+	}
+
+	public void setStrategy(JComboBox<String> strategy) {
+		this.strategy = strategy;
 	}
 	 
 	

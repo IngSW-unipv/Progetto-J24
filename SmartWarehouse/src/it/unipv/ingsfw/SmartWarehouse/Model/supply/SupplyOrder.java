@@ -70,5 +70,4 @@ public class SupplyOrder implements Comparable<SupplyOrder> {
 	public int compareTo(SupplyOrder o) {
 		return o.getDate().compareTo(date);
 	} 
-
 }
