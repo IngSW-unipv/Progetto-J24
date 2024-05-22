@@ -9,6 +9,7 @@ import java.util.HashSet;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
@@ -21,11 +22,12 @@ import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
 @SuppressWarnings("serial")
 public class ShopFrame extends JFrame{
 
-	private JPanel shopPan,kartPan;
+	private JPanel shopPan,kartPan,infoPan;
 	private ArrayList<JButton> shopbutts;
 	private HashSet<JButton> kartbutts;
 	private JButton kart,shop,pay,orders,prime;
-	
+	private JLabel infoLab;
+
 	public ShopFrame() {
 		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -54,6 +56,12 @@ public class ShopFrame extends JFrame{
 		
 		shopPan=new JPanel();
 		kartPan=new JPanel();
+		infoPan=new JPanel();
+		
+		infoLab=new JLabel();
+		infoLab.setPreferredSize(new Dimension(200,80));
+		infoLab.setText("elementi nel carrello: 0");
+		infoPan.add(infoLab);
 		
 		JToolBar bar=new JToolBar();
 		bar.add(kart);
@@ -64,6 +72,7 @@ public class ShopFrame extends JFrame{
 		
 		this.add(bar, BorderLayout.NORTH);
 		this.add(shopPan, BorderLayout.CENTER);
+		this.add(infoPan, BorderLayout.SOUTH);
 	}
 	
 	public void makeShop(InventoryManager inv) {
@@ -194,4 +203,25 @@ public class ShopFrame extends JFrame{
 	public JButton getPrime() {
 		return prime;
 	}
+	
+	public JLabel getInfoLab() {
+		return infoLab;
+	}
+
+	public void setInfoLab(JLabel infoLab) {
+		this.infoLab = infoLab;
+	}
+	
+	public void setInfoLabText(String st) {
+		this.infoLab.setText("elementi nel carrello: "+st);
+	}
+
+	public JButton getOrders() {
+		return orders;
+	}
+
+	public void setOrders(JButton orders) {
+		this.orders = orders;
+	}
+
 }

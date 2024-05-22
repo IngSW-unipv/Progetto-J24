@@ -5,8 +5,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.text.View;
 
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Shop;
+import it.unipv.ingsfw.SmartWarehouse.View.ReturnView;
 import it.unipv.ingsfw.SmartWarehouse.View.ShopFrame;
 
 public class ShopController {
@@ -44,6 +46,7 @@ public class ShopController {
 				}catch(IllegalArgumentException ex2) {
 					System.err.print("invalid argument please retry");
 				}
+				view.setInfoLabText(model.getKart().toString());
 			}
 			
 		};
@@ -60,7 +63,8 @@ public class ShopController {
 					model.removeFromKart(e.getActionCommand());
 					for(JButton b: view.getKartButts()) {
 						if(b.getActionCommand().equals(e.getActionCommand())) {
-							b.setVisible(false);						
+							b.setVisible(false);	
+							view.setInfoLabText(model.getKart().toString());
 						}
 					}
 				}
@@ -123,5 +127,16 @@ public class ShopController {
 		};
 		
 		view.getPrime().addActionListener(getprime);
+		
+		ActionListener goToOrderArea=new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				new ReturnView(model.getCl());
+			}
+		};
+		
+		view.getOrders().addActionListener(goToOrderArea);
 	}
 }
