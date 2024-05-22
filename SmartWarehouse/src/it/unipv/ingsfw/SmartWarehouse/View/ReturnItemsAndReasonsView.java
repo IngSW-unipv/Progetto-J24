@@ -110,7 +110,6 @@ public class ReturnItemsAndReasonsView extends JFrame{
         	   }
            }
            
-        Map<String, String> reasons=reasonsFromController;
         int count3=0;
         for (String i : itemsDescriptionsForButton) {
         	
@@ -123,8 +122,7 @@ public class ReturnItemsAndReasonsView extends JFrame{
             checkBoxList.add(checkBox);
             itemAndReasonsPanel.add(checkBox);
             
-            JComboBox<String> reasonsDropdown = new JComboBox<String>(reasons.values().toArray(new String[0]));
-            reasonsDropdown.addItem("Scegli una motivazione");
+            JComboBox<String> reasonsDropdown = new JComboBox<String>(reasonsFromController.values().toArray(new String[0]));
             reasonsDropdown.setSelectedItem("Scegli una motivazione");
             reasonsDropdown.setEnabled(false);
             reasonsDropdownList.add(reasonsDropdown);
@@ -164,6 +162,8 @@ public class ReturnItemsAndReasonsView extends JFrame{
         JLabel refundLabel = new JLabel("Scegli la modalità con cui preferisci essere rimborsato:");
         JRadioButton voucherRadioButton = new JRadioButton(VOUCHER_RADIO_TEXT);
         JRadioButton bankTransferRadioButton = new JRadioButton(BANK_TRANSFER_RADIO_TEXT);
+        voucherRadioButton.setActionCommand(VOUCHER_RADIO_TEXT);
+        bankTransferRadioButton.setActionCommand(BANK_TRANSFER_RADIO_TEXT);
         refundButtonGroup = new ButtonGroup();
         refundButtonGroup.add(voucherRadioButton);
         refundButtonGroup.add(bankTransferRadioButton);
@@ -171,9 +171,9 @@ public class ReturnItemsAndReasonsView extends JFrame{
         refundPanel.add(voucherRadioButton);
         refundPanel.add(bankTransferRadioButton);
 
-        // Aggiungi bordi evidenziati o colori se necessario
-        refundPanel.setBorder(BorderFactory.createTitledBorder("Modalità di Rimborso")); // Aggiunge un bordo titolato
-        refundPanel.setBackground(Color.cyan); // Cambia colore di sfondo se necessario
+        // Aggiungi bordi evidenziati
+        refundPanel.setBorder(BorderFactory.createTitledBorder("Modalità di Rimborso")); //   bordo titolato
+        refundPanel.setBackground(Color.cyan); // colore di sfondo
         JPanel uselessPanel=new JPanel(new BorderLayout());
         mainPanel.add(uselessPanel,BorderLayout.EAST);
         uselessPanel.add(refundPanel,BorderLayout.SOUTH);
@@ -188,9 +188,13 @@ public class ReturnItemsAndReasonsView extends JFrame{
 		 return JOptionPane.showConfirmDialog(this, recap, "Conferma restituzione", JOptionPane.OK_CANCEL_OPTION);
 
 	 }
-	 public void showAlert(String message) {
+	 public void showWarningMessagge(String message) {
 		    JOptionPane.showMessageDialog(this, message, "Alert", JOptionPane.WARNING_MESSAGE);
 		}
+	 public void showErrorMessagge(String message) {
+		    JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	
 	
 	public static String getVoucherRadioText() {
 		return VOUCHER_RADIO_TEXT;

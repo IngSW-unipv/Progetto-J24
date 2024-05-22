@@ -6,6 +6,8 @@ import java.util.Map;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ItemToBeReturned;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnService;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 
 public class ReturnServiceFacade {
@@ -26,7 +28,7 @@ public class ReturnServiceFacade {
 		return rsdao.selectByOrder(returnableOrder);
 		
 	}
-	public Map<ItemToBeReturned, String> readItemAndReason(IReturnable returnableOrder){
+	public Map<InventoryItem, String> readItemAndReason(IReturnable returnableOrder){
 		return rsdao.selectItemAndReason(returnableOrder);
 	}
 	public double readMoneyAlreadyReturned(IReturnable returnableOrder) {

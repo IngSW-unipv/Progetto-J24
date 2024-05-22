@@ -20,6 +20,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -111,6 +112,12 @@ public class ReturnView extends JFrame{
 		setVisible(true);
 
 	}
+	 public void showWarningMessagge(String message) {
+		    JOptionPane.showMessageDialog(this, message, "Alert", JOptionPane.WARNING_MESSAGE);
+		}
+	 public void showErrorMessagge(String message) {
+		    JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
+		}
 
 
 	public ButtonGroup getOrderButtonGroup() {

@@ -11,6 +11,9 @@ import java.util.Map;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ItemToBeReturned;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnService;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 
 public class ReturnServiceDAO implements IReturnServiceDAO{
@@ -52,9 +55,9 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 	}
 
 
-	public Map<ItemToBeReturned, String> selectItemAndReason(IReturnable returnableOrder) {
+	public Map<InventoryItem, String> selectItemAndReason(IReturnable returnableOrder) {
 		// TODO Auto-generated method stub
-		Map<ItemToBeReturned, String>  result = new HashMap<>();
+		Map<InventoryItem, String>  result = new HashMap<>();
 
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;
@@ -70,11 +73,8 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 
 			while(rs1.next())
 			{
-				String id=rs1.getString(1);
-
-				ItemToBeReturned itbr=new ItemToBeReturned(returnableOrder.getItemBySku(id.substring(0,id.indexOf("-"))),id);
-			
-				result.put(itbr,rs1.getString(2));
+				InventoryItem inventoryItem=InventoryDAOFacade.getInstance().findInventoryItemBySku(rs1.getString(1));
+				result.put(inventoryItem,rs1.getString(2));
 			}
 		}catch (Exception e){e.printStackTrace();}
 
@@ -105,7 +105,7 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 		return result;
 	}
 	
-	public boolean insertReturnService(ReturnService rs) {
+	public boolean insertReturnService(ReturnService returnService) {
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1; 		
 		
@@ -117,11 +117,11 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 
 			st1 = conn.prepareStatement(query);
 			
-			for (Map.Entry<ItemToBeReturned, String> entry : rs.getReturnedItems().entrySet()) {
-	            st1.setInt(1, rs.getReturnableOrder().getId()); //evitare chiamate ricorsive
-	            st1.setString(2, entry.getKey().getID()); 
+			for (Map.Entry<InventoryItem, String> entry : returnService.getReturnedItems().entrySet()) {
+	            st1.setInt(1, returnService.getReturnableOrder().getId()); //evitare chiamate ricorsive
+	            st1.setString(2, entry.getKey().getSku()); 
 	            st1.setString(3, entry.getValue()); 
-	            st1.setDouble(4, rs.getMoneyAlreadyReturned());
+	            st1.setDouble(4, returnService.getMoneyAlreadyReturned());
 	            st1.executeUpdate();
 	        }
 

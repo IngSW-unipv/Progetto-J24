@@ -1,28 +1,34 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.Return;
 
+import java.util.Map;
+
+import it.unipv.ingsfw.SmartWarehouse.Exception.MissingReasonException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
+import it.unipv.ingsfw.SmartWarehouse.Exception.UnableToReturnException;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 
 public class ReturnFACADE {
-	private static ReturnFACADE instance;
 	private ReturnService rs;
 	public ReturnFACADE() {
 	}
-	public ReturnFACADE(IReturnable order) {
+	public ReturnFACADE(IReturnable order) { 
+		if(order==null) {
+			throw new NullPointerException("Selezionare un ordine per continuare");
+		}
 		this.rs=ResoManager.getIstance().getReturnService(order);
+		
+		 
 	}
-	public static ReturnFACADE getInstance() {
-		if(instance==null)
-			instance=new ReturnFACADE();
-		return instance;
+	public void addItemToReturn(InventoryItem inventoryItem,String reason) throws UnableToReturnException, MissingReasonException {
+		rs.addItemToReturn(inventoryItem, reason);
 	}
-	public void addItemToReturn(String sku,String reason) {
-		rs.addItemToReturn(sku, reason);
-	}
+
 	public void removeAllFromReturn() {
 		rs.removeAllFromReturn();
 	}
+	
 	public String toString(){
 	
 		return rs.toString();
@@ -36,6 +42,23 @@ public class ReturnFACADE {
 	public double getMoneyToBeReturned() {
 		// TODO Auto-generated method stub
 		return rs.getMoneyToBeReturned();
+	}
+	public Map<InventoryItem, String> getReturnedItems() {
+		return rs.getReturnedItems();
+	}
+	public void AddReturnToDB(IRefund refundMode) {
+		// TODO Auto-generated method stub
+		rs.AddReturnToDB(refundMode);
+		
+	}
+	public void setMoneyAlreadyReturned(double moneyAlreadyReturned) {
+		// TODO Auto-generated method stub
+		rs.setMoneyAlreadyReturned(moneyAlreadyReturned);
+		
+	}
+	public double getMoneyAlreadyReturned() {
+		// TODO Auto-generated method stub
+		return rs.getMoneyAlreadyReturned();
 	}
 
 }

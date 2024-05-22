@@ -3,6 +3,7 @@ package it.unipv.ingsfw.SmartWarehouse;
 import java.util.HashMap;
 
 import it.unipv.ingsfw.SmartWarehouse.Controller.ReturnController;
+import it.unipv.ingsfw.SmartWarehouse.Controller.ReturnableOrdersController;
 import it.unipv.ingsfw.SmartWarehouse.Model.Client;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnFACADE;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
@@ -20,20 +21,27 @@ public class MainClassForTest {
 	
 	public static void main(String[] args) {
 		new MainClassForTest();
-		Client client1= new Client("John", "Doe", "john.doe@example.com", "123 Main St, Anytown, USA", "password123");
+		Client client1= new Client("John", "Doe", "john.doe@example.com", "123 Main St, Anytown, USA", "password1");
+		Client client2= new Client("Jane", "Smith", "jane.smith@example.com", "123 Main St, Anytown, USA", "letmein");
+		
 
 		Position pos1=new Position("linea1","pod1","bin1");
 		ItemDetails itemDetails1=new ItemDetails(1, 1);
 		Item item1=new Item("Smartphone",itemDetails1);
-		InventoryItem inventoryItem1=new InventoryItem(item1,"SKU001",599.99,2,1000,pos1);
+		InventoryItem inventoryItem1=new InventoryItem(item1,"SKU001",500,2,1000,pos1);
+		
+		Position pos2=new Position("linea2","pod2","bin2");
+		ItemDetails itemDetails2=new ItemDetails(0, 0);
+		Item item2=new Item("Laptop",itemDetails2);
+		InventoryItem inventoryItem2=new InventoryItem(item2,"SKU002",1000,2,1000,pos2);
 
 		HashMap<InventoryItem, Integer> skuqty=new HashMap<InventoryItem, Integer>();
 		skuqty.put(inventoryItem1, 5);
-		Order order1_client1=new Order(skuqty,1,client1.getEmail(),"oggi");
+		skuqty.put(inventoryItem2, 2);
+		
 		ReturnView rv= new ReturnView(client1);
-		ReturnFACADE rf=new ReturnFACADE(order1_client1);
-		ReturnController rc=new ReturnController(rf,rv);
-		System.out.println(rc);
+		ReturnableOrdersController roc=new ReturnableOrdersController(rv);
+		System.out.println(roc);
     }
 
 }

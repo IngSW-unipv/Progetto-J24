@@ -19,7 +19,6 @@ public class ResoManager {
 	}
     public ReturnService getReturnService(IReturnable returnableOrder) {
     	ReturnService rs=returnServiceFacade.findByOrder(returnableOrder);
-    	System.out.println(rs);
     	 if(rs==null) {
     		 return new ReturnService(returnableOrder);
     	 }
