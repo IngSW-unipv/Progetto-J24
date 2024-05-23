@@ -67,10 +67,12 @@ public class ReturnView extends JFrame{
 		setResizable(true);
 
 		mainPanel = new JPanel();
+		mainPanel.repaint();
 		mainPanel.setLayout(new BorderLayout());
 		getContentPane().add(mainPanel);
 
 		selectOrderPanel = new JPanel();
+		selectOrderPanel.repaint();
 		selectOrderPanel.setLayout(new GridLayout(0, 1)); // 0 righe per una colonna dinamica
 		JLabel selectOrderLabel = new JLabel("Seleziona un ordine:");
 		selectOrderPanel.add(selectOrderLabel);
@@ -97,6 +99,7 @@ public class ReturnView extends JFrame{
 		mainPanel.add(selectOrderPanel, BorderLayout.CENTER);
 
 		confirmPanel = new JPanel();
+		confirmPanel.repaint();
 		confirmButton = new JButton("Conferma Scelta");
 		//confirmButton.setIcon(new ImageIcon("check_icon.png")); // Aggiungo un'icona al pulsante
 		confirmPanel.add(confirmButton);
@@ -104,11 +107,14 @@ public class ReturnView extends JFrame{
 
 
 		backPanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); // Layout per posizionare il pulsante a sinistra
+		backPanel.repaint();
 		backButton = new JButton("Back",UIManager.getIcon("FileView.directoryIcon"));
 		backPanel.add(backButton);
 		mainPanel.add(backPanel, BorderLayout.NORTH);
 		//pack();
 		setVisible(true);
+		JScrollPane selectOrderScrollPane = new JScrollPane(selectOrderPanel);
+		mainPanel.add(selectOrderScrollPane, BorderLayout.CENTER);
 
 	}
 	 public void showWarningMessagge(String message) {

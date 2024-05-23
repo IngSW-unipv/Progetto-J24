@@ -101,7 +101,6 @@ public class ReturnController {
 					}
 				}
 				if (!itemSelected) {
-					// Se nessun prodotto è stato selezionato, mostra un avviso
 					riarView.setVisible(true);
 					riarView.showWarningMessagge("Selezionare almeno un prodotto da restituire");
 					return;
@@ -120,9 +119,10 @@ public class ReturnController {
 					return;
 				}
 				message.append(button.getActionCommand());
+				
 				// Recap popup to confirm or cancel the return.
-				int popup = riarView.showConfirmPopUp(message.toString());
-				if(popup==JOptionPane.OK_OPTION) {
+				int recapPopup = riarView.showConfirmPopUp(message.toString());
+				if(recapPopup==JOptionPane.OK_OPTION) {
 					//String clientEmail=SingletonManager.getInstance().getLoggedUser().getEmail();
 					double moneyToBeReturned=returnFacade.getMoneyToBeReturned();
 					if (button.getActionCommand().equals(ReturnItemsAndReasonsView.getBankTransferRadioText())) {
@@ -140,7 +140,6 @@ public class ReturnController {
 							removeItemsNotActuallyReturned();
 							return;
 						}
-						
 					} else {
 						VoucherRefund vr = new VoucherRefund(moneyToBeReturned);
 						try {

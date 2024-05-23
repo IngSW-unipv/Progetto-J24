@@ -1,4 +1,5 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.Return;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,23 +17,35 @@ public class ReturnService {
 	private Map<InventoryItem, String> returnedItems;
 	private double moneyAlreadyReturned;
 
+	/*
+	 * Constructor and Checking the order date to verify returnability.
+	 */
 	public ReturnService(IReturnable returnableOrder) {
+		/*if(!checkReturnability(returnableOrder)) {
+			
+		}*/
 		this.returnableOrder = returnableOrder;
 		this.returnedItems = new HashMap<>();
 		this.moneyAlreadyReturned=0;
 		Reasons.initializeReasons();
 	}
+	/*private boolean checkReturnability() {
+		if(returnableOrder.getDate().) {
+			
+		}
+	}*/
+	
 
 	/*
 	 * Methods related to the Return process
 	 */
 	public void addItemToReturn(InventoryItem inventoryItem,String reason) throws UnableToReturnException, MissingReasonException{
-		if(!checkReturnability(inventoryItem)){
+		if(!checkReturnabilityOfInventoryItem(inventoryItem)){
 			throw new UnableToReturnException(returnableOrder.getDescBySku(inventoryItem.getSku()));
 		}
 		returnedItems.put(inventoryItem,setReason(reason));
 	}
-	private boolean checkReturnability(InventoryItem inventoryItem){
+	private boolean checkReturnabilityOfInventoryItem(InventoryItem inventoryItem){
 		if(returnableOrder.getQtyBySku(inventoryItem.getSku())<getQtyReturned(inventoryItem.getSku())+1) {
 			return false;
 		}
@@ -63,7 +76,7 @@ public class ReturnService {
 		moneyToBeReturned=moneyToBeReturned-moneyAlreadyReturned;
 		return moneyToBeReturned;
 	}
-	public void setRefundMode(IRefund rm) throws PaymentException { //valutare la gestione di boolean al posto di void e spostare i metodi scrittura su DB
+	public void setRefundMode(IRefund rm) throws PaymentException { //valutare la gestione di boolean al posto di void
 		rm.issueRefund();
 	}
 	public void AddReturnToDB(IRefund rm) {
@@ -78,7 +91,7 @@ public class ReturnService {
 		s.append("Reso dell'ordine: ").append(returnableOrder.getId());
 		s.append("\ngli articoli restituiti sono: \n");
 		for(IInventoryItem inventoryItem:returnedItems.keySet()) {
-			s.append(inventoryItem.getSku()).append(" ").append(inventoryItem.getItem().getDescription()).append(" la cui motivazione è: ").append(returnedItems.get(inventoryItem)).append("\n");
+			s.append(inventoryItem.getSku()).append(" ").append(inventoryItem.getDescription()).append(" la cui motivazione è: ").append(returnedItems.get(inventoryItem)).append(" in data "+LocalDate.now()).append("\n");
 		}
 		return s.toString();
 

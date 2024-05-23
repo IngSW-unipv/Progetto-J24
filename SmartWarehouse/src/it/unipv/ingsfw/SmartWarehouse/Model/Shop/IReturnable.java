@@ -7,4 +7,5 @@ public interface IReturnable {
 	public int getQtyBySku(String sku);
 	public String getDescBySku(String sku);
 	public int getId();
+	public String getDate();
 }

@@ -44,7 +44,7 @@ public class ItemToBeReturned {
 		return id;
 	}
 	public String getDescription() {
-		return item.getItem().getDescription();
+		return item.getDescription();
 	}
 	
 	

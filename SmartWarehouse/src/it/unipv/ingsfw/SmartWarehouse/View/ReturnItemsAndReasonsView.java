@@ -82,10 +82,12 @@ public class ReturnItemsAndReasonsView extends JFrame{
         
         
         mainPanel = new JPanel();
+        mainPanel.repaint();
         mainPanel.setLayout(new BorderLayout());
         getContentPane().add(mainPanel);
         
         orderDetailsPanel=new JPanel();
+        orderDetailsPanel.repaint();
         orderDetailsPanel.setLayout(new BoxLayout(orderDetailsPanel, BoxLayout.Y_AXIS));
         JLabel selectedOrderLabel = new JLabel("Ordine selezionato: " +orderId);
         JLabel ItemAndReasonsLabel = new JLabel("Seleziona gli item che vuoi restituire");
@@ -104,7 +106,7 @@ public class ReturnItemsAndReasonsView extends JFrame{
            int count=0;
            for(InventoryItem i:inventoryItem_keyOfOrderMap) {
         	   for(int count2=0;count2<order.getQtyOfItem(i);count2++) {
-        		   itemsDescriptionsForButton.add(i.getItem().getDescription());
+        		   itemsDescriptionsForButton.add(i.getDescription());
         		   skuForActionCommand[count]=i.getSku();
             	   count++;
         	   }
@@ -114,6 +116,7 @@ public class ReturnItemsAndReasonsView extends JFrame{
         for (String i : itemsDescriptionsForButton) {
         	
         	itemAndReasonsPanel = new JPanel();
+        	itemAndReasonsPanel.repaint();
         	itemAndReasonsPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         	
         	JCheckBox checkBox=new JCheckBox(i);
@@ -146,17 +149,20 @@ public class ReturnItemsAndReasonsView extends JFrame{
         mainPanel.add(orderDetailsPanel, BorderLayout.CENTER);
         
         confirmPanel = new JPanel();
+        confirmPanel.repaint();
         nextButton = new JButton("Next");
         confirmPanel.add(nextButton);
         mainPanel.add(confirmPanel, BorderLayout.SOUTH);
         
         backPanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); // Layout per posizionare il pulsante a sinistra
+        backPanel.repaint();
         backButton = new JButton("Back",UIManager.getIcon("FileView.directoryIcon"));
         backPanel.add(backButton);
         mainPanel.add(backPanel, BorderLayout.NORTH);
        
         
         refundPanel = new JPanel();
+        refundPanel.repaint();
         refundPanel.setLayout(new GridLayout(0, 1));
         //refundPanel.setLayout(new BoxLayout(refundPanel, BoxLayout.Y_AXIS));
         JLabel refundLabel = new JLabel("Scegli la modalità con cui preferisci essere rimborsato:");
@@ -175,12 +181,12 @@ public class ReturnItemsAndReasonsView extends JFrame{
         refundPanel.setBorder(BorderFactory.createTitledBorder("Modalità di Rimborso")); //   bordo titolato
         refundPanel.setBackground(Color.cyan); // colore di sfondo
         JPanel uselessPanel=new JPanel(new BorderLayout());
+        uselessPanel.repaint();
         mainPanel.add(uselessPanel,BorderLayout.EAST);
         uselessPanel.add(refundPanel,BorderLayout.SOUTH);
 
         //pack();
         setVisible(true);
-        
    
 	}
 	 
