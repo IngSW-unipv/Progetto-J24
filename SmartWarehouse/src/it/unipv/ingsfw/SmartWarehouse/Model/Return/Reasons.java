@@ -6,9 +6,9 @@ import java.util.*;
 import it.unipv.ingsfw.SmartWarehouse.Exception.MissingReasonException;
 
 public class Reasons {
-	private static final String NESSUNA_MOTIVAZIONE_EXCEPTION_MESSAGE ="Selezionare una motivazione valida per ogni prodotto che si intende restituire";
-	private static final String MOTIVO_PERSONALIZZATO_EXCEPTION_MESSAGE ="Scrivere un motivo personalizzato laddove richiesto";
-	private static final String NESSUN_MOTIVO ="MOTIVO1";
+	private static final String NO_REASONS_ENTERED_EXCEPTION_MESSAGE ="Selezionare una motivazione valida per ogni prodotto che si intende restituire";
+	private static final String NO_PERSONALIZED_REASONS_ENTERED_EXCEPTION_MESSAGE ="Scrivere un motivo personalizzato laddove richiesto";
+	private static final String NO_REASON ="MOTIVO1";
 	
 	    private static Map<String, String> reasons; //la motivazione è una coppia nome_del_motivo+motivo
 	    public static  void initializeReasons() {
@@ -29,13 +29,13 @@ public class Reasons {
 	    }
 	    public static String findReason(String input) throws MissingReasonException {
 	        if (reasons.containsValue(input)) {
-	        	if(input.equals(reasons.get(NESSUN_MOTIVO))) {
-	        		 throw new MissingReasonException(NESSUNA_MOTIVAZIONE_EXCEPTION_MESSAGE);
+	        	if(input.equals(reasons.get(NO_REASON))) {
+	        		 throw new MissingReasonException(NO_REASONS_ENTERED_EXCEPTION_MESSAGE);
 	        	}
 	        	return input;
 	        }
 	    	if(input.isEmpty()||input.isBlank()) {
-        		throw new MissingReasonException(MOTIVO_PERSONALIZZATO_EXCEPTION_MESSAGE);
+        		throw new MissingReasonException(NO_PERSONALIZED_REASONS_ENTERED_EXCEPTION_MESSAGE);
         	}
 	        return input;
 	        
