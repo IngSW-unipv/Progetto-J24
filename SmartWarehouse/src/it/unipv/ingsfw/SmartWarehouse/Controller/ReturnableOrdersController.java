@@ -11,13 +11,13 @@ import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.Reasons;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnFACADE;
 import it.unipv.ingsfw.SmartWarehouse.View.ReturnItemsAndReasonsView;
-import it.unipv.ingsfw.SmartWarehouse.View.ReturnView;
+import it.unipv.ingsfw.SmartWarehouse.View.ReturnableOrdersView;
 
 public class ReturnableOrdersController {
 
-	private ReturnView returnView;
+	private ReturnableOrdersView returnView;
 
-	public ReturnableOrdersController(ReturnView returnView) {
+	public ReturnableOrdersController(ReturnableOrdersView returnView) {
 		this.returnView=returnView;
 		returnViewInitComponents();
 	}

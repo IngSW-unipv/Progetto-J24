@@ -34,7 +34,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.User;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
 
-public class ReturnView extends JFrame{
+public class ReturnableOrdersView extends JFrame{
 
 	private JPanel mainPanel;
 	private JPanel selectOrderPanel;
@@ -45,7 +45,7 @@ public class ReturnView extends JFrame{
 	private JButton backButton;
 
 
-	public ReturnView(User client) {
+	public ReturnableOrdersView(User client) {
 		setTitle("Return Service");
 		setSize(400, 200);
 
@@ -101,7 +101,6 @@ public class ReturnView extends JFrame{
 		confirmPanel = new JPanel();
 		confirmPanel.repaint();
 		confirmButton = new JButton("Conferma Scelta");
-		//confirmButton.setIcon(new ImageIcon("check_icon.png")); // Aggiungo un'icona al pulsante
 		confirmPanel.add(confirmButton);
 		mainPanel.add(confirmPanel, BorderLayout.SOUTH);
 
@@ -113,8 +112,6 @@ public class ReturnView extends JFrame{
 		mainPanel.add(backPanel, BorderLayout.NORTH);
 		//pack();
 		setVisible(true);
-		JScrollPane selectOrderScrollPane = new JScrollPane(selectOrderPanel);
-		mainPanel.add(selectOrderScrollPane, BorderLayout.CENTER);
 
 	}
 	 public void showWarningMessagge(String message) {

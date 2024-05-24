@@ -1,6 +1,7 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.randomGenerator;
 
 import java.util.Random;
+import java.util.UUID;
 
 public class RandomGenerator implements IRandomGenerator{
 
@@ -18,6 +19,12 @@ public class RandomGenerator implements IRandomGenerator{
 			char randomChar = alphaNumeric.charAt(index);
 			sb.append(randomChar);
 		}
+		return sb.toString();
+	}
+	
+	public String generateRandomIdentifierUUID() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(UUID.randomUUID());
 		return sb.toString();
 	}
 }

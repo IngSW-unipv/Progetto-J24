@@ -24,10 +24,13 @@ public class Reasons {
 	            }
 	            reader.close();
 	        } catch (IOException e) {
-	            e.printStackTrace();
+	        	e.printStackTrace();
 	        }
 	    }
 	    public static String findReason(String input) throws MissingReasonException {
+	    	 if (reasons == null) {
+		            throw new IllegalStateException("Reasons not initialized. Call initializeReasons() first.");
+		        }
 	        if (reasons.containsValue(input)) {
 	        	if(input.equals(reasons.get(NO_REASON))) {
 	        		 throw new MissingReasonException(NO_REASONS_ENTERED_EXCEPTION_MESSAGE);
@@ -41,6 +44,9 @@ public class Reasons {
 	        
 	    }
 		public static Map<String, String> getReasons() {
+			  if (reasons == null) {
+		            throw new IllegalStateException("Reasons not initialized. Call initializeReasons() first.");
+		        }
 			return reasons;
 		}
 

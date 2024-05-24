@@ -34,7 +34,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnServiceDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.View.ReturnItemsAndReasonsView;
-import it.unipv.ingsfw.SmartWarehouse.View.ReturnView;
+import it.unipv.ingsfw.SmartWarehouse.View.ReturnableOrdersView;
 
 public class ReturnController {
 	private ReturnFACADE returnFacade;

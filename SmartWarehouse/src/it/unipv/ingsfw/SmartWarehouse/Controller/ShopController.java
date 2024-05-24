@@ -8,7 +8,7 @@ import javax.swing.JButton;
 import javax.swing.text.View;
 
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Shop;
-import it.unipv.ingsfw.SmartWarehouse.View.ReturnView;
+import it.unipv.ingsfw.SmartWarehouse.View.ReturnableOrdersView;
 import it.unipv.ingsfw.SmartWarehouse.View.ShopFrame;
 
 public class ShopController {
@@ -133,7 +133,7 @@ public class ShopController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				new ReturnView(model.getCl());
+				new ReturnableOrdersView(model.getCl());
 			}
 		};
 		

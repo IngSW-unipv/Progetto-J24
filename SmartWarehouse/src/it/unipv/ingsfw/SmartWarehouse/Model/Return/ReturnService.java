@@ -1,4 +1,5 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.Return;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,14 +21,13 @@ public class ReturnService {
 	/*
 	 * Constructor and Checking the order date to verify returnability.
 	 */
-	public ReturnService(IReturnable returnableOrder) {
+	public ReturnService(IReturnable returnableOrder)  {
 		/*if(!checkReturnability(returnableOrder)) {
 			
 		}*/
 		this.returnableOrder = returnableOrder;
 		this.returnedItems = new HashMap<>();
 		this.moneyAlreadyReturned=0;
-		Reasons.initializeReasons();
 	}
 	/*private boolean checkReturnability() {
 		if(returnableOrder.getDate().) {

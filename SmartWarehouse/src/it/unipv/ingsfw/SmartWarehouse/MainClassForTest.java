@@ -11,7 +11,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Category;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.ItemDetails;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Position;
-import it.unipv.ingsfw.SmartWarehouse.View.ReturnView;
+import it.unipv.ingsfw.SmartWarehouse.View.ReturnableOrdersView;
 
 public class MainClassForTest {
 	
@@ -38,7 +38,7 @@ public class MainClassForTest {
 		skuqty.put(inventoryItem1, 5);
 		skuqty.put(inventoryItem2, 2);
 		
-		ReturnView rv= new ReturnView(client1);
+		ReturnableOrdersView rv= new ReturnableOrdersView(client1);
 		ReturnableOrdersController roc=new ReturnableOrdersController(rv);
 		System.out.println(roc);
     }
