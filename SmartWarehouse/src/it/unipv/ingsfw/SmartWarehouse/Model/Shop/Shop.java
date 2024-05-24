@@ -3,6 +3,7 @@ package it.unipv.ingsfw.SmartWarehouse.Model.Shop;
 import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyKartExceptio;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
 import it.unipv.ingsfw.SmartWarehouse.Model.Client;
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.IPayment;
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentProcess;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
@@ -11,14 +12,14 @@ public class Shop {
 	
 	private InventoryManager inv;
 	private Kart kart;
-	private Register reg;
+	private RegisterFacade reg;
 	private Client cl;
 	private final double primeImport=50;
 	
-	public Shop(InventoryManager inv, Register reg, Client c) {	
+	public Shop(Client c) {	
 		this.kart = new Kart();
-		this.inv = inv;
-		this.reg = reg;
+		this.inv = SingletonManager.getInstance().getInventoryManager();
+		this.reg = RegisterFacade.getIstance();
 		this.cl = c;		
 	}
 	
@@ -59,7 +60,7 @@ public class Shop {
 		return kart;
 	}
 
-	public Register getReg() {
+	public RegisterFacade getReg() {
 		return reg;
 	}
 
@@ -75,7 +76,7 @@ public class Shop {
 		this.kart = kart;
 	}
 
-	public void setReg(Register reg) {
+	public void setReg(RegisterFacade reg) {
 		this.reg = reg;
 	}
 

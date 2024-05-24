@@ -133,7 +133,8 @@ public class ShopController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				new ReturnView(model.getCl());
+				
+				new ReturnableOrdersController(new ReturnView(model.getCl()));
 			}
 		};
 		
