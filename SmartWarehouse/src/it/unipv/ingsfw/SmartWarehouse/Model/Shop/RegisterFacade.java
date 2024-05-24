@@ -1,60 +1,30 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.Shop;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import it.unipv.ingsfw.SmartWarehouse.Database.IRegisterDAO;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
-
-public class RegisterFacade {
-	private int id;
-	IRegisterDAO red;
-	InventoryManager inv;		//serve nella fase di ricostruzione
+public class RegisterFacade { 
+	private Register reg;
+	public static RegisterFacade istance;
 	
-	public RegisterFacade(IRegisterDAO red, InventoryManager i) {
-		this.red = red;
-		this.inv=i;
-		this.id=this.red.selectLastId();
+	private RegisterFacade() {
+		this.reg=new Register();
+	}
+	public static RegisterFacade getIstance() {
+		if(istance == null) {
+			istance=new RegisterFacade();
+		}
+		return istance;
 	}
 	
 	public void addOrd(Order o) {
-		o.setId(id);
-		red.insertOrder(makeLine(o));
-		id++;
+		reg.addOrd(o);
 	}
 	
 	public Order selectOrder(int id) {
-		return rebuildOrder(red.selectOrder(id),id);
+		return reg.selectOrder(id);
 	}
-	
 	
 	public ArrayList<Order> selectOrderWhereClient(String email){
-		ArrayList< ArrayList<OrderLine> > orderLineList=red.selectOrderWhereClient(email);
-		ArrayList<Order> orders=new ArrayList<Order>();
-		for(ArrayList<OrderLine> o:orderLineList) {
-			orders.add(rebuildOrder(o,o.get(0).getId()));
-		}
-		return orders;
-	}
-	
-	
-	
-	private Order rebuildOrder(ArrayList<OrderLine> o, int id) { 
-		HashMap<InventoryItem, Integer> hs = new HashMap<InventoryItem, Integer>();
-		OrderLine temp=o.get(0);
-		for(OrderLine ord: o) {
-			hs.put(inv.findInventoryItem(ord.getSku()), ord.getQty()); //eccezione gestita da InventoryManager se sku non esiste
-		}
-		return new Order(hs, id, temp.getEmail(), temp.getDate());
-	}
-	
-	private ArrayList<OrderLine> makeLine(Order o) {
-		ArrayList<OrderLine> ord = new ArrayList<OrderLine>();
-		for(InventoryItem i: o.getSet()) {
-			ord.add(new OrderLine(o.getId(), i.getSku(), o.getQtyOfItem(i),
-					o.getEmail(), o.getDate()));
-		}
-		return ord;
+		return reg.selectOrderWhereClient(email);
 	}
 }

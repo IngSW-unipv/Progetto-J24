@@ -7,13 +7,14 @@ import java.util.HashSet;
 import java.util.Locale;
 
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Item;
+
 
 public class Order implements IReturnable{
 	private HashMap<InventoryItem, Integer> skuqty;
 	private int id;
 	private String email;
 	private String date;
+	
 	public Order(HashMap<InventoryItem, Integer> skuqty, String email) {
 		this.skuqty=new HashMap<InventoryItem, Integer>();
 		this.skuqty.putAll(skuqty);
@@ -89,10 +90,9 @@ public class Order implements IReturnable{
 		return getQtyOfItem(getItemBySku(sku));
 	}
 	
-	//????????
 	@Override 
 	public String getDescBySku(String sku) {
-		return getItemBySku(sku).toString();
+		return getItemBySku(sku).getDescription();
 	}
 	
 	
@@ -100,7 +100,7 @@ public class Order implements IReturnable{
 	public String toString() {
 		String s="";
 		for(InventoryItem i: getSet()) {
-			s+=i+", ";
+			s+=i.getDescription()+", ";
 		}
 		return s;
 	}
