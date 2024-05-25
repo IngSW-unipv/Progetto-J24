@@ -19,6 +19,8 @@ import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.IPayment;
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentFactory;
+import it.unipv.ingsfw.SmartWarehouse.Model.Payment.WalletPayment;
+import it.unipv.ingsfw.SmartWarehouse.Model.Payment.WalletPaymentAdapter;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
 
@@ -158,10 +160,14 @@ public class ShopFrame extends JFrame{
 		return ret;
 	}
 	
+	public void displayInfo(String info) {
+		JOptionPane.showMessageDialog(this, info, "PAYMENT INFO",JOptionPane.INFORMATION_MESSAGE);
+	}
+	
 	public IPayment displayPaymentOption() throws NumberFormatException{
 		String[] option = {"PayPall", "Wallet"};
 		int met=JOptionPane.showOptionDialog(
-                null,                               
+                this,                               
                 "Scegli il metodo di pagamento:",    
                 "Metodo di Pagamento",               
                 JOptionPane.DEFAULT_OPTION,          
@@ -176,14 +182,14 @@ public class ShopFrame extends JFrame{
 	        mode = PaymentFactory.getPayPalAdapter();
 	        break;
 	    case 1:
-	        mode = null;
+	        mode = new WalletPaymentAdapter(new WalletPayment());
 	        break;
 		}
 		return mode;
 	}
 	
 	public int displayConfirm() {
-		return JOptionPane.showConfirmDialog(null, "are you shure to continue?");
+		return JOptionPane.showConfirmDialog(this, "are you shure to continue?");
 	}
 	
 	public JPanel getShopPan() {

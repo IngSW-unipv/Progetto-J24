@@ -5,8 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.text.View;
-
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentProcess;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Shop;
@@ -126,9 +124,17 @@ public class ShopController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				if(view.displayConfirm()==0) {
-					model.setPrime(view.displayPaymentOption());
-					System.err.println("in teoria si setta il prime");
+				if(view.displayConfirm()==0 && !model.getCl().getPrime()) {
+					
+					PaymentProcess pay=new PaymentProcess(view.displayPaymentOption(), model.getCl().getEmail(), "magazzo");
+					try {
+						pay.startPayment(model.getPrimeImport());
+						view.displayInfo("pagamento");
+						
+					} catch (PaymentException ex) {
+						System.err.println("è stato impossibile effettuare l'abbonamento a prime");
+					}
+					model.setPrime();
 				}
 				if(model.getCl().getPrime()) {
 					view.getPrime().setBackground(Color.green);

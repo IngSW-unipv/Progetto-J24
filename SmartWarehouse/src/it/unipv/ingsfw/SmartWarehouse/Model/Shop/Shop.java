@@ -40,16 +40,12 @@ public class Shop {
 	}
 	
 	
-	public void setPrime(IPayment mode) {
-		PaymentProcess pay=new PaymentProcess(mode, cl.getEmail(), "magazzo");
-		try {
-			pay.startPayment(primeImport);
-			cl.setPrime(true);
-		} catch (PaymentException e) {
-			//TODO SISTEMARE
-			System.err.println("è stato impossibile effettuare l'abbonamento a prime");
-		}
-		
+	public void setPrime() {
+		cl.setPrime(true);		
+	}
+	
+	public double getPrimeImport() {
+		return primeImport;
 	}
 
 	public InventoryManager getInv() {
