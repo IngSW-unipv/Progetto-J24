@@ -31,9 +31,9 @@ public class Shop {
 		kart.remove(inv.findInventoryItem(sku));
 	}
 	
-	public void makeOrder(IPayment mode) {
+	public void makeOrder() {
 		try {
-			reg.addOrd(kart.PayAndOrder(cl, mode));
+			reg.addOrd(kart.PayAndOrder(cl));
 		} catch (EmptyKartExceptio e) {
 			System.err.println("the kart is empty, please retry");
 		} 

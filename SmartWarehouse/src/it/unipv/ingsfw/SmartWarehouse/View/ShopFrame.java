@@ -13,6 +13,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.IPayment;
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentFactory;
@@ -26,9 +29,15 @@ public class ShopFrame extends JFrame{
 	private ArrayList<JButton> shopbutts;
 	private HashSet<JButton> kartbutts;
 	private JButton kart,shop,pay,orders,prime;
-	private JLabel infoLab;
+	private JLabel kartInfoLab, wallet;
 
 	public ShopFrame() {
+		
+		try {
+			UIManager.setLookAndFeel(new NimbusLookAndFeel());
+		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
 		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setSize(500, 500);
@@ -58,10 +67,15 @@ public class ShopFrame extends JFrame{
 		kartPan=new JPanel();
 		infoPan=new JPanel();
 		
-		infoLab=new JLabel();
-		infoLab.setPreferredSize(new Dimension(200,80));
-		infoLab.setText("elementi nel carrello: 0");
-		infoPan.add(infoLab);
+		kartInfoLab=new JLabel();
+		kartInfoLab.setPreferredSize(new Dimension(200,80));
+		kartInfoLab.setText("elementi nel carrello: 0");
+		infoPan.add(kartInfoLab);
+		
+		wallet=new JLabel();
+		wallet.setPreferredSize(new Dimension(200,80));
+		wallet.setText("Wallet: 0 euro");
+		infoPan.add(wallet);
 		
 		JToolBar bar=new JToolBar();
 		bar.add(kart);
@@ -205,15 +219,15 @@ public class ShopFrame extends JFrame{
 	}
 	
 	public JLabel getInfoLab() {
-		return infoLab;
+		return kartInfoLab;
 	}
 
 	public void setInfoLab(JLabel infoLab) {
-		this.infoLab = infoLab;
+		this.kartInfoLab = infoLab;
 	}
 	
 	public void setInfoLabText(String st) {
-		this.infoLab.setText("elementi nel carrello: "+st);
+		this.kartInfoLab.setText("elementi nel carrello: "+st);
 	}
 
 	public JButton getOrders() {

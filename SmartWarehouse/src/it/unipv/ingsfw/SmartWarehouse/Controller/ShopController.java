@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.text.View;
 
+import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
+import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentProcess;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Shop;
 import it.unipv.ingsfw.SmartWarehouse.View.ReturnableOrdersView;
 import it.unipv.ingsfw.SmartWarehouse.View.ShopFrame;
@@ -78,7 +80,15 @@ public class ShopController {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				if(view.displayConfirm()==0) {
-					model.makeOrder(view.displayPaymentOption());
+					
+					PaymentProcess pay=new PaymentProcess(view.displayPaymentOption(), model.getCl().getEmail(), "magazzo");		
+					try {
+						pay.startPayment(model.getKart().getTotal());
+						model.makeOrder();
+					} catch (PaymentException ex) {
+						ex.printStackTrace();
+						//stampare che i fondi sono stati insufficienti
+					}				
 				}
 			}
 		};

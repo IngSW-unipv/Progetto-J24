@@ -31,19 +31,11 @@ public class Kart {
 		 skuqty.remove(it);
 	}
 		
-	public Order PayAndOrder(Client cl, IPayment mode) throws EmptyKartExceptio {
+	public Order PayAndOrder(Client cl) throws EmptyKartExceptio {
 		if(skuqty.isEmpty()) {
 			throw(new EmptyKartExceptio());
 		}		
 		Order o=new Order(skuqty, cl.getEmail());
-		PaymentProcess pay=new PaymentProcess(mode, cl.getEmail(), "magazzo");		
-		try {
-			pay.startPayment(getTotal());
-		} catch (PaymentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		skuqty.clear();
 		return o;
 	}
