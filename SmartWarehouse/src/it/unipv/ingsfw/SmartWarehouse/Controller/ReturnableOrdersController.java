@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.Reasons;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnFACADE;
+import it.unipv.ingsfw.SmartWarehouse.Model.Shop.RegisterFacade;
 import it.unipv.ingsfw.SmartWarehouse.View.ReturnItemsAndReasonsView;
 import it.unipv.ingsfw.SmartWarehouse.View.ReturnableOrdersView;
 
@@ -51,7 +52,7 @@ public class ReturnableOrdersController {
 				Reasons.initializeReasons();
 	            Map<String, String> possibleReasons = Reasons.getReasons();
 	            returnView.setVisible(false);
-                ReturnFACADE rf= new ReturnFACADE(SingletonManager.getInstance().getRegisterFacade().selectOrder(Integer.parseInt(button.getActionCommand())));
+                ReturnFACADE rf= new ReturnFACADE(RegisterFacade.getIstance().selectOrder(Integer.parseInt(button.getActionCommand())));
                 new ReturnController(rf,new ReturnItemsAndReasonsView(Integer.parseInt(button.getActionCommand()),possibleReasons)); 
 			}
 		};

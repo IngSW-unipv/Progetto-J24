@@ -33,6 +33,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Client;
 import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.User;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
+import it.unipv.ingsfw.SmartWarehouse.Model.Shop.RegisterFacade;
 
 public class ReturnableOrdersView extends JFrame{
 
@@ -78,7 +79,7 @@ public class ReturnableOrdersView extends JFrame{
 		selectOrderPanel.add(selectOrderLabel);
 
 
-		ArrayList<Order> allClientOrders = SingletonManager.getInstance().getRegisterFacade().selectOrderWhereClient(client.getEmail()); 
+		ArrayList<Order> allClientOrders = RegisterFacade.getIstance().selectOrderWhereClient(client.getEmail()); 
 		ArrayList<String> ordersDescriptionsForButton = new ArrayList<>();
 		Integer[] orderIdForActionCommand=new Integer[allClientOrders.size()];
 		int count=0;

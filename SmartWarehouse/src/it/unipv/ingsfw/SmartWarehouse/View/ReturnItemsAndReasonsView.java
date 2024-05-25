@@ -35,6 +35,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.Reasons;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.OrderLine;
+import it.unipv.ingsfw.SmartWarehouse.Model.Shop.RegisterFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 
@@ -99,7 +100,7 @@ public class ReturnItemsAndReasonsView extends JFrame{
         
           // Valutare di fare così:
         
-           Order order = SingletonManager.getInstance().getRegisterFacade().selectOrder(orderId); //RegisterFacade.getInstance().selectOrder(orderId)
+           Order order = RegisterFacade.getIstance().selectOrder(orderId); //RegisterFacade.getInstance().selectOrder(orderId)
            String skuForActionCommand[]=new String[order.getQtyTotal()];
            ArrayList<InventoryItem> inventoryItem_keyOfOrderMap= new ArrayList<>(order.getMap().keySet());
            ArrayList<String> itemsDescriptionsForButton= new ArrayList<>();

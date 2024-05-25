@@ -4,14 +4,17 @@ import java.util.HashMap;
 
 import it.unipv.ingsfw.SmartWarehouse.Controller.ReturnController;
 import it.unipv.ingsfw.SmartWarehouse.Controller.ReturnableOrdersController;
+import it.unipv.ingsfw.SmartWarehouse.Controller.ShopController;
 import it.unipv.ingsfw.SmartWarehouse.Model.Client;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnFACADE;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
+import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Shop;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Category;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.ItemDetails;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Position;
 import it.unipv.ingsfw.SmartWarehouse.View.ReturnableOrdersView;
+import it.unipv.ingsfw.SmartWarehouse.View.ShopFrame;
 
 public class MainClassForTest {
 	
@@ -38,9 +41,11 @@ public class MainClassForTest {
 		skuqty.put(inventoryItem1, 5);
 		skuqty.put(inventoryItem2, 2);
 		
-		ReturnableOrdersView rv= new ReturnableOrdersView(client1);
-		ReturnableOrdersController roc=new ReturnableOrdersController(rv);
-		System.out.println(roc);
+		ShopController shc=new ShopController(new Shop(client2), new ShopFrame());
+		/*
+		 * ReturnableOrdersView rov= new ReturnableOrdersView(client1);
+		 * ReturnableOrdersController roc=new ReturnableOrdersController(rov);
+		 */
     }
 
 }
