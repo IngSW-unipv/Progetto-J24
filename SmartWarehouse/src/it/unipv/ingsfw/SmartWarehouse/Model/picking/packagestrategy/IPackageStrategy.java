@@ -1,6 +1,6 @@
-package it.unipv.ingsfw.SmartWarehouse.packagestrategy;
+package it.unipv.ingsfw.SmartWarehouse.Model.packagestrategy;
 import java.util.*;
-import it.unipv.ingsfw.SmartWarehouse.orderp.*;
+import it.unipv.ingsfw.SmartWarehouse.Model.picking.orderpicking.*;
 public interface IPackageStrategy {
     public boolean calculatePackageSizes(Orderp o);
 }
