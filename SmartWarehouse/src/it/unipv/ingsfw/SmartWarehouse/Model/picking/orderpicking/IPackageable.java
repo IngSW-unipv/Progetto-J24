@@ -1,6 +1,7 @@
-package it.unipv.ingsfw.SmartWarehouse.orderpicking;
+package it.unipv.ingsfw.SmartWarehouse.model.picking.orderpicking;
 
 import java.util.List;
+
 
 import it.unipv.ingsfw.SmartWarehouse.exception.*;
 import it.unipv.ingsfw.SmartWarehouse.inventory.*;

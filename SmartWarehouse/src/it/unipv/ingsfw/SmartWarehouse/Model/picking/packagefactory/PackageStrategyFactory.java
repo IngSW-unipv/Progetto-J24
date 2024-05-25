@@ -1,6 +1,5 @@
-package it.unipv.ingsfw.SmartWarehouse.packagefactory;
-import it.unipv.ingsfw.SmartWarehouse.orderp.*;
-
+package it.unipv.ingsfw.SmartWarehouse.model.picking.packagefactory;
+import it.unipv.ingsfw.SmartWarehouse..model.picking.orderp.*;
 import packagestrategy.*;
 
 public class PackageStrategyFactory {
