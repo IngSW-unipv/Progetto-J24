@@ -3,11 +3,8 @@ package it.unipv.ingsfw.SmartWarehouse.Model.supply;
 import java.util.Collections;
 import java.util.List;
 
-import com.mysql.cj.x.protobuf.MysqlxCrud.Collection;
-
 import it.unipv.ingsfw.SmartWarehouse.Exception.AuthorizationDeniedException;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
-import it.unipv.ingsfw.SmartWarehouse.Model.supply.replenishmentStrategy.CategoryStrategy;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.replenishmentStrategy.IReplenishmentStrategy;
 
 

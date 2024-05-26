@@ -63,6 +63,10 @@ public class SupplyDAOFacade {
 		return supplyDAO.getSupplyBySku(sku);
 	}
 	
+	public List<Supply> findSupplyBySupplier(String ids){
+		return supplyDAO.getSupplyByIds(ids); 
+	}
+	
 	public boolean insertNewSupply(Supply s) {
 		return supplyDAO.insertSupply(s);
 	}
@@ -70,10 +74,6 @@ public class SupplyDAOFacade {
 	public boolean deleteSupply(Supply s) {
 		return supplyDAO.deleteSupply(s); 
 	} 
-
-	public boolean deleteSupplyOfSupplier(Supplier s) {
-		return supplyDAO.deleteSupplyOfSupplier(s);
-	}
 	
 	public Supply getCheaperSupplyByInventoryItem(InventoryItem i) {
 		return supplyDAO.getCheaperSupplyByInventoryItem(i);

@@ -9,6 +9,7 @@ import java.util.List;
 
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Category;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.ItemDetails;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Position;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supplier;
@@ -179,13 +180,13 @@ public class InventoryDAO implements IInventoryDAO {
 		ResultSet rs1; 
 		
 		try {
-			String query="select * from inventory where qty<stdLevel";
+			String query="select * from inventory where qty<stdLevel order by description";
 			st1=conn.createStatement();
 			rs1=st1.executeQuery(query);
 			
 			while(rs1.next()) {
-				InventoryItem i=new InventoryItem(rs1.getString(2), new ItemDetails(rs1.getInt(9), rs1.getInt(10), Category.fromString(rs1.getString(11))), 
-						rs1.getString(1), rs1.getDouble(3), rs1.getInt(4), rs1.getInt(5), new Position(rs1.getString(6), rs1.getString(7),rs1.getString(8)));
+				result.add(new InventoryItem(rs1.getString(2), new ItemDetails(rs1.getInt(9), rs1.getInt(10), Category.fromString(rs1.getString(11))), 
+						rs1.getString(1), rs1.getDouble(3), rs1.getInt(4), rs1.getInt(5), new Position(rs1.getString(6), rs1.getString(7),rs1.getString(8))));
 			}
 			
 		} catch(Exception e) {
@@ -201,7 +202,6 @@ public class InventoryDAO implements IInventoryDAO {
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;
 		ResultSet rs1;
-		Object[] row= new Object[3];
 				
 		try { 
 			String query= "select su.*, s.price, s.maxqty from supply s join supplier su on s.ids=su.ids where sku=? order by s.price";
@@ -209,6 +209,7 @@ public class InventoryDAO implements IInventoryDAO {
 			st1.setString(1, i.getSku());
 			rs1=st1.executeQuery();
 			while (rs1.next()) {
+				Object[] row= new Object[3];
 				row[0]= new Supplier(rs1.getString(1), rs1.getString(2), rs1.getString(3), rs1.getString(4));
 				row[1]= rs1.getDouble(5);
 				row[2]= rs1.getInt(6); 
