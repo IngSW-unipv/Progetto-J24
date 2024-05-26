@@ -61,7 +61,6 @@ CREATE TABLE `clientorders` (
   `email` varchar(40) NOT NULL,
   `Odate` varchar(30) DEFAULT NULL,
   primary key(`id`,`sku`,`email`),
-  unique key `Odate` (`Odate`),
   key `sku` (`sku`),
   key `email` (`email`),
   constraint `clientorders_ibfk_1` foreign key(`sku`) references `inventory` (`sku`),
