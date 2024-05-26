@@ -32,8 +32,6 @@ public class ShopController {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				System.out.println(model.getInv().findInventoryItem(e.getActionCommand()).toString());
 				int q=0;
 				try {
 				q=view.displayOption();
@@ -46,7 +44,7 @@ public class ShopController {
 				}catch(IllegalArgumentException ex2) {
 					System.err.print("invalid argument please retry");
 				}
-				view.setInfoLabText(model.getKart().toString());
+				view.setInfoLabText(model.getKart().getSkuqty().size());
 			}
 			
 		};
@@ -58,13 +56,12 @@ public class ShopController {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				if(view.displayConfirm()==0) {
 					model.removeFromKart(e.getActionCommand());
 					for(JButton b: view.getKartButts()) {
 						if(b.getActionCommand().equals(e.getActionCommand())) {
 							b.setVisible(false);	
-							view.setInfoLabText(model.getKart().toString());
+							view.setInfoLabText(model.getKart().getSkuqty().size());
 						}
 					}
 				}
@@ -76,10 +73,9 @@ public class ShopController {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				if(view.displayConfirm()==0) {
 					
-					PaymentProcess pay=new PaymentProcess(view.displayPaymentOption(), model.getCl().getEmail(), "magazzo");		
+					PaymentProcess pay=new PaymentProcess(view.displayPaymentOption(), model.getCl().getEmail(), "warehause");		
 					try {
 						pay.startPayment(model.getKart().getTotal());
 						model.makeOrder();
@@ -95,7 +91,6 @@ public class ShopController {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				view.makeKart(model.getKart().getSet(), model.getKart().getSkuqty());
 				view.showKart();
 				for(JButton b: view.getKartButts()) {
@@ -111,7 +106,6 @@ public class ShopController {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				view.showShop();
 				System.out.println(model.getKart().toString());
 			}
@@ -123,7 +117,6 @@ public class ShopController {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				if(view.displayConfirm()==0 && !model.getCl().getPrime()) {
 					
 					PaymentProcess pay=new PaymentProcess(view.displayPaymentOption(), model.getCl().getEmail(), "magazzo");
@@ -148,8 +141,6 @@ public class ShopController {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
 				new ReturnableOrdersController(new ReturnableOrdersView(model.getCl()));
 			}
 		};

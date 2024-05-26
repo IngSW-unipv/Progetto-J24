@@ -43,7 +43,7 @@ public class ShopFrame extends JFrame{
 		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setSize(500, 500);
-		this.setTitle("Https://SmartWarehouse/Shop");
+		this.setTitle("SmartWarehouse/Shop");
 		this.setLayout(new BorderLayout());
 		this.setVisible(true);
 		
@@ -94,7 +94,7 @@ public class ShopFrame extends JFrame{
 	public void makeShop(InventoryManager inv) {
 		shopbutts = new ArrayList<JButton>();
 		for(InventoryItem i: inv.getInventory()) {
-			JButton b=new JButton(i.toString()+": "+i.getPrice()+"$");
+			JButton b=new JButton(i.getDescription()+": "+i.getPrice()+"$");
 			
 			b.setFocusable(false);
 			b.setPreferredSize(new Dimension(150,100));
@@ -113,7 +113,7 @@ public class ShopFrame extends JFrame{
 		kartPan.removeAll();
 		
 		for(InventoryItem it: i) {
-			JButton b=new JButton(it.toString()+"-"+sq.get(it)+": "+it.getPrice()+"$");
+			JButton b=new JButton(it.getDescription()+"-"+sq.get(it)+": "+it.getPrice()+"$");
 			
 			b.setFocusable(false);
 			b.setPreferredSize(new Dimension(150,100));
@@ -138,6 +138,7 @@ public class ShopFrame extends JFrame{
 		shop.setVisible(false);
 		kart.setVisible(true);
 		pay.setVisible(false);
+		this.setTitle("SmartWarehouse/Shop");
 	}
 	
 	public void showKart() {
@@ -148,6 +149,7 @@ public class ShopFrame extends JFrame{
 		shop.setVisible(true);
 		kart.setVisible(false);
 		pay.setVisible(true);
+		this.setTitle("SmartWarehouse/Shop/Kart");
 	}
 	
 	public int displayOption() throws NumberFormatException{
@@ -232,8 +234,8 @@ public class ShopFrame extends JFrame{
 		this.kartInfoLab = infoLab;
 	}
 	
-	public void setInfoLabText(String st) {
-		this.kartInfoLab.setText("elementi nel carrello: "+st);
+	public void setInfoLabText(int i) {
+		this.kartInfoLab.setText("elementi nel carrello: "+i);
 	}
 
 	public JButton getOrders() {
