@@ -14,7 +14,7 @@ public class ClientDAO implements IClientDAO{
 	
 	public ClientDAO() {
 		super();
-		this.schema = "smartwarehouse";
+		this.schema = "warehouse";
 	}
 	
 	@Override
@@ -42,7 +42,7 @@ public class ClientDAO implements IClientDAO{
 		Statement st1;
 		try {
 			st1 = conn.createStatement();
-			String query="update table Clients insert value(\""+c.getName()+"\",\""+c.getSurname()+"\",\""+c.getEmail()+"\",\""+c.getAddress()+"\",\""+c.getPassword()+"\",\""+c.getType()+"\";";
+			String query="insert into table clients values(\""+c.getName()+"\",\""+c.getSurname()+"\",\""+c.getEmail()+"\",\""+c.getAddress()+"\",\""+c.getPassword()+"\")";
 			st1.executeUpdate(query);
 		}catch (Exception e){e.printStackTrace();}
 		
