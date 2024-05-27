@@ -1,5 +1,8 @@
-create database warehouse;
+drop database if exists warehouse;
+create database if not exists warehouse;
+use warehouse;
 
+drop table if exists inventory;
 CREATE TABLE inventory (
     sku VARCHAR(25) PRIMARY KEY NOT NULL,
     description VARCHAR(50) NOT NULL,
@@ -15,6 +18,7 @@ CREATE TABLE inventory (
     CONSTRAINT unique_line_pod_bin UNIQUE (line, pod, bin)
 );
 
+drop table if exists supplier;
 create table supplier(
 	ids varchar(25) PRIMARY KEY,
     fullname VARCHAR(25) NOT NULL,
@@ -22,6 +26,7 @@ create table supplier(
     email VARCHAR(50) NOT NULL
 );
 
+drop table if exists supply;
 create table supply(
 	idsupply varchar(25) primary key, 
     sku varchar(25) not null,
@@ -33,6 +38,7 @@ create table supply(
 alter table supply add foreign key (sku) references inventory (sku);
 alter table supply add foreign key (ids) references  supplier (ids);
 
+drop table if exists supplyOrders;
 create table supplyOrders (
 	ids_order int primary key,
     idsupply varchar(25) not null,
@@ -43,41 +49,42 @@ create table supplyOrders (
 alter table supplyOrders add foreign key (idsupply) references supply (idsupply);
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-
-CREATE TABLE `clients` (
-  `name` varchar(20) DEFAULT NULL,
-  `surname` varchar(20) DEFAULT NULL,
-  `email` varchar(40) NOT NULL,
-  `address` varchar(30) DEFAULT NULL,
-  `password` varchar(18) DEFAULT NULL,
-  `wallet_id`  INT DEFAULT NULL,
+drop table if exists clients;
+CREATE TABLE clients (
+  name varchar(20) DEFAULT NULL,
+  surname varchar(20) DEFAULT NULL,
+  email varchar(40) NOT NULL,
+  address varchar(30) DEFAULT NULL,
+  password varchar(18) DEFAULT NULL,
   primary key(`email`)
 );
 
-CREATE TABLE `clientorders` (
-  `id` int not NULL,
-  `sku` varchar(25) not NULL,
-  `qty` int DEFAULT NULL,
-  `email` varchar(40) NOT NULL,
-  `Odate` varchar(30) DEFAULT NULL,
-  primary key(`id`,`sku`,`email`),
-  key `sku` (`sku`),
-  key `email` (`email`),
-  constraint `clientorders_ibfk_1` foreign key(`sku`) references `inventory` (`sku`),
-  constraint `clientorders_ibfk_2` foreign key(`email`) references `clients` (`email`)
+drop table if exists clientorders;
+CREATE TABLE clientorders (
+  id int not NULL,
+  sku varchar(25) not NULL,
+  qty int not NULL,
+  email varchar(40) NOT NULL,
+  Odate varchar(30) DEFAULT NULL,
+  picked bool not NULL,
+  primary key(id,sku,email),
+  key sku (sku),
+  key email (email),
+  foreign key(sku) references inventory (sku),
+  foreign key(email) references clients (email)
 );
 
-CREATE TABLE `returnservice` (
-  `OrderID` int DEFAULT NULL,
-  `Item` varchar(255) DEFAULT NULL,
-  `Reason` varchar(255) DEFAULT NULL,
-  `MoneyAlreadyReturned` double DEFAULT NULL
+drop table if exists returnservice;
+CREATE TABLE returnservice (
+  OrderID int DEFAULT NULL,
+  Item varchar(255) DEFAULT NULL,
+  Reason varchar(255) DEFAULT NULL,
+  MoneyAlreadyReturned double DEFAULT NULL
 );
 
-CREATE TABLE `refundmode` (
-  `OrderID` int DEFAULT NULL,
-  `RefundMode` varchar(255) DEFAULT NULL,
-  `Date` timestamp NULL DEFAULT NULL
+drop table if exists refundmode;
+CREATE TABLE refundmode (
+  OrderID int DEFAULT NULL,
+  RefundMode varchar(255) DEFAULT NULL,
+  Date timestamp NULL DEFAULT NULL
 );
-
-
