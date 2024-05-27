@@ -28,7 +28,7 @@ public class MainClassForTest {
 	}
 	
 	public static void main(String[] args) {
-		/*
+		
 		new MainClassForTest();
 		Client client1= new Client("John", "Doe", "john.doe@example.com", "123 Main St, Anytown, USA", "password1");
 		Client client2= new Client("Jane", "Smith", "jane.smith@example.com", "123 Main St, Anytown, USA", "letmein");
@@ -48,13 +48,15 @@ public class MainClassForTest {
 		skuqty.put(inventoryItem2, 2);
 		
 		ShopController shc=new ShopController(new Shop(client2), new ShopFrame());
-		*/		
+			
 		
+		/*
 		InventoryView iv=new InventoryView();
 		InventoryManager w=new InventoryManager();
 		InventoryController ic=new InventoryController(w, iv);
 		SupplyManager sm=new SupplyManager();
 		SupplyController sc=new SupplyController(sm, iv.getSupplyPanel());
+		*/
 
 
 		/*
