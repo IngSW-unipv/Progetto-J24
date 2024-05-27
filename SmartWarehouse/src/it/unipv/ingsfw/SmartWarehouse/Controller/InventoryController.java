@@ -52,7 +52,12 @@ public class InventoryController {
 			private void manageAction() {
 				String s = iv.getSkutf().getText();
 				if (!s.isEmpty()) { 
-					iv.viewInventoryItemFound(w.findInventoryItem(s));
+					iv.cleanTable();
+					InventoryItem i = w.findInventoryItem(s);
+					if (i!= null) {
+						iv.addInventoryItem(i.getSku(), i.getDescription(), i.getPrice(),i.getQty(), i.getStdLevel(), i.getPos().getLine(), i.getPos().getPod(), i.getPos().getBin(),
+								i.getDetails().getFragility(), i.getDetails().getDimension(), i.getDetails().getCategory().getLabel());
+					}
 	            }
 			}
 		};
@@ -70,12 +75,12 @@ public class InventoryController {
 			private void manage() {
 				Object[] input=iv.showFilterPosition();
 				if(input!=null) {
-					try {
-						InventoryItem i = w.findInventoryItemByPosition(new Position((String)input[0], (String)input[1], (String)input[2]));
-						iv.viewInventoryItemFound(i);
-					} catch (Exception e) {
-						JOptionPane.showMessageDialog(iv.getFirstDialog(), e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
-					}		
+					iv.cleanTable();
+					InventoryItem i = w.findInventoryItemByPosition(new Position((String)input[0], (String)input[1], (String)input[2]));
+					if (i!=null) {
+						iv.addInventoryItem (i.getSku(), i.getDescription(), i.getPrice(),i.getQty(), i.getStdLevel(), i.getPos().getLine(), i.getPos().getPod(), i.getPos().getBin(),
+								i.getDetails().getFragility(), i.getDetails().getDimension(), i.getDetails().getCategory().getLabel());
+					}
 				}
 			} 
 		};

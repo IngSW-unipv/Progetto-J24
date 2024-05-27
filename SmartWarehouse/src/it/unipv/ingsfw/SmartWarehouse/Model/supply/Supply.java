@@ -5,12 +5,11 @@ import java.time.LocalDateTime;
 import it.unipv.ingsfw.SmartWarehouse.Exception.AuthorizationDeniedException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.supplier.SupplierDoesNotExistException;
-import it.unipv.ingsfw.SmartWarehouse.Exception.supply.InvalidMaxQuantityExcepion;
-import it.unipv.ingsfw.SmartWarehouse.Exception.supply.InvalidPriceException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.supply.InvalidSupplyException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.supply.SupplyAlreadyExistsException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.supply.SupplyDoesNotExistException;
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
+import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentProcess;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.operator.SupplyOperator;
@@ -124,11 +123,13 @@ public class Supply {
 		this.checkSupplierAuthorization();
 		//check the presence of the supply
 		if(SupplyDAOFacade.getInstance().findSupply(ID_Supply)!=null) {
+			//delete orders of that supply
+			SupplyDAOFacade.getInstance().deleteSupplyOrder(this);
 			SupplyDAOFacade.getInstance().deleteSupply(this);
 		} else {
 			throw new SupplyDoesNotExistException();
 		}
-	}
+	} 
 
 	//check that qty is less than maxQty
 	public SupplyOrder buy(int qty) throws AuthorizationDeniedException, SupplyDoesNotExistException, IllegalArgumentException {
@@ -154,7 +155,7 @@ public class Supply {
 	
 	private void checkSupplierAuthorization() throws AuthorizationDeniedException {
 		try {
-			WarehouseOperator op=SingletonUser.getInstance().getOp();
+			WarehouseOperator op=SingletonManager.getInstance().getOp();
 			SupplyOperator su = (SupplyOperator) op;
 		} catch(ClassCastException e) {
 			throw new AuthorizationDeniedException();

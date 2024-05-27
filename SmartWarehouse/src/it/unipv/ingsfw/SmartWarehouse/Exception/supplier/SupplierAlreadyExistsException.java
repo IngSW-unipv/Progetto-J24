@@ -6,5 +6,4 @@ public class SupplierAlreadyExistsException extends InvalidSupplierException{
 		super("The supplier you want to insert already exists");
 	}
 	
-	
 }

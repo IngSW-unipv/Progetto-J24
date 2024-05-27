@@ -8,7 +8,7 @@ public enum Category {
 	
 	private final String label;
 
-	//only private constructor
+	//private constructor
     Category(String label) {
 		this.label=label;
 	}

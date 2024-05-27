@@ -12,8 +12,8 @@ public interface ISupplyDAO {
 	public Supply getSupplyByIDSupply(String IDSupply);
 	public Supply getSupplyBySkuAndIds(String sku, String ids);
 	public List<Supply> getSupplyBySku(String sku);
+	public List<Supply> getSupplyByIds(String ids);
 	public boolean insertSupply(Supply s);
 	public boolean deleteSupply(Supply s);
-	public boolean deleteSupplyOfSupplier(Supplier s);
 	public Supply getCheaperSupplyByInventoryItem(InventoryItem i);
 }

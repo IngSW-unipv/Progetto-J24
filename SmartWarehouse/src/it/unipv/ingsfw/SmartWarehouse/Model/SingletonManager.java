@@ -16,6 +16,7 @@ import it.unipv.ingsfw.SmartWarehouse.Database.SupplyDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.SupplyOrderDAO;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.operator.InventoryOperator;
+import it.unipv.ingsfw.SmartWarehouse.Model.operator.SupplyOperator;
 import it.unipv.ingsfw.SmartWarehouse.Model.operator.WarehouseOperator;
 
 public class SingletonManager {
@@ -42,6 +43,7 @@ public class SingletonManager {
 		supplyDAO=new SupplyDAO();
 		supplyOrderDAO=new SupplyOrderDAO();
 		inventoryManager=new InventoryManager();
+		op=new InventoryOperator();
 	}   
 	
 	public static synchronized SingletonManager getInstance() {

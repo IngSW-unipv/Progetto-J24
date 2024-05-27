@@ -4,7 +4,8 @@ import it.unipv.ingsfw.SmartWarehouse.Exception.AuthorizationDeniedException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.supplier.InvalidSupplierException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.supplier.SupplierAlreadyExistsException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.supplier.SupplierDoesNotExistException;
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
+import it.unipv.ingsfw.SmartWarehouse.Exception.supply.InvalidSupplyException;
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.operator.SupplyOperator;
 import it.unipv.ingsfw.SmartWarehouse.Model.operator.WarehouseOperator;
 
@@ -62,11 +63,13 @@ public class Supplier {
 		}	 
 	}
 	
-	public boolean delete() throws InvalidSupplierException, AuthorizationDeniedException { 
+	public boolean delete() throws InvalidSupplierException, AuthorizationDeniedException, InvalidSupplyException { 
 		this.checkSupplierAuthorization(); 
 		if(supplyDAOFacade.findSupplier(IDS)!=null) {
-			//delete also the supplies associated with this supplier
-			supplyDAOFacade.deleteSupplyOfSupplier(this);
+			//delete also the supplies associated with this supplier, and the orders of the supply deleted
+			for(Supply supply:supplyDAOFacade.findSupplyBySupplier(IDS)) {
+				supply.delete(); 
+			}
 			return supplyDAOFacade.deleteSupplier(this);
 		} else {
 			throw new SupplierDoesNotExistException();
@@ -75,7 +78,7 @@ public class Supplier {
 	
 	private boolean checkSupplierAuthorization() throws AuthorizationDeniedException {
 		try {
-			WarehouseOperator op=SingletonUser.getInstance().getOp();
+			WarehouseOperator op=SingletonManager.getInstance().getOp();
 			SupplyOperator su = (SupplyOperator) op;
 			return true;
 		} catch(ClassCastException e) {

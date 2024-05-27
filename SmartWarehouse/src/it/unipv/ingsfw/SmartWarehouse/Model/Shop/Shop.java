@@ -31,25 +31,21 @@ public class Shop {
 		kart.remove(inv.findInventoryItem(sku));
 	}
 	
-	public void makeOrder(IPayment mode) {
+	public void makeOrder() {
 		try {
-			reg.addOrd(kart.PayAndOrder(cl, mode));
+			reg.addOrd(kart.PayAndOrder(cl));
 		} catch (EmptyKartExceptio e) {
 			System.err.println("the kart is empty, please retry");
 		} 
 	}
 	
 	
-	public void setPrime(IPayment mode) {
-		PaymentProcess pay=new PaymentProcess(mode, cl.getEmail(), "magazzo");
-		try {
-			pay.startPayment(primeImport);
-			cl.setPrime(true);
-		} catch (PaymentException e) {
-			//TODO SISTEMARE
-			System.err.println("è stato impossibile effettuare l'abbonamento a prime");
-		}
-		
+	public void setPrime() {
+		cl.setPrime(true);		
+	}
+	
+	public double getPrimeImport() {
+		return primeImport;
 	}
 
 	public InventoryManager getInv() {

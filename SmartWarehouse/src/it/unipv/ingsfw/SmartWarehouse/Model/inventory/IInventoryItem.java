@@ -4,6 +4,7 @@ import java.util.List;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.AuthorizationDeniedException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
+import it.unipv.ingsfw.SmartWarehouse.Exception.supply.InvalidSupplyException;
 
 public interface IInventoryItem {
 	public String getSku();
@@ -13,8 +14,8 @@ public interface IInventoryItem {
 	public int getStdLevel();
 	public Position getPos();
 	public ItemDetails getDetails();
-	public InventoryItem addToInventory() throws AuthorizationDeniedException;
-	public void delete() throws ItemNotFoundException, AuthorizationDeniedException;
+	public IInventoryItem addToInventory() throws AuthorizationDeniedException;
+	public void delete() throws ItemNotFoundException, AuthorizationDeniedException, InvalidSupplyException;
 	public boolean updateQty(int qty) throws ItemNotFoundException, IllegalArgumentException;
 	public boolean increaseQty() throws ItemNotFoundException, IllegalArgumentException;
 	public boolean decreaseQty() throws ItemNotFoundException, IllegalArgumentException;

@@ -23,10 +23,7 @@ public class InventoryManager {
 		return invFacade.findInventoryItemBySku(sku);
 	}  
 	
-	public InventoryItem findInventoryItemByPosition(Position pos) throws IllegalArgumentException {
-		if(pos==null) {
-			throw new IllegalArgumentException("Insert a position valid");
-		}
+	public InventoryItem findInventoryItemByPosition(Position pos) {
 		return invFacade.checkIfPositionAlreadyUsed(pos);
 	}
 

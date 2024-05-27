@@ -21,7 +21,7 @@ public class CategoryStrategy implements IReplenishmentStrategy {
 		for(InventoryItem i:items) { 
 			if(i.getDetails().getCategory().equals(category)) {
 				Supply s = SupplyDAOFacade.getInstance().getCheaperSupplyByInventoryItem(i);
-				if(s!=null) {
+				if(s!=null) { 
 					q = i.getQty();
 					while(q < i.getStdLevel()) {
 						s.replenishSupply(Math.min(s.getMaxqty(), i.getStdLevel()-q));	

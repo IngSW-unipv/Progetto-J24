@@ -16,12 +16,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-import it.unipv.ingsfw.SmartWarehouse.Controller.InventoryController;
-import it.unipv.ingsfw.SmartWarehouse.Controller.SupplyController;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Category;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
-import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyManager;
 
 public class InventoryView extends JFrame {
 	
@@ -155,12 +150,8 @@ public class InventoryView extends JFrame {
         tableModel.addRow(new Object[]{sku, d, price, qty, stdl, line, pod, bin, fr, dim, cat});
     }
 	 
-	public void viewInventoryItemFound(InventoryItem i) {
+	public void cleanTable() {
 		tableModel.setRowCount(0);
-		if(i!=null) {
-		tableModel.addRow(new Object[]{i.getSku(), i.getDescription(), i.getPrice(),i.getQty(), i.getStdLevel(), i.getPos().getLine(), i.getPos().getPod(), i.getPos().getBin(),
-						i.getDetails().getFragility(), i.getDetails().getDimension(), i.getDetails().getCategory().getLabel()});
-		}
 	}
 	
 	public Object[] showFilterPosition() {
@@ -180,6 +171,12 @@ public class InventoryView extends JFrame {
 		panel.add(binField);
 		int result = JOptionPane.showConfirmDialog(this, panel, "Filter Position", JOptionPane.OK_CANCEL_OPTION);
 		if(result==JOptionPane.OK_OPTION) {
+			if (lineField.getText().isEmpty() ||
+                podField.getText().isEmpty()  ||
+                binField.getText().isEmpty()) {
+       		    JOptionPane.showMessageDialog(this, "empty fields" , "Error", JOptionPane.WARNING_MESSAGE);
+                return null;
+            } 
 			String line = lineField.getText();
 			String pod = podField.getText();
 			String bin = binField.getText();
@@ -268,16 +265,6 @@ public class InventoryView extends JFrame {
 		this.underLevel = underLevel;
 	}
 
-	public static void main(String[] args) {
-	
-		InventoryView iv=new InventoryView();
-		System.out.println(iv.getSupplyPanel());
-		InventoryManager w=new InventoryManager();
-		InventoryController ic=new InventoryController(w, iv);
-		SupplyManager sm=new SupplyManager();
-		SupplyController sc=new SupplyController(sm, iv.getSupplyPanel());
-
-	}
 	
 }
 

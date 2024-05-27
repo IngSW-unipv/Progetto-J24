@@ -113,6 +113,29 @@ public class SupplyDAO implements ISupplyDAO {
 		return result;
 	}
 	
+	public List<Supply> getSupplyByIds(String ids) {
+		conn=DBConnection.startConnection(conn,schema);
+		PreparedStatement st1;
+		ResultSet rs1;
+		List<Supply> result = new ArrayList<Supply>();
+				
+		try {
+			String query= "select * from supply where ids = ?";
+			st1=conn.prepareStatement(query);
+			st1.setString(1, ids);
+			rs1=st1.executeQuery();
+			if(rs1.next()) {
+				result.add(new Supply(rs1.getString(1),rs1.getString(2), rs1.getString(3),rs1.getDouble(4),rs1.getInt(5)));
+			}
+			
+		} catch  (Exception e) { 
+			e.printStackTrace();
+		} finally {
+	        DBConnection.closeConnection(conn); 
+	    }
+		return result;
+	}
+	
 	public boolean insertSupply(Supply s) {
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;
@@ -155,26 +178,6 @@ public class SupplyDAO implements ISupplyDAO {
 		return result;
 	}
 	
-	public boolean deleteSupplyOfSupplier(Supplier s) {
-		conn=DBConnection.startConnection(conn,schema);
-		PreparedStatement st1;
-		boolean result=true;
-		
-		try {
-			String query="delete from supply where ids=?";
-			st1 = conn.prepareStatement(query);
-			st1.setString(1, s.getIDS());
-			st1.executeUpdate();
-			
-		} catch  (Exception e) {
-			e.printStackTrace();
-			result=false;
-		} finally {
-	        DBConnection.closeConnection(conn);
-	    }
-		return result;
-	}
-	
 	public Supply getCheaperSupplyByInventoryItem(InventoryItem i) {
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;
@@ -182,7 +185,7 @@ public class SupplyDAO implements ISupplyDAO {
 		Supply result=null;
 				
 		try {
-			String query= "select * from supply where sku = ? and price=(select max(price) from supply where sku= ?)";
+			String query= "select * from supply where sku = ? and price=(select min(price) from supply where sku= ?)";
 			st1=conn.prepareStatement(query);
 			st1.setString(1, i.getSku());
 			st1.setString(2, i.getSku());

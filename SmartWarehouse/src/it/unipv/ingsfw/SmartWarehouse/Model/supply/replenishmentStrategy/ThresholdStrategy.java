@@ -6,23 +6,23 @@ import it.unipv.ingsfw.SmartWarehouse.Exception.AuthorizationDeniedException;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supply;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyDAOFacade;
-import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyManager;
 
 public class ThresholdStrategy implements IReplenishmentStrategy {
 	
-	//rifornisco i sottosoglia fino ad arrivare alla soglia
+	//replenish item until the threshold
+	@Override
 	public void replenish(List<InventoryItem> items) throws AuthorizationDeniedException {
 		int q;
 		for(InventoryItem i:items) { 
 			q = i.getQty();
 			Supply s= SupplyDAOFacade.getInstance().getCheaperSupplyByInventoryItem(i);
-			while (q < i.getStdLevel()) {
-				if (s!=null) {
+			if (s!=null) {
+				while (q < i.getStdLevel()) {
 					s.replenishSupply(Math.min(s.getMaxqty(), i.getStdLevel()-q));	
 					q += Math.min(s.getMaxqty(), i.getStdLevel()-q);
 				}
 			}
-		}
+		}		
 	}
 	
 	@Override
