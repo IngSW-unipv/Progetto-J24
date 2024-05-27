@@ -21,10 +21,5 @@ public class RandomGenerator implements IRandomGenerator{
 		}
 		return sb.toString();
 	}
-	
-	public String generateRandomIdentifierUUID() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(UUID.randomUUID());
-		return sb.toString();
-	}
+
 }
