@@ -134,7 +134,9 @@ public class ShopController {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				
-				new ReturnableOrdersController(new ReturnableOrdersView());
+				new ReturnableOrdersController(new ReturnableOrdersView(model.getCl()));
+				
+				// new ReturnableOrdersController(new ReturnableOrdersView());
 			}
 		};
 		view.getOrders().addActionListener(goToOrderArea);

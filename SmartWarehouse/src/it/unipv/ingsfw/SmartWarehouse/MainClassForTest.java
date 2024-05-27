@@ -54,7 +54,7 @@ public class MainClassForTest {
 		SupplyManager sm=new SupplyManager();
 		SupplyController sc=new SupplyController(sm, iv.getSupplyPanel());
 		
-		/* il mio
+		/*
 		 ReturnableOrdersView rov= new ReturnableOrdersView();
 		 ReturnableOrdersController roc=new ReturnableOrdersController(rov);
 		 */
