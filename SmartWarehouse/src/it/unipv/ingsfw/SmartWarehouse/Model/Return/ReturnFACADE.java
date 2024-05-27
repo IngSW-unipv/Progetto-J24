@@ -60,5 +60,9 @@ public class ReturnFACADE {
 		// TODO Auto-generated method stub
 		return rs.getMoneyAlreadyReturned();
 	}
+	public IReturnable getReturnableOrder() {
+		// TODO Auto-generated method stub
+		return rs.getReturnableOrder();
+	}
 
 }

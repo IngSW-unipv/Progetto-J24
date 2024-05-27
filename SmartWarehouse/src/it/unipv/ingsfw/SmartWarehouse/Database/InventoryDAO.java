@@ -19,7 +19,7 @@ public class InventoryDAO implements IInventoryDAO {
 	
 	public InventoryDAO () {
 		super();
-		this.schema="warehouse";  
+		this.schema="smartwarehouse";  
 	}  
 
 	public List<InventoryItem> selectAllInventory(){  

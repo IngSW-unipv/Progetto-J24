@@ -11,10 +11,10 @@ public class BankTransfer {
 		this.senderEmail=senderEmail;
 		this.receiverEmail=receiverEmail;
 	}
-	public void makeBankTransfer() throws PaymentException {
-		PaymentProcess pp= new PaymentProcess(PaymentFactory.getPayPalAdapter(),senderEmail,receiverEmail );
+	public boolean makeBankTransfer() throws PaymentException {
+		PaymentProcess pp= new PaymentProcess(PaymentFactory.getPayPalAdapter(),senderEmail,receiverEmail);
 		System.out.println("Emissione bonifico in corso.... attendere");
-        pp.startPayment(value);
+        return pp.startPayment(value);
 	}
 	public double getValue() {
 		return value;

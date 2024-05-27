@@ -8,8 +8,8 @@ public class WalletPaymentAdapter implements IPayment {
 	    }
 
 		@Override
-		public void makePayment(double importo,String senderEmail,String receiverEmail) {
-			walletPayment.makeWalletPayment(importo,senderEmail,receiverEmail);
+		public void makePayment(double amount,String senderEmail,String receiverEmail) {
+			walletPayment.makeWalletPayment(amount,senderEmail,receiverEmail);
 		}
 
 	  

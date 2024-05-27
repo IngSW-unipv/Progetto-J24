@@ -1,39 +1,21 @@
 package it.unipv.ingsfw.SmartWarehouse.View;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.ListModel;
-import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
-import it.unipv.ingsfw.SmartWarehouse.Model.Client;
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
-import it.unipv.ingsfw.SmartWarehouse.Model.User;
-import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
-import it.unipv.ingsfw.SmartWarehouse.Model.Shop.RegisterFacade;
 
 public class ReturnableOrdersView extends JFrame{
 
@@ -46,7 +28,10 @@ public class ReturnableOrdersView extends JFrame{
 	private JButton backButton;
 
 
-	public ReturnableOrdersView(User client) {
+	/*
+	 * Init the View
+	 */
+	public ReturnableOrdersView() {
 		setTitle("Return Service");
 		setSize(400, 200);
 
@@ -59,7 +44,6 @@ public class ReturnableOrdersView extends JFrame{
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int screenWidth = (int) screenSize.getWidth();
 		int screenHeight = (int) screenSize.getHeight();
-		// Imposto le dimensioni della finestra in base alle dimensioni dello schermo
 		int windowWidth = (int) (screenWidth*0.9); 
 		int windowHeight = (int) (screenHeight*0.9); 
 		setSize(windowWidth, windowHeight);
@@ -75,36 +59,25 @@ public class ReturnableOrdersView extends JFrame{
 		selectOrderPanel = new JPanel();
 		selectOrderPanel.repaint();
 		selectOrderPanel.setLayout(new GridLayout(0, 1)); // 0 righe per una colonna dinamica
-		JLabel selectOrderLabel = new JLabel("Seleziona un ordine:");
+		JLabel selectOrderLabel = new JLabel("Qui puoi vedere gli ordini da te effettuati/n Seleziona un ordine per cominciare la procedura di reso\n");
 		selectOrderPanel.add(selectOrderLabel);
-
-
-		ArrayList<Order> allClientOrders = RegisterFacade.getIstance().selectOrderWhereClient(client.getEmail()); 
-		ArrayList<String> ordersDescriptionsForButton = new ArrayList<>();
-		Integer[] orderIdForActionCommand=new Integer[allClientOrders.size()];
-		int count=0;
-		for(Order or: allClientOrders){
-			ordersDescriptionsForButton.add(or.toString());
-			orderIdForActionCommand[count]=or.getId();
-			count++;
-		}
-		orderButtonGroup = new ButtonGroup();
-		count=0;
-		for (String i : ordersDescriptionsForButton) {
-			JRadioButton radioButton = new JRadioButton(i);
-			orderButtonGroup.add(radioButton);
-			radioButton.setActionCommand(orderIdForActionCommand[count].toString());
-			count++;
-			selectOrderPanel.add(radioButton, BorderLayout.LINE_START);
-		}
-		mainPanel.add(selectOrderPanel, BorderLayout.CENTER);
-
+		
+		
+		
+		
+		
+		
+		//TODO initWithClientOrders() chiamato dal controller.... Qui sotto fai un altro metodo completeView() chiamaro da initWithClientOrders
+		
+		
+		
+		
+	
 		confirmPanel = new JPanel();
 		confirmPanel.repaint();
 		confirmButton = new JButton("Conferma Scelta");
 		confirmPanel.add(confirmButton);
 		mainPanel.add(confirmPanel, BorderLayout.SOUTH);
-
 
 		backPanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); // Layout per posizionare il pulsante a sinistra
 		backPanel.repaint();
@@ -115,6 +88,23 @@ public class ReturnableOrdersView extends JFrame{
 		setVisible(true);
 
 	}
+	public void initWithClientOrders(ArrayList<String> ordersDescriptionsForButton, Integer[] orderIdForActionCommand) {
+		orderButtonGroup = new ButtonGroup();
+		int count=0;
+		for (String i : ordersDescriptionsForButton) {
+			JRadioButton radioButton = new JRadioButton(i);
+			orderButtonGroup.add(radioButton);
+			radioButton.setActionCommand(orderIdForActionCommand[count].toString());
+			count++;
+			selectOrderPanel.add(radioButton, BorderLayout.LINE_START);
+		}
+		mainPanel.add(selectOrderPanel, BorderLayout.CENTER);
+		
+	}
+	
+	
+	
+	
 	 public void showWarningMessagge(String message) {
 		    JOptionPane.showMessageDialog(this, message, "Alert", JOptionPane.WARNING_MESSAGE);
 		}

@@ -31,6 +31,8 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Return.Reasons;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnFACADE;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnService;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnServiceDAOFacade;
+import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
+import it.unipv.ingsfw.SmartWarehouse.Model.Shop.RegisterFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.View.ReturnItemsAndReasonsView;
@@ -47,8 +49,29 @@ public class ReturnController {
 	public ReturnController(ReturnFACADE returnFacade,ReturnItemsAndReasonsView riarView) {
 		this.returnFacade=returnFacade;
 		this.riarView=riarView;
+		initWithItemOfTheOrder();
 		addItemsAndReasonsToReturnService();
 		initActionAndStateOfTheComponent();
+	}
+	
+	private void initWithItemOfTheOrder() {
+		int selectedOrderId=returnFacade.getReturnableOrder().getId();
+		riarView.getSelectedOrderLabel().setText("Ordine selezionato: " +selectedOrderId);
+        Order order = RegisterFacade.getIstance().selectOrder(selectedOrderId);
+        String skuForActionCommand[]=new String[order.getQtyTotal()];
+        ArrayList<InventoryItem> inventoryItem_keyOfOrderMap= new ArrayList<>(order.getMap().keySet());
+        ArrayList<String> itemsDescriptionsForButton= new ArrayList<>();
+        int count=0;
+        for(InventoryItem i:inventoryItem_keyOfOrderMap) {
+     	   for(int count2=0;count2<order.getQtyOfItem(i);count2++) {
+     		   itemsDescriptionsForButton.add(i.getDescription());
+     		   skuForActionCommand[count]=i.getSku();
+         	   count++;
+     	   }
+        }
+        Reasons.initializeReasons();
+        riarView.initWithItemOfTheOrder(itemsDescriptionsForButton,skuForActionCommand,Reasons.getReasons());
+        
 	}
 
 	private void addItemsAndReasonsToReturnService() {

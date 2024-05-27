@@ -12,8 +12,8 @@ public class BankTransferAdapter implements IRefund {
 			this.br=br;
 		}
 		@Override
-		public void issueRefund() throws PaymentException {
-			br.makeBankTransfer();
+		public boolean issueRefund() throws PaymentException {
+			return br.makeBankTransfer();
 		}
 		 public String toString() {
 			return br.toString();

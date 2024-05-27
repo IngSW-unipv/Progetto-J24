@@ -13,11 +13,16 @@ public class PaymentProcess {
     	this.receiverEmail=receiverEmail;
     }
 
-    public void startPayment(double importo) throws PaymentException{
-        if (paymentMode != null) {
-        	paymentMode.makePayment(importo,senderEmail,receiverEmail);
-        } else {
-            throw new PaymentException();
-        }
+    public boolean startPayment(double amount) throws PaymentException{
+    	boolean result=false;
+    	if(amount<0||paymentMode==null||senderEmail==null||receiverEmail==null||senderEmail.isBlank()||senderEmail.isEmpty()
+    			||receiverEmail.isBlank()||receiverEmail.isEmpty()) {
+    		throw new PaymentException();
+    	}
+    	else {
+    		paymentMode.makePayment(amount,senderEmail,receiverEmail);
+        	result=true;
+    	}
+        return result;
     }
 }

@@ -31,7 +31,6 @@ public class ReturnService {
 	}
 	/*private boolean checkReturnability() {
 		if(returnableOrder.getDate().) {
-			
 		}
 	}*/
 	
@@ -53,7 +52,7 @@ public class ReturnService {
 	}
 	public int getQtyReturned(String sku) {
 		int count=0;
-		for(IInventoryItem inventoryItem:returnedItems.keySet()) {
+		for(InventoryItem inventoryItem:returnedItems.keySet()) {
 			if(inventoryItem.getSku().equals(sku)) {
 				count++; 
 			}
@@ -76,8 +75,8 @@ public class ReturnService {
 		moneyToBeReturned=moneyToBeReturned-moneyAlreadyReturned;
 		return moneyToBeReturned;
 	}
-	public void setRefundMode(IRefund rm) throws PaymentException { //valutare la gestione di boolean al posto di void
-		rm.issueRefund();
+	public boolean setRefundMode(IRefund rm) throws PaymentException { //valutare la gestione di boolean al posto di void
+		return rm.issueRefund();
 	}
 	public void AddReturnToDB(IRefund rm) {
 		//Adding the return to the DB

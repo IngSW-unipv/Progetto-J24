@@ -40,182 +40,178 @@ import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 
 public class ReturnItemsAndReasonsView extends JFrame{
-	 private JPanel mainPanel;
-	 private JPanel orderDetailsPanel;
-	 private JPanel itemAndReasonsPanel;
-	 private JPanel confirmPanel;
-	 private JPanel backPanel;
-	 private JPanel refundPanel;
-	 private ArrayList<JCheckBox> checkBoxList=new ArrayList<JCheckBox>();
-	 private ArrayList< JComboBox<String> > reasonsDropdownList=new ArrayList< JComboBox<String> >();
-	 private ArrayList<JTextArea> customReasonAreaList=new ArrayList<JTextArea>();
-	 private ArrayList<JLabel> customReasonLabelList=new ArrayList<JLabel>();
-	 private ButtonGroup refundButtonGroup;
-	 public static final String VOUCHER_RADIO_TEXT = "VOUCHER (consigliato): ricevi il rimborso all'istante su un voucher senza scadenza spendibile in tutto lo shop.";
-	 public static final String BANK_TRANSFER_RADIO_TEXT = "Bonifico Bancario: ricevi un bonifico sulla carta che hai utilizzato per effettuare l'acquisto. Tempi stimati 14 giorni lavorativi.";
+	private JPanel mainPanel;
+	private JPanel orderDetailsPanel;
+	private JPanel itemAndReasonsPanel;
+	private JPanel confirmPanel;
+	private JPanel backPanel;
+	private JPanel refundPanel;
+	private  JLabel selectedOrderLabel;
+	private ArrayList<JCheckBox> checkBoxList=new ArrayList<JCheckBox>();
+	private ArrayList< JComboBox<String> > reasonsDropdownList=new ArrayList< JComboBox<String> >();
+	private ArrayList<JTextArea> customReasonAreaList=new ArrayList<JTextArea>();
+	private ArrayList<JLabel> customReasonLabelList=new ArrayList<JLabel>();
+	private ButtonGroup refundButtonGroup;
+	public static final String VOUCHER_RADIO_TEXT = "VOUCHER (consigliato): ricevi il rimborso all'istante su un voucher senza scadenza spendibile in tutto lo shop.";
+	public static final String BANK_TRANSFER_RADIO_TEXT = "Bonifico Bancario: ricevi un bonifico sulla carta che hai utilizzato per effettuare l'acquisto. Tempi stimati 14 giorni lavorativi.";
 
 	private JButton backButton;
-	 private JButton nextButton;
-	 
+	private JButton nextButton;
 
 
-	 public ReturnItemsAndReasonsView(int orderId,Map<String, String> reasonsFromController) {
-	    setTitle("Items and Reasons");
-        setSize(600,400);
-        
-        try {
-            UIManager.setLookAndFeel(new NimbusLookAndFeel());
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
-        
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenWidth = (int) screenSize.getWidth();
-        int screenHeight = (int) screenSize.getHeight();
 
-        // Imposta le dimensioni della finestra in base alle dimensioni dello schermo
-        int windowWidth = (int) (screenWidth*0.9); // ad esempio, 80% della larghezza dello schermo
-        int windowHeight = (int) (screenHeight*0.9); // ad esempio, 80% dell'altezza dello schermo
-        setSize(windowWidth, windowHeight);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Centra la finestra
-        setResizable(true);
-        
-        
-        mainPanel = new JPanel();
-        mainPanel.repaint();
-        mainPanel.setLayout(new BorderLayout());
-        getContentPane().add(mainPanel);
-        
-        orderDetailsPanel=new JPanel();
-        orderDetailsPanel.repaint();
-        orderDetailsPanel.setLayout(new BoxLayout(orderDetailsPanel, BoxLayout.Y_AXIS));
-        JLabel selectedOrderLabel = new JLabel("Ordine selezionato: " +orderId);
-        JLabel ItemAndReasonsLabel = new JLabel("Seleziona gli item che vuoi restituire");
+	public ReturnItemsAndReasonsView() {
+		setTitle("Items and Reasons");
+		setSize(600,400);
 
-        orderDetailsPanel.add(selectedOrderLabel);
+		try {
+			UIManager.setLookAndFeel(new NimbusLookAndFeel());
+		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
 
-        orderDetailsPanel.add(ItemAndReasonsLabel);
-        
-        
-          // Valutare di fare così:
-        
-           Order order = RegisterFacade.getIstance().selectOrder(orderId); //RegisterFacade.getInstance().selectOrder(orderId)
-           String skuForActionCommand[]=new String[order.getQtyTotal()];
-           ArrayList<InventoryItem> inventoryItem_keyOfOrderMap= new ArrayList<>(order.getMap().keySet());
-           ArrayList<String> itemsDescriptionsForButton= new ArrayList<>();
-           int count=0;
-           for(InventoryItem i:inventoryItem_keyOfOrderMap) {
-        	   for(int count2=0;count2<order.getQtyOfItem(i);count2++) {
-        		   itemsDescriptionsForButton.add(i.getDescription());
-        		   skuForActionCommand[count]=i.getSku();
-            	   count++;
-        	   }
-           }
-           
-        int count3=0;
-        for (String i : itemsDescriptionsForButton) {
-        	
-        	itemAndReasonsPanel = new JPanel();
-        	itemAndReasonsPanel.repaint();
-        	itemAndReasonsPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        	
-        	JCheckBox checkBox=new JCheckBox(i);
-        	checkBox.setActionCommand(skuForActionCommand[count3]);
-        	count3++;
-            checkBoxList.add(checkBox);
-            itemAndReasonsPanel.add(checkBox);
-            
-            JComboBox<String> reasonsDropdown = new JComboBox<String>(reasonsFromController.values().toArray(new String[0]));
-            reasonsDropdown.setSelectedItem("Scegli una motivazione");
-            reasonsDropdown.setEnabled(false);
-            reasonsDropdownList.add(reasonsDropdown);
-            itemAndReasonsPanel.add(reasonsDropdown);
-            
-            JTextArea customReasonArea=new JTextArea(4, 50);
-            JLabel customReasonLabel=new JLabel("Descrivi il motivo della restituzione");
-            LineBorder border = new LineBorder(Color.BLACK); // Puoi scegliere il colore del bordo
-            customReasonArea.setBorder(BorderFactory.createCompoundBorder(border, BorderFactory.createEmptyBorder(5, 5, 5, 5))); // Aggiungi spaziatura interna
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int screenWidth = (int) screenSize.getWidth();
+		int screenHeight = (int) screenSize.getHeight();
+		int windowWidth = (int) (screenWidth*0.9); 
+		int windowHeight = (int) (screenHeight*0.9); 
+		setSize(windowWidth, windowHeight);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null); // Centra la finestra
+		setResizable(true);
 
-            customReasonArea.setVisible(false);
-            customReasonLabel.setVisible(false);
-            customReasonAreaList.add(customReasonArea); 
-            customReasonLabelList.add(customReasonLabel);
-            itemAndReasonsPanel.add(customReasonLabel); 
-            itemAndReasonsPanel.add(customReasonArea); 
-            
-            orderDetailsPanel.add(itemAndReasonsPanel);
-        }
 
-        mainPanel.add(orderDetailsPanel, BorderLayout.CENTER);
-        
-        confirmPanel = new JPanel();
-        confirmPanel.repaint();
-        nextButton = new JButton("Next");
-        confirmPanel.add(nextButton);
-        mainPanel.add(confirmPanel, BorderLayout.SOUTH);
-        
-        backPanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); // Layout per posizionare il pulsante a sinistra
-        backPanel.repaint();
-        backButton = new JButton("Back",UIManager.getIcon("FileView.directoryIcon"));
-        backPanel.add(backButton);
-        mainPanel.add(backPanel, BorderLayout.NORTH);
-       
-        
-        refundPanel = new JPanel();
-        refundPanel.repaint();
-        refundPanel.setLayout(new GridLayout(0, 1));
-        //refundPanel.setLayout(new BoxLayout(refundPanel, BoxLayout.Y_AXIS));
-        JLabel refundLabel = new JLabel("Scegli la modalità con cui preferisci essere rimborsato:");
-        JRadioButton voucherRadioButton = new JRadioButton(VOUCHER_RADIO_TEXT);
-        JRadioButton bankTransferRadioButton = new JRadioButton(BANK_TRANSFER_RADIO_TEXT);
-        voucherRadioButton.setActionCommand(VOUCHER_RADIO_TEXT);
-        bankTransferRadioButton.setActionCommand(BANK_TRANSFER_RADIO_TEXT);
-        refundButtonGroup = new ButtonGroup();
-        refundButtonGroup.add(voucherRadioButton);
-        refundButtonGroup.add(bankTransferRadioButton);
-        refundPanel.add(refundLabel);
-        refundPanel.add(voucherRadioButton);
-        refundPanel.add(bankTransferRadioButton);
+		mainPanel = new JPanel();
+		mainPanel.repaint();
+		mainPanel.setLayout(new BorderLayout());
+		getContentPane().add(mainPanel);
 
-        // Aggiungi bordi evidenziati
-        refundPanel.setBorder(BorderFactory.createTitledBorder("Modalità di Rimborso")); //   bordo titolato
-        refundPanel.setBackground(Color.cyan); // colore di sfondo
-        JPanel uselessPanel=new JPanel(new BorderLayout());
-        uselessPanel.repaint();
-        mainPanel.add(uselessPanel,BorderLayout.EAST);
-        uselessPanel.add(refundPanel,BorderLayout.SOUTH);
+		orderDetailsPanel=new JPanel();
+		orderDetailsPanel.repaint();
+		orderDetailsPanel.setLayout(new BoxLayout(orderDetailsPanel, BoxLayout.Y_AXIS));
+		JLabel selectedOrderLabel = new JLabel();
+		selectedOrderLabel.setBackground(Color.yellow);
+		JLabel ItemAndReasonsLabel = new JLabel("Seleziona gli item che vuoi restituire");
 
-        //pack();
-        setVisible(true);
-   
+		orderDetailsPanel.add(selectedOrderLabel);
+		orderDetailsPanel.add(ItemAndReasonsLabel);
+		
+		
+
+
+        //initWithItemOfTheOrder chiamato dal controller.... Qui sotto fai un altro metodo completeView() chiamaro da initWithItemOfTheOrder
+		
+		
+		
+		
+		confirmPanel = new JPanel();
+		confirmPanel.repaint();
+		nextButton = new JButton("Next");
+		confirmPanel.add(nextButton);
+		mainPanel.add(confirmPanel, BorderLayout.SOUTH);
+
+		backPanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); // Layout per posizionare il pulsante a sinistra
+		backPanel.repaint();
+		backButton = new JButton("Back",UIManager.getIcon("FileView.directoryIcon"));
+		backPanel.add(backButton);
+		mainPanel.add(backPanel, BorderLayout.NORTH);
+
+
+		refundPanel = new JPanel();
+		refundPanel.repaint();
+		refundPanel.setLayout(new GridLayout(0, 1));
+		//refundPanel.setLayout(new BoxLayout(refundPanel, BoxLayout.Y_AXIS));
+		JLabel refundLabel = new JLabel("Scegli la modalità con cui preferisci essere rimborsato:");
+		JRadioButton voucherRadioButton = new JRadioButton(VOUCHER_RADIO_TEXT);
+		JRadioButton bankTransferRadioButton = new JRadioButton(BANK_TRANSFER_RADIO_TEXT);
+		voucherRadioButton.setActionCommand(VOUCHER_RADIO_TEXT);
+		bankTransferRadioButton.setActionCommand(BANK_TRANSFER_RADIO_TEXT);
+		refundButtonGroup = new ButtonGroup();
+		refundButtonGroup.add(voucherRadioButton);
+		refundButtonGroup.add(bankTransferRadioButton);
+		refundPanel.add(refundLabel);
+		refundPanel.add(voucherRadioButton);
+		refundPanel.add(bankTransferRadioButton);
+
+		// Aggiungi bordi evidenziati
+		refundPanel.setBorder(BorderFactory.createTitledBorder("Modalità di Rimborso")); //   bordo titolato
+		refundPanel.setBackground(Color.cyan); // colore di sfondo
+		JPanel uselessPanel=new JPanel(new BorderLayout());
+		uselessPanel.repaint();
+		mainPanel.add(uselessPanel,BorderLayout.EAST);
+		uselessPanel.add(refundPanel,BorderLayout.SOUTH);
+
+		//pack();
+		setVisible(true);
+
 	}
-	 
-	 public int showConfirmPopUp(String recap) {
-		 return JOptionPane.showConfirmDialog(this, recap, "Conferma restituzione", JOptionPane.OK_CANCEL_OPTION);
+	public void initWithItemOfTheOrder(ArrayList<String> itemsDescriptionsForButton, String[] skuForActionCommand,Map<String, String> map) {
+		// TODO Auto-generated method stub
+		int count3=0;
+		for (String i : itemsDescriptionsForButton) {
 
-	 }
-	 public void showWarningMessagge(String message) {
-		    JOptionPane.showMessageDialog(this, message, "Alert", JOptionPane.WARNING_MESSAGE);
+			itemAndReasonsPanel = new JPanel();
+			itemAndReasonsPanel.repaint();
+			itemAndReasonsPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+			JCheckBox checkBox=new JCheckBox(i);
+			checkBox.setActionCommand(skuForActionCommand[count3]);
+			count3++;
+			checkBoxList.add(checkBox);
+			itemAndReasonsPanel.add(checkBox);
+
+			JComboBox<String> reasonsDropdown = new JComboBox<String>(map.values().toArray(new String[0]));
+			reasonsDropdown.setSelectedItem("Scegli una motivazione");
+			reasonsDropdown.setEnabled(false);
+			reasonsDropdownList.add(reasonsDropdown);
+			itemAndReasonsPanel.add(reasonsDropdown);
+
+			JTextArea customReasonArea=new JTextArea(4, 50);
+			JLabel customReasonLabel=new JLabel("Descrivi il motivo della restituzione");
+			LineBorder border = new LineBorder(Color.BLACK); 
+			customReasonArea.setBorder(BorderFactory.createCompoundBorder(border, BorderFactory.createEmptyBorder(5, 5, 5, 5))); // Aggiungi spaziatura interna
+
+			customReasonArea.setVisible(false);
+			customReasonLabel.setVisible(false);
+			customReasonAreaList.add(customReasonArea); 
+			customReasonLabelList.add(customReasonLabel);
+			itemAndReasonsPanel.add(customReasonLabel); 
+			itemAndReasonsPanel.add(customReasonArea); 
+
+			orderDetailsPanel.add(itemAndReasonsPanel);
 		}
-	 public void showErrorMessagge(String message) {
-		    JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
+
+		mainPanel.add(orderDetailsPanel, BorderLayout.CENTER);
+
+	}
+
+	public int showConfirmPopUp(String recap) {
+		return JOptionPane.showConfirmDialog(this, recap, "Conferma restituzione", JOptionPane.OK_CANCEL_OPTION);
+
+	}
+	public void showWarningMessagge(String message) {
+		JOptionPane.showMessageDialog(this, message, "Alert", JOptionPane.WARNING_MESSAGE);
+	}
+	public void showErrorMessagge(String message) {
+		JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
+	}
+	public void showSuccessDialog(String message) {
+		String[] options = {"Continua a navigare nello shop", "chiudi"};
+		int n = JOptionPane.showOptionDialog(this,message,
+				"Operazione di Reso completata con successo",
+				JOptionPane.YES_NO_OPTION,
+				JOptionPane.INFORMATION_MESSAGE,
+				null,
+				options,
+				options[0]);
+		if (n == JOptionPane.YES_OPTION) {
+			this.dispose();
+		} else if (n == JOptionPane.NO_OPTION) {
+			// new ShopView ecc.
 		}
-	 public void showSuccessDialog(String message) {
-		   String[] options = {"Continua a navigare nello shop", "chiudi"};
-		    int n = JOptionPane.showOptionDialog(this,message,
-		        "Operazione di Reso completata con successo",
-		        JOptionPane.YES_NO_OPTION,
-		        JOptionPane.INFORMATION_MESSAGE,
-		        null,
-		        options,
-		        options[0]);
-		    if (n == JOptionPane.YES_OPTION) {
-		        this.dispose();
-		    } else if (n == JOptionPane.NO_OPTION) {
-		        // new ShopView ecc.
-		    }
-		}
+	}
+
+
 	public static String getVoucherRadioText() {
 		return VOUCHER_RADIO_TEXT;
 	}
@@ -240,7 +236,6 @@ public class ReturnItemsAndReasonsView extends JFrame{
 		return backButton;
 	}
 
-
 	public ArrayList<JTextArea> getCustomReasonAreaList() {
 		return customReasonAreaList;
 	}
@@ -255,5 +250,11 @@ public class ReturnItemsAndReasonsView extends JFrame{
 	public ButtonGroup getRefundButtonGroup() {
 		return refundButtonGroup;
 	}
+
+	public JLabel getSelectedOrderLabel() {
+		return selectedOrderLabel;
+	}
+
+
 }
 
