@@ -6,13 +6,15 @@ public class OrderLine {
 	private int qty;
 	private String email;
 	private String date;
+	private boolean picked;
 	
-	public OrderLine(int id, String sku, int qty, String email, String date) {
+	public OrderLine(int id, String sku, int qty, String email, String date, boolean pick) {
 		this.id=id;
 		this.sku=sku;
 		this.qty=qty;
 		this.email=email;
 		this.date=date;
+		this.picked=pick;
 	}
 
 	public int getId() {
@@ -53,5 +55,13 @@ public class OrderLine {
 
 	public void setDate(String date) {
 		this.date = date;
+	}
+
+	public boolean isPicked() {
+		return picked;
+	}
+
+	public void setPicked(boolean picked) {
+		this.picked = picked;
 	}
 }

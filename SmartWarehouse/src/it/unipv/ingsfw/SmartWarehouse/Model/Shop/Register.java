@@ -45,7 +45,7 @@ public class Register {
 		HashMap<InventoryItem, Integer> hs = new HashMap<InventoryItem, Integer>();
 		OrderLine temp=o.get(0);
 		for(OrderLine ord: o) {
-			hs.put(inv.findInventoryItem(ord.getSku()), ord.getQty()); //eccezione gestita da InventoryManager se sku non esiste
+			hs.put(inv.findInventoryItem(ord.getSku()), ord.getQty());
 		}
 		return new Order(hs, id, temp.getEmail(), temp.getDate());
 	}
@@ -54,7 +54,7 @@ public class Register {
 		ArrayList<OrderLine> ord = new ArrayList<OrderLine>();
 		for(InventoryItem i: o.getSet()) {
 			ord.add(new OrderLine(o.getId(), i.getSku(), o.getQtyOfItem(i),
-					o.getEmail(), o.getDate()));
+					o.getEmail(), o.getDate(), false));
 		}
 		return ord;
 	}
