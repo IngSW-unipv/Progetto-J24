@@ -31,7 +31,7 @@ public class RegisterDAO implements IRegisterDAO {
 			ArrayList<OrderLine> o = new ArrayList<OrderLine>();
 			while(rs1.next()) {
 				o.add(new OrderLine(rs1.getInt(1),rs1.getString(2),
-						rs1.getInt(3),rs1.getString(4),rs1.getString(5)));
+						rs1.getInt(3),rs1.getString(4),rs1.getString(5), rs1.getBoolean(6)));
 			}
 			return o;
 		}
@@ -63,7 +63,7 @@ public class RegisterDAO implements IRegisterDAO {
                 	currentOrderId = orderId;
             	}
             	o.add(new OrderLine(orderId, rs1.getString(2),
-                    rs1.getInt(3), rs1.getString(4), rs1.getString(5)));
+                    rs1.getInt(3), rs1.getString(4), rs1.getString(5), rs1.getBoolean(6)));
 				
 			}
 			
@@ -85,7 +85,7 @@ public class RegisterDAO implements IRegisterDAO {
 			for(OrderLine ord: o) {
 				String query = "insert into clientorders values("
 						+ord.getId()+",\""+ord.getSku()+"\","+ord.getQty()+
-						",\""+ord.getEmail()+"\",\""+ord.getDate()+"\")";				
+						",\""+ord.getEmail()+"\",\""+ord.getDate()+"\","+ord.isPicked()+")";				
 				st1.executeUpdate(query);
 			}
 		}
