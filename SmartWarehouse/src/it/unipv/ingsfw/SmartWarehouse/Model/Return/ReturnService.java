@@ -22,16 +22,16 @@ import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 
 public class ReturnService { 
 	private IReturnable returnableOrder;
-	private Map<InventoryItem, String> returnedItems;
+	private Map<IInventoryItem, String> returnedItems;
 	private double moneyAlreadyReturned;
 
 	/*
 	 * Constructor and Checking the order date to verify returnability.
 	 */
 	public ReturnService(IReturnable returnableOrder) throws UnableToReturnException, ParseException  {
-		if(!checkReturnability(returnableOrder)) {
+		/*if(!checkReturnability(returnableOrder)) {
 			throw new UnableToReturnException();
-		}
+		}*/
 		this.returnableOrder = returnableOrder;
 		this.returnedItems = new HashMap<>();
 		this.moneyAlreadyReturned=0;
@@ -69,13 +69,13 @@ public class ReturnService {
 	/*
 	 * Methods related to the Return process
 	 */
-	public void addItemToReturn(InventoryItem inventoryItem,String reason) throws UnableToReturnException, MissingReasonException{
+	public void addItemToReturn(IInventoryItem inventoryItem,String reason) throws UnableToReturnException, MissingReasonException{
 		if(!checkReturnabilityOfInventoryItem(inventoryItem)){
 			throw new UnableToReturnException(returnableOrder.getDescBySku(inventoryItem.getSku()));
 		}
 		returnedItems.put(inventoryItem,setReason(reason));
 	}
-	private boolean checkReturnabilityOfInventoryItem(InventoryItem inventoryItem){
+	private boolean checkReturnabilityOfInventoryItem(IInventoryItem inventoryItem){
 		if(returnableOrder.getQtyBySku(inventoryItem.getSku())<getQtyReturned(inventoryItem.getSku())+1) {
 			return false;
 		}
@@ -83,7 +83,7 @@ public class ReturnService {
 	}
 	public int getQtyReturned(String sku) {
 		int count=0;
-		for(InventoryItem inventoryItem:returnedItems.keySet()) {
+		for(IInventoryItem inventoryItem:returnedItems.keySet()) {
 			if(inventoryItem.getSku().equals(sku)) {
 				count++; 
 			}
@@ -100,7 +100,7 @@ public class ReturnService {
 	public double getMoneyToBeReturned()
 	{
 		double moneyToBeReturned=0;
-		for(InventoryItem inventoryItem:returnedItems.keySet()) {
+		for(IInventoryItem inventoryItem:returnedItems.keySet()) {
 			moneyToBeReturned+=inventoryItem.getPrice();
 
 		}
@@ -131,7 +131,7 @@ public class ReturnService {
 	/*
 	 * setters and getters
 	 */
-	public void setReturnedItems(Map<InventoryItem, String> returnedItems) {
+	public void setReturnedItems(Map<IInventoryItem, String> returnedItems) {
 		this.returnedItems = returnedItems;
 	}
 
@@ -148,7 +148,7 @@ public class ReturnService {
 	public double getMoneyAlreadyReturned() {
 		return this.moneyAlreadyReturned;
 	}
-	public Map<InventoryItem, String> getReturnedItems() {
+	public Map<IInventoryItem, String> getReturnedItems() {
 		return returnedItems;
 	}
 }

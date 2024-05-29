@@ -9,6 +9,7 @@ import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.UnableToReturnException;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 
 public class ReturnFACADE {
@@ -43,7 +44,7 @@ public class ReturnFACADE {
 		// TODO Auto-generated method stub
 		return rs.getMoneyToBeReturned();
 	}
-	public Map<InventoryItem, String> getReturnedItems() {
+	public Map<IInventoryItem, String> getReturnedItems() {
 		return rs.getReturnedItems();
 	}
 	public void AddReturnToDB(IRefund refundMode) {

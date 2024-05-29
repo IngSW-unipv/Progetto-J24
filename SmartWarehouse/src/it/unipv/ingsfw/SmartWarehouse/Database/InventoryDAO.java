@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Category;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.ItemDetails;

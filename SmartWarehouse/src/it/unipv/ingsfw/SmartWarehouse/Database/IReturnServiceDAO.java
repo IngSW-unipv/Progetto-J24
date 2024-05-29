@@ -13,7 +13,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 public interface IReturnServiceDAO {
 	public ArrayList<ReturnService> selectAll();
 	public ReturnService selectByOrder(IReturnable returnableOrder);
-	public Map<InventoryItem, String> selectItemAndReason(IReturnable returnableOrder);
+	public Map<IInventoryItem, String> selectItemAndReason(IReturnable returnableOrder);
 	public double selectMoneyAlreadyReturn(IReturnable returnableOrder);
 	public boolean insertReturnService(ReturnService rs);
 	public boolean deleteReturnService(ReturnService rs);

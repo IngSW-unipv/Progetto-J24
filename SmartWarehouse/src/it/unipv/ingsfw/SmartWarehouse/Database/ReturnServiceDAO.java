@@ -56,9 +56,9 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 	}
 
 
-	public Map<InventoryItem, String> selectItemAndReason(IReturnable returnableOrder) {
+	public Map<IInventoryItem, String> selectItemAndReason(IReturnable returnableOrder) {
 		// TODO Auto-generated method stub
-		Map<InventoryItem, String>  result = new HashMap<>();
+		Map<IInventoryItem, String>  result = new HashMap<>();
 
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;
@@ -118,7 +118,7 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 
 			st1 = conn.prepareStatement(query);
 			
-			for (Map.Entry<InventoryItem, String> entry : returnService.getReturnedItems().entrySet()) {
+			for (Map.Entry<IInventoryItem, String> entry : returnService.getReturnedItems().entrySet()) {
 	            st1.setInt(1, returnService.getReturnableOrder().getId()); //evitare chiamate ricorsive
 	            st1.setString(2, entry.getKey().getSku()); 
 	            st1.setString(3, entry.getValue()); 
