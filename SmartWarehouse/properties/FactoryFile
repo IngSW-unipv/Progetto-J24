@@ -1,3 +1,4 @@
 voucher.adapter.class.name=it.unipv.ingsfw.SmartWarehouse.Model.Refund.Voucher.VoucherAdapter
 bonifico.adapter.class.name=it.unipv.ingsfw.SmartWarehouse.Model.Refund.BankTransfer.BankTransferAdapter
 paypal.adapter.class.name=it.unipv.ingsfw.SmartWarehouse.Model.Payment.PayPalAdapter
+wallet.adapter.class.name=it.unipv.ingsfw.SmartWarehouse.Model.Payment.WalletPaymentAdapter

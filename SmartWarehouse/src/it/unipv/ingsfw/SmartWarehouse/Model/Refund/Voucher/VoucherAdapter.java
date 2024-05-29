@@ -3,7 +3,7 @@ package it.unipv.ingsfw.SmartWarehouse.Model.Refund.Voucher;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 
 public class VoucherAdapter implements IRefund{
-	
+
 	private VoucherRefund vr; 
 
 	public VoucherAdapter(VoucherRefund vr) {
@@ -12,11 +12,11 @@ public class VoucherAdapter implements IRefund{
 	}
 
 	@Override
-	public void issueRefund() {
-		 vr.makeVoucher();
-		
+	public boolean issueRefund() {
+		return vr.makeVoucher();
+
 	}
-	
+
 	public String toString() {
 		return vr.toString();
 	}

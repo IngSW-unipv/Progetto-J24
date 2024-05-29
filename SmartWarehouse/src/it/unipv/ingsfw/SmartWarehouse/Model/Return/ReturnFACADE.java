@@ -1,5 +1,6 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.Return;
 
+import java.text.ParseException;
 import java.util.Map;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.MissingReasonException;
@@ -13,13 +14,11 @@ public class ReturnFACADE {
 	private ReturnService rs;
 	public ReturnFACADE() {
 	}
-	public ReturnFACADE(IReturnable order) { 
+	public ReturnFACADE(IReturnable order) throws UnableToReturnException, ParseException { 
 		if(order==null) {
 			throw new NullPointerException("Selezionare un ordine per continuare");
 		}
 		this.rs=ResoManager.getIstance().getReturnService(order);
-		
-		 
 	}
 	public void addItemToReturn(InventoryItem inventoryItem,String reason) throws UnableToReturnException, MissingReasonException {
 		rs.addItemToReturn(inventoryItem, reason);

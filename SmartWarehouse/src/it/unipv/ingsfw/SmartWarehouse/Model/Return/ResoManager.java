@@ -1,6 +1,9 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.Return;
 
 
+import java.text.ParseException;
+
+import it.unipv.ingsfw.SmartWarehouse.Exception.UnableToReturnException;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 
@@ -17,7 +20,7 @@ public class ResoManager {
 		}
 		return istance;
 	}
-    public ReturnService getReturnService(IReturnable returnableOrder) {
+    public ReturnService getReturnService(IReturnable returnableOrder) throws UnableToReturnException, ParseException {
     	ReturnService rs=returnServiceFacade.findByOrder(returnableOrder);
     	 if(rs==null) {
     		 return new ReturnService(returnableOrder);

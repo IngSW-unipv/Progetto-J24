@@ -1,7 +1,13 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.Return;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.MissingReasonException;
@@ -21,19 +27,43 @@ public class ReturnService {
 	/*
 	 * Constructor and Checking the order date to verify returnability.
 	 */
-	public ReturnService(IReturnable returnableOrder)  {
-		/*if(!checkReturnability(returnableOrder)) {
-			
-		}*/
+	public ReturnService(IReturnable returnableOrder) throws UnableToReturnException, ParseException  {
+		if(!checkReturnability(returnableOrder)) {
+			throw new UnableToReturnException();
+		}
 		this.returnableOrder = returnableOrder;
 		this.returnedItems = new HashMap<>();
 		this.moneyAlreadyReturned=0;
 	}
-	/*private boolean checkReturnability() {
-		if(returnableOrder.getDate().) {
-		}
-	}*/
-	
+	private boolean checkReturnability(IReturnable returnableOrder) throws ParseException {
+		String orderDateString = returnableOrder.getDate();
+
+		/*
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.ITALY);
+		Date orderDate = dateFormat.parse(orderDateString);
+		 */
+
+		// Specifica il formato della data
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.ITALIAN);
+
+		// Parso la stringa della data
+		Date orderDate = dateFormat.parse(orderDateString);
+
+		// Aggiungere 5 giorni alla data dell'ordine
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(orderDate);
+		cal.add(Calendar.DAY_OF_MONTH, 5);
+		Date criticalDate = cal.getTime();
+
+		// Ottenere la data attuale
+		Date currentDate = new Date();
+
+		// Controllare se la data attuale è precedente alla data critica
+		return currentDate.before(criticalDate);
+	}
+
+
+
 
 	/*
 	 * Methods related to the Return process
@@ -59,6 +89,7 @@ public class ReturnService {
 		}
 		return count;
 	}
+
 	public void removeAllFromReturn() {
 		returnedItems.clear();
 	}
@@ -70,7 +101,7 @@ public class ReturnService {
 		double moneyToBeReturned=0;
 		for(InventoryItem inventoryItem:returnedItems.keySet()) {
 			moneyToBeReturned+=inventoryItem.getPrice();
-			
+
 		}
 		moneyToBeReturned=moneyToBeReturned-moneyAlreadyReturned;
 		return moneyToBeReturned;

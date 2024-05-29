@@ -6,6 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
@@ -48,8 +51,7 @@ public class ReturnableOrdersView extends JFrame{
 		int windowHeight = (int) (screenHeight*0.9); 
 		setSize(windowWidth, windowHeight);
 		setLocationRelativeTo(null); // Centro la finestra
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setResizable(true);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		mainPanel = new JPanel();
 		mainPanel.repaint();
@@ -59,20 +61,30 @@ public class ReturnableOrdersView extends JFrame{
 		selectOrderPanel = new JPanel();
 		selectOrderPanel.repaint();
 		selectOrderPanel.setLayout(new GridLayout(0, 1)); // 0 righe per una colonna dinamica
-		JLabel selectOrderLabel = new JLabel("Qui puoi vedere gli ordini da te effettuati/n Seleziona un ordine per cominciare la procedura di reso\n");
+		JLabel selectOrderLabel = new JLabel("Scegli un ordine e conferma se vuoi cominciare una procedura di reso\n");
 		selectOrderPanel.add(selectOrderLabel);
+	    JScrollPane scrollPane = new JScrollPane(selectOrderPanel);
+	    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+	    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	    mainPanel.add(scrollPane, BorderLayout.CENTER);
 		
-		
-		
-		
-		
-		
-		//TODO initWithClientOrders() chiamato dal controller.... Qui sotto fai un altro metodo completeView() chiamaro da initWithClientOrders
-		
-		
-		
-		
-	
+	}
+	public void initWithClientOrders(ArrayList<String> ordersDescriptionsForButton, Integer[] orderIdForActionCommand) {
+		System.out.println(ordersDescriptionsForButton.size());
+		orderButtonGroup = new ButtonGroup();
+		int count=0;
+		for (String i : ordersDescriptionsForButton) {
+			JRadioButton radioButton = new JRadioButton(i);
+			orderButtonGroup.add(radioButton);
+			radioButton.setActionCommand(orderIdForActionCommand[count].toString());
+			count++;
+			selectOrderPanel.add(radioButton, BorderLayout.LINE_START);
+		}
+		completeTheView();
+	}
+
+	private void completeTheView() {
+		// TODO Auto-generated method stub
 		confirmPanel = new JPanel();
 		confirmPanel.repaint();
 		confirmButton = new JButton("Conferma Scelta");
@@ -88,29 +100,12 @@ public class ReturnableOrdersView extends JFrame{
 		setVisible(true);
 
 	}
-	public void initWithClientOrders(ArrayList<String> ordersDescriptionsForButton, Integer[] orderIdForActionCommand) {
-		orderButtonGroup = new ButtonGroup();
-		int count=0;
-		for (String i : ordersDescriptionsForButton) {
-			JRadioButton radioButton = new JRadioButton(i);
-			orderButtonGroup.add(radioButton);
-			radioButton.setActionCommand(orderIdForActionCommand[count].toString());
-			count++;
-			selectOrderPanel.add(radioButton, BorderLayout.LINE_START);
-		}
-		mainPanel.add(selectOrderPanel, BorderLayout.CENTER);
-		
+	public void showWarningMessagge(String message) {
+		JOptionPane.showMessageDialog(this, message, "Alert", JOptionPane.WARNING_MESSAGE);
 	}
-	
-	
-	
-	
-	 public void showWarningMessagge(String message) {
-		    JOptionPane.showMessageDialog(this, message, "Alert", JOptionPane.WARNING_MESSAGE);
-		}
-	 public void showErrorMessagge(String message) {
-		    JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
-		}
+	public void showErrorMessagge(String message) {
+		JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
+	}
 
 
 	public ButtonGroup getOrderButtonGroup() {

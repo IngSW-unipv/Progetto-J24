@@ -5,8 +5,9 @@ public class VoucherRefund {
 	public VoucherRefund(double value) {
 		this.value=value;
 	}
-	public void makeVoucher() {
+	public boolean makeVoucher() {
 		System.out.println("Emesso un voucher del valore di "+value);
+		return true;
 		/*
 		 * try{
 		 * Client client=(client) SingletonManager.getInstance().getUser
@@ -15,7 +16,6 @@ public class VoucherRefund {
 		 * e.printStackTrace();}
 		 */
 		// 
-		//logica di emissione del buono
 	}
 	public String toString() {
 		return "Voucher di "+value;

@@ -4,7 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,7 +49,7 @@ public class ReturnItemsAndReasonsView extends JFrame{
 	private JPanel confirmPanel;
 	private JPanel backPanel;
 	private JPanel refundPanel;
-	private  JLabel selectedOrderLabel;
+	private JLabel selectedOrderLabel;
 	private ArrayList<JCheckBox> checkBoxList=new ArrayList<JCheckBox>();
 	private ArrayList< JComboBox<String> > reasonsDropdownList=new ArrayList< JComboBox<String> >();
 	private ArrayList<JTextArea> customReasonAreaList=new ArrayList<JTextArea>();
@@ -76,7 +79,7 @@ public class ReturnItemsAndReasonsView extends JFrame{
 		int windowWidth = (int) (screenWidth*0.9); 
 		int windowHeight = (int) (screenHeight*0.9); 
 		setSize(windowWidth, windowHeight);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null); // Centra la finestra
 		setResizable(true);
 
@@ -89,21 +92,81 @@ public class ReturnItemsAndReasonsView extends JFrame{
 		orderDetailsPanel=new JPanel();
 		orderDetailsPanel.repaint();
 		orderDetailsPanel.setLayout(new BoxLayout(orderDetailsPanel, BoxLayout.Y_AXIS));
-		JLabel selectedOrderLabel = new JLabel();
-		selectedOrderLabel.setBackground(Color.yellow);
-		JLabel ItemAndReasonsLabel = new JLabel("Seleziona gli item che vuoi restituire");
+		selectedOrderLabel = new JLabel();
+		JLabel ItemAndReasonsLabel = new JLabel("Scegli cosa restituire");
 
 		orderDetailsPanel.add(selectedOrderLabel);
 		orderDetailsPanel.add(ItemAndReasonsLabel);
-		
-		
+
+		JScrollPane scrollPane = new JScrollPane(orderDetailsPanel);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		mainPanel.add(scrollPane, BorderLayout.WEST);
+	}
+	public void initWithItemOfTheOrder(ArrayList<String> itemsDescriptionsForButton, String[] skuForActionCommand,Map<String, String> map) {
+		// TODO Auto-generated method stub
+		int count3=0;
+		for (String i : itemsDescriptionsForButton) {
+
+			itemAndReasonsPanel = new JPanel();
+			itemAndReasonsPanel.setLayout(new GridBagLayout());
+			GridBagConstraints gbc = new GridBagConstraints();
+			gbc.gridx = 0;
+			gbc.gridy = GridBagConstraints.RELATIVE;
+			gbc.fill = GridBagConstraints.HORIZONTAL;
+			gbc.anchor = GridBagConstraints.WEST;
+			gbc.insets = new Insets(5, 5, 5, 20); // Aggiungi margini attorno ai componenti
 
 
-        //initWithItemOfTheOrder chiamato dal controller.... Qui sotto fai un altro metodo completeView() chiamaro da initWithItemOfTheOrder
-		
-		
-		
-		
+			JCheckBox checkBox=new JCheckBox(i);
+			checkBox.setActionCommand(skuForActionCommand[count3]);
+			count3++;
+			checkBoxList.add(checkBox);
+			itemAndReasonsPanel.add(checkBox,gbc);
+
+			gbc.gridx = 1;
+			JComboBox<String> reasonsDropdown = new JComboBox<String>(map.values().toArray(new String[0]));
+			reasonsDropdown.setSelectedItem("Scegli una motivazione");
+			reasonsDropdown.setEnabled(false);
+			reasonsDropdownList.add(reasonsDropdown);
+			itemAndReasonsPanel.add(reasonsDropdown, gbc);
+
+			gbc.gridx = 0;
+			gbc.gridy = GridBagConstraints.RELATIVE;
+			gbc.gridwidth = 2;
+			gbc.insets = new Insets(10, 0, 0, 0); // Aggiungi spazio tra il JComboBox e la JLabel
+
+			JLabel customReasonLabel=new JLabel("Descrivi il motivo della restituzione");
+			itemAndReasonsPanel.add(customReasonLabel, gbc);
+
+			JTextArea customReasonArea = new JTextArea(4, 10); // 2 righe e 10 colonne
+			customReasonArea.setColumns(10);
+			customReasonArea.setMinimumSize(new Dimension(1, 1)); // Set a minimum size
+			customReasonArea.setLineWrap(true); // Abilita l'andare a capo automatico
+			customReasonArea.setWrapStyleWord(true); // Evita di spezzare le parole
+
+			LineBorder border = new LineBorder(Color.BLACK); 
+			customReasonArea.setBorder(BorderFactory.createCompoundBorder(border, BorderFactory.createEmptyBorder(5, 5, 5, 5))); // Aggiungi spaziatura interna
+
+			customReasonArea.setVisible(false);
+			customReasonLabel.setVisible(false);
+			customReasonAreaList.add(customReasonArea); 
+			customReasonLabelList.add(customReasonLabel);
+			gbc.gridy = GridBagConstraints.RELATIVE;
+
+			itemAndReasonsPanel.add(customReasonArea, gbc);
+			orderDetailsPanel.add(itemAndReasonsPanel);
+		}
+
+		//mainPanel.add(orderDetailsPanel, BorderLayout.CENTER);
+		completeTheView();
+
+	}
+
+	private void completeTheView() {
+		// TODO Auto-generated method stub
 		confirmPanel = new JPanel();
 		confirmPanel.repaint();
 		nextButton = new JButton("Next");
@@ -145,46 +208,6 @@ public class ReturnItemsAndReasonsView extends JFrame{
 		setVisible(true);
 
 	}
-	public void initWithItemOfTheOrder(ArrayList<String> itemsDescriptionsForButton, String[] skuForActionCommand,Map<String, String> map) {
-		// TODO Auto-generated method stub
-		int count3=0;
-		for (String i : itemsDescriptionsForButton) {
-
-			itemAndReasonsPanel = new JPanel();
-			itemAndReasonsPanel.repaint();
-			itemAndReasonsPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-
-			JCheckBox checkBox=new JCheckBox(i);
-			checkBox.setActionCommand(skuForActionCommand[count3]);
-			count3++;
-			checkBoxList.add(checkBox);
-			itemAndReasonsPanel.add(checkBox);
-
-			JComboBox<String> reasonsDropdown = new JComboBox<String>(map.values().toArray(new String[0]));
-			reasonsDropdown.setSelectedItem("Scegli una motivazione");
-			reasonsDropdown.setEnabled(false);
-			reasonsDropdownList.add(reasonsDropdown);
-			itemAndReasonsPanel.add(reasonsDropdown);
-
-			JTextArea customReasonArea=new JTextArea(4, 50);
-			JLabel customReasonLabel=new JLabel("Descrivi il motivo della restituzione");
-			LineBorder border = new LineBorder(Color.BLACK); 
-			customReasonArea.setBorder(BorderFactory.createCompoundBorder(border, BorderFactory.createEmptyBorder(5, 5, 5, 5))); // Aggiungi spaziatura interna
-
-			customReasonArea.setVisible(false);
-			customReasonLabel.setVisible(false);
-			customReasonAreaList.add(customReasonArea); 
-			customReasonLabelList.add(customReasonLabel);
-			itemAndReasonsPanel.add(customReasonLabel); 
-			itemAndReasonsPanel.add(customReasonArea); 
-
-			orderDetailsPanel.add(itemAndReasonsPanel);
-		}
-
-		mainPanel.add(orderDetailsPanel, BorderLayout.CENTER);
-
-	}
-
 	public int showConfirmPopUp(String recap) {
 		return JOptionPane.showConfirmDialog(this, recap, "Conferma restituzione", JOptionPane.OK_CANCEL_OPTION);
 

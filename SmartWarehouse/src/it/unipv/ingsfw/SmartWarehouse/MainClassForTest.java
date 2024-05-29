@@ -23,13 +23,9 @@ import it.unipv.ingsfw.SmartWarehouse.View.inventory.InventoryView;
 
 public class MainClassForTest {
 	
-	public MainClassForTest() {
-		System.out.println("QUESTO è il main");
-	}
-	
 	public static void main(String[] args) {
+	
 		
-		new MainClassForTest();
 		Client client1= new Client("John", "Doe", "john.doe@example.com", "123 Main St, Anytown, USA", "password1");
 		Client client2= new Client("Jane", "Smith", "jane.smith@example.com", "123 Main St, Anytown, USA", "letmein");
 		

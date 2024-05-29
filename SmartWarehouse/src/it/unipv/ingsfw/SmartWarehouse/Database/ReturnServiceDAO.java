@@ -24,7 +24,7 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 
 	public ReturnServiceDAO() {
 		super();
-		this.schema = "smartwarehouse";
+		this.schema = "warehouse";
 	}
 	@Override
 	public ReturnService selectByOrder(IReturnable returnableOrder) {

@@ -15,7 +15,7 @@ public class RegisterDAO implements IRegisterDAO {
 	
 	public RegisterDAO() {
 		super();
-		this.schema = "smartwarehouse";
+		this.schema = "warehouse";
 	}
 
 	public ArrayList<OrderLine> selectOrder(int id) { 

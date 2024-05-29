@@ -36,19 +36,22 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Shop.RegisterFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.View.ReturnItemsAndReasonsView;
+import it.unipv.ingsfw.SmartWarehouse.View.ReturnItemsAndReasonsView;
 import it.unipv.ingsfw.SmartWarehouse.View.ReturnableOrdersView;
 
 public class ReturnController {
 	private ReturnFACADE returnFacade;
 	private ReturnItemsAndReasonsView riarView;
+	private ReturnableOrdersView returnableOrdersView;
 	private static final String MOTIVAZIONE_PERSONALIZZATA ="Altro";
 
 	/*
 	 * Controller for ReturnItemsAndReasonsView: it manages the choice of items to return, the reasons and the refund method
 	 */
-	public ReturnController(ReturnFACADE returnFacade,ReturnItemsAndReasonsView riarView) {
+	public ReturnController(ReturnFACADE returnFacade,ReturnItemsAndReasonsView riarView,ReturnableOrdersView returnableOrdersView) {
 		this.returnFacade=returnFacade;
 		this.riarView=riarView;
+		this.returnableOrdersView=returnableOrdersView;
 		initWithItemOfTheOrder();
 		addItemsAndReasonsToReturnService();
 		initActionAndStateOfTheComponent();
@@ -266,7 +269,7 @@ public class ReturnController {
 			}
 			private void manageAction() {
 				riarView.setVisible(false);
-				//new ReturnView(SingletonManager.getInstance().getLoggedUser());
+				returnableOrdersView.setVisible(true);
 			}
 
 		};

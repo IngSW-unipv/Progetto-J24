@@ -11,4 +11,5 @@ public interface IReturnable {
 	public int getId();
 	public String getDate();
 	public HashSet<InventoryItem> getSet();
+	public void setDate(String date);
 }

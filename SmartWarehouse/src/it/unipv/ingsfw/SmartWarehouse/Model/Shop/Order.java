@@ -19,10 +19,16 @@ public class Order implements IReturnable{
 		this.skuqty=new HashMap<InventoryItem, Integer>();
 		this.skuqty.putAll(skuqty);
 		this.email=email;
-	
+		
+		/*
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.ITALY);
+        date = dateFormat.format(new Date());
+        */
+		
 		Locale loc = new Locale.Builder().setLanguage("it").setRegion("EU").build();
 		DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, loc);
 		date=dateFormat.format(new Date());
+		
 	}
 	public Order(HashMap<InventoryItem, Integer> skuqty, int id, String email, String date) {
 		this.skuqty=new HashMap<InventoryItem, Integer>();
@@ -100,8 +106,9 @@ public class Order implements IReturnable{
 	public String toString() {
 		String s="";
 		for(InventoryItem i: getSet()) {
-			s+=i.getDescription()+", ";
+			s+=getQtyBySku(i.getSku())+" "+i.getDescription()+", ";
 		}
+		s+=getDate();
 		return s;
 	}
 	
