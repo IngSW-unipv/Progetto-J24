@@ -1,14 +1,16 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.Shop;
 
+import java.time.LocalDateTime;
+
 public class OrderLine { 
 	private int id;
 	private String sku;
 	private int qty;
 	private String email;
-	private String date;
+	private LocalDateTime date;
 	private boolean picked;
 	
-	public OrderLine(int id, String sku, int qty, String email, String date, boolean pick) {
+	public OrderLine(int id, String sku, int qty, String email, LocalDateTime date, boolean pick) {
 		this.id=id;
 		this.sku=sku;
 		this.qty=qty;
@@ -33,7 +35,7 @@ public class OrderLine {
 		return email;
 	}
 
-	public String getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
@@ -53,7 +55,7 @@ public class OrderLine {
 		this.email = email;
 	}
 
-	public void setDate(String date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 

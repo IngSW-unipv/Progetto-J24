@@ -1,10 +1,8 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.Shop;
 
-import java.text.DateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Locale;
 
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 
@@ -13,24 +11,16 @@ public class Order implements IReturnable{
 	private HashMap<InventoryItem, Integer> skuqty;
 	private int id;
 	private String email;
-	private String date;
+	private LocalDateTime date;
 	
 	public Order(HashMap<InventoryItem, Integer> skuqty, String email) {
 		this.skuqty=new HashMap<InventoryItem, Integer>();
 		this.skuqty.putAll(skuqty);
 		this.email=email;
-		
-		/*
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.ITALY);
-        date = dateFormat.format(new Date());
-        */
-		
-		Locale loc = new Locale.Builder().setLanguage("it").setRegion("EU").build();
-		DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, loc);
-		date=dateFormat.format(new Date());
+		date = LocalDateTime.now();
 		
 	}
-	public Order(HashMap<InventoryItem, Integer> skuqty, int id, String email, String date) {
+	public Order(HashMap<InventoryItem, Integer> skuqty, int id, String email, LocalDateTime date) {
 		this.skuqty=new HashMap<InventoryItem, Integer>();
 		this.skuqty.putAll(skuqty);
 		this.id=id;
@@ -46,11 +36,11 @@ public class Order implements IReturnable{
 		this.id = id;
 	}
 
-	public String getDate() {
-		return date;
+	public LocalDateTime getDate() {
+		return this.date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 	
@@ -119,4 +109,9 @@ public class Order implements IReturnable{
 		}
 		return totalQty;
 	}
+	@Override
+	public void setDate(String date) {
+		// TODO Auto-generated method stub
+	}
+	
 }
