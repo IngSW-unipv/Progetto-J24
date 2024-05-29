@@ -123,11 +123,11 @@ public class ShopController {
 					
 					PaymentProcess pay=new PaymentProcess(view.displayPaymentOption(), model.getCl().getEmail(), "magazzo");
 					try {
-						pay.startPayment(model.getPrimeImport());
-						view.displayInfo("pagamento");
-						
+						if(pay.startPayment(model.getPrimeImport())) {
+							view.displayInfo("pagamento di "+model.getPrimeImport()+"effettuato");
+						}
 					} catch (PaymentException ex) {
-						System.err.println("è stato impossibile effettuare l'abbonamento a prime");
+						view.displayWarn(ex.getMessage());
 					}
 					model.setPrime();
 				}

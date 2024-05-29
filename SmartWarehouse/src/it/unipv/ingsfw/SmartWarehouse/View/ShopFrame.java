@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,8 +18,6 @@ import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.IPayment;
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentFactory;
-import it.unipv.ingsfw.SmartWarehouse.Model.Payment.WalletPayment;
-import it.unipv.ingsfw.SmartWarehouse.Model.Payment.WalletPaymentAdapter;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
 
@@ -42,7 +39,7 @@ public class ShopFrame extends JFrame{
 		}
 		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setSize(500, 500);
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setTitle("SmartWarehouse/Shop");
 		this.setLayout(new BorderLayout());
 		this.setVisible(true);
