@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
-import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supplier;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supply;
 
 public class SupplyDAO implements ISupplyDAO {
