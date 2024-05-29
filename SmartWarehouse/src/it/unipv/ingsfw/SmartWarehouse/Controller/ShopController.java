@@ -5,6 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+
+import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyKartExceptio;
+import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentProcess;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Shop;
@@ -79,9 +82,8 @@ public class ShopController {
 					try {
 						pay.startPayment(model.getKart().getTotal());
 						model.makeOrder();
-					} catch (PaymentException ex) {
-						ex.printStackTrace();
-						//stampare che i fondi sono stati insufficienti
+					} catch (PaymentException | IllegalArgumentException | EmptyKartExceptio | ItemNotFoundException ex) {
+						view.displayWarn(ex.getMessage());						
 					}				
 				}
 			}

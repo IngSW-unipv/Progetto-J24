@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyKartExceptio;
+import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
 import it.unipv.ingsfw.SmartWarehouse.Model.Client;
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.IPayment;
@@ -31,13 +32,21 @@ public class Kart {
 		 skuqty.remove(it);
 	}
 		
-	public Order PayAndOrder(Client cl) throws EmptyKartExceptio {
+	public Order PayAndOrder(Client cl) throws EmptyKartExceptio, IllegalArgumentException, ItemNotFoundException {
 		if(skuqty.isEmpty()) {
 			throw(new EmptyKartExceptio());
 		}		
 		Order o=new Order(skuqty, cl.getEmail());
+		updateWarehouseQty();
 		skuqty.clear();
 		return o;
+	}
+	
+	private void updateWarehouseQty() throws IllegalArgumentException, ItemNotFoundException{
+		for(InventoryItem i: getSet()) {
+			int nuova = i.getQty() - skuqty.get(i);
+			i.updateQty(nuova);
+		}
 	}
 	
 	public double getTotal() {
