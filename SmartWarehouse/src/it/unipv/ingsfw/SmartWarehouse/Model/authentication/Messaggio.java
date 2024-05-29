@@ -1,4 +1,4 @@
-package it.unipv.ingsfw.SmartWarehouse.autentication;
+package it.unipv.ingsfw.SmartWarehouse.Model.authentication;
 
 import java.time.LocalDateTime;
 import java.util.List;

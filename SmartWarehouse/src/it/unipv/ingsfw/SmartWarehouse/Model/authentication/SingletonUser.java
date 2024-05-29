@@ -1,4 +1,4 @@
-package it.unipv.ingsfw.SmartWarehouse.authentication;
+package it.unipv.ingsfw.SmartWarehouse.Model.authentication;
 
 import it.unipv.ingsfw.SmartWarehouse.operator.*;
 

@@ -1,4 +1,4 @@
-package Controller;
+package it.unipv.ingsfw.SmartWarehouse.Controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

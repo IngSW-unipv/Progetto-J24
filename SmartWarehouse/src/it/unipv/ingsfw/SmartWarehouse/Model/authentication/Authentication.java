@@ -1,4 +1,4 @@
-package it.unipv.ingsfw.SmartWarehouse.autentication;
+package it.unipv.ingsfw.SmartWarehouse.Model.authentication;
 
 
 public class Authentication {

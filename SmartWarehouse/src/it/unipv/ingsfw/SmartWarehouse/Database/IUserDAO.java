@@ -1,4 +1,4 @@
-package Database;
+package it.unipv.ingsfw.SmartWarehouse.Database;
 import java.util.List;
 public interface IUserDAO {
 

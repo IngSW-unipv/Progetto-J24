@@ -7,6 +7,7 @@ import it.unipv.ingsfw.SmartWarehouse.Database.IReturnServiceDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.ReturnServiceDAO;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 
 public class ReturnServiceDAOFacade {
@@ -27,7 +28,7 @@ public class ReturnServiceDAOFacade {
 		return rsdao.selectByOrder(returnableOrder);
 		
 	}
-	public Map<InventoryItem, String> readItemAndReason(IReturnable returnableOrder){
+	public Map<IInventoryItem, String> readItemAndReason(IReturnable returnableOrder){
 		return rsdao.selectItemAndReason(returnableOrder);
 	}
 	public double readMoneyAlreadyReturned(IReturnable returnableOrder) {

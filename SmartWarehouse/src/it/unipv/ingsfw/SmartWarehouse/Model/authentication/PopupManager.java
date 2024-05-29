@@ -1,4 +1,4 @@
-package it.unipv.ingsfw.SmartWarehouse.authentication;
+package it.unipv.ingsfw.SmartWarehouse.Model.authentication;
 
 import javax.swing.JOptionPane;
 
