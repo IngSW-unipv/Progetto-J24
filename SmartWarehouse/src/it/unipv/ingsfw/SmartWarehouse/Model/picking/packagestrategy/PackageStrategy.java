@@ -1,7 +1,7 @@
-package it.unipv.ingsfw.SmartWarehouse.model.picking.packagestrategy;
+package it.unipv.ingsfw.SmartWarehouse.Model.picking.packagestrategy;
 
-import it.unipv.ingsfw.SmartWarehouse.model.picking.orderpicking.*;
-import it.unipv.ingsfw.SmartWarehouse.model.inventory.*;
+import it.unipv.ingsfw.SmartWarehouse.Model.picking.orderpicking.*;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.*;
 import java.util.*;
 import java.util.Map.Entry;
 
