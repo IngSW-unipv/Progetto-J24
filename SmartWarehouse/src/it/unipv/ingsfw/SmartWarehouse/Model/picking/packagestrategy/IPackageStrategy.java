@@ -1,4 +1,4 @@
-package it.unipv.ingsfw.SmartWarehouse.Model.packagestrategy;
+package it.unipv.ingsfw.SmartWarehouse.Model.picking.packagestrategy;
 import java.util.*;
 import it.unipv.ingsfw.SmartWarehouse.Model.picking.orderpicking.*;
 public interface IPackageStrategy {
