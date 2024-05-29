@@ -16,7 +16,7 @@ public class Register {
 	public Register() {
 		this.red = SingletonManager.getInstance().getRegisterDAO();
 		this.inv=new InventoryManager();
-		this.id=this.red.selectLastId();
+		this.id=this.red.selectLastId() + 1;
 	}
 	
 	public void addOrd(Order o) {

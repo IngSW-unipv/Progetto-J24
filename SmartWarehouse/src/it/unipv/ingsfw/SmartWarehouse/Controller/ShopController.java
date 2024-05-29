@@ -80,8 +80,11 @@ public class ShopController {
 					
 					PaymentProcess pay=new PaymentProcess(view.displayPaymentOption(), model.getCl().getEmail(), "warehause");		
 					try {
-						pay.startPayment(model.getKart().getTotal());
-						model.makeOrder();
+						if(pay.startPayment(model.getKart().getTotal())) {
+							view.displayInfo("pagamento di "+ model.getKart().getTotal()+ "euro effettuato");
+							model.makeOrder();
+						}
+						view.setInfoLabText(0);						
 					} catch (PaymentException | IllegalArgumentException | EmptyKartExceptio | ItemNotFoundException ex) {
 						view.displayWarn(ex.getMessage());						
 					}				
@@ -124,7 +127,7 @@ public class ShopController {
 					PaymentProcess pay=new PaymentProcess(view.displayPaymentOption(), model.getCl().getEmail(), "magazzo");
 					try {
 						if(pay.startPayment(model.getPrimeImport())) {
-							view.displayInfo("pagamento di "+model.getPrimeImport()+"effettuato");
+							view.displayInfo("pagamento di "+model.getPrimeImport()+"euro effettuato");
 						}
 					} catch (PaymentException ex) {
 						view.displayWarn(ex.getMessage());

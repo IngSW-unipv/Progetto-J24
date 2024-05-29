@@ -8,7 +8,7 @@ public class WalletPayment {
 	
 		public void makeWalletPayment(double amount,String senderEmail,String receiverEmail) {
 			// Logica per il pagamento tramite PayPal
-			Client c=SingletonManager.getInstance().getClientDAO().selectClient(senderEmail);
+			Client c=(Client) SingletonManager.getInstance().getLoggedUser();
 			if(c.getWallet()<amount) {
 				System.err.println("GESTIRE L'ECCEZIONE DI PAGAMENTO");
 			}
