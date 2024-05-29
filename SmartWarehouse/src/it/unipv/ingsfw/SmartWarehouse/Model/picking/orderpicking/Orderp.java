@@ -12,6 +12,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Shop.OrderLine;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.picking.packagestrategy.PackageStrategy;
 
+
 public class Orderp implements IPackageable{		
 	private int id;
 	private HashMap<InventoryItem,Integer> skuqty;
