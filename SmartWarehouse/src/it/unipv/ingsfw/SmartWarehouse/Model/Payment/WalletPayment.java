@@ -1,3 +1,4 @@
+//
 package it.unipv.ingsfw.SmartWarehouse.Model.Payment;
 
 import it.unipv.ingsfw.SmartWarehouse.Model.Client;

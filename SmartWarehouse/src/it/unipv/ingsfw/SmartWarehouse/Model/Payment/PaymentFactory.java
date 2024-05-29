@@ -1,3 +1,4 @@
+//
 package it.unipv.ingsfw.SmartWarehouse.Model.Payment;
 
 import java.io.FileInputStream;

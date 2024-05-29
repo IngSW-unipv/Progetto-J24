@@ -1,3 +1,4 @@
+//
 package it.unipv.ingsfw.SmartWarehouse.Model.Refund.Voucher;
 
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;

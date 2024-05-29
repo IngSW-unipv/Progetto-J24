@@ -1,3 +1,4 @@
+//
 package it.unipv.ingsfw.SmartWarehouse.Model.Refund.Voucher;
 
 public class VoucherRefund {

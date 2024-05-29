@@ -1,3 +1,5 @@
+
+//
 package it.unipv.ingsfw.SmartWarehouse.View;
 
 import java.awt.BorderLayout;

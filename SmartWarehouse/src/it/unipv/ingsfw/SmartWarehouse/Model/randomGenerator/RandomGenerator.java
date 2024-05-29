@@ -1,3 +1,4 @@
+//
 package it.unipv.ingsfw.SmartWarehouse.Model.randomGenerator;
 
 import java.util.Random;
