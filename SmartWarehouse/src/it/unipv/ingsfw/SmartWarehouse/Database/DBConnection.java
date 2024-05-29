@@ -19,7 +19,6 @@ package it.unipv.ingsfw.SmartWarehouse.Database;
 		private static void init() {
 			Properties p = new Properties(System.getProperties());
 			try {
-				//src\\\\DBConnection
 				p.load(new FileInputStream("properties\\DBConnection"));
 				username=p.getProperty(PROPERTYNAME);
 				password=p.getProperty(PROPERTYPSW);

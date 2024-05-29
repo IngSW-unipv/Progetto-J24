@@ -1,21 +1,25 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.picking.orderpicking;
 
-import java.util.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import it.unipv.ingsfw.SmartWarehouse.database.*;
-import it.unipv.ingsfw.SmartWarehouse.exception.*;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.*;
-import java.util.Map.Entry;
-import it.unipv.ingsfw.SmartWarehouse.exception.*;
-import java.time.*;
-import it.unipv.ingsfw.SmartWarehouse.Model.packagastrategy.*;
+import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
+import it.unipv.ingsfw.SmartWarehouse.Exception.QuantityMismatchException;
+import it.unipv.ingsfw.SmartWarehouse.Model.Shop.OrderLine;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.Model.picking.packagestrategy.PackageStrategy;
 
 public class Orderp implements IPackageable{		
 	private int id;
 	private HashMap<InventoryItem,Integer> skuqty;
 	private int date;
 	private String email;
-	public Order(HashMap<InventoryItem,Integer> skuqty) {
+	private final int N=3;
+	
+	public Orderp(HashMap<InventoryItem,Integer> skuqty) {
 		this.skuqty=new HashMap<InventoryItem,Integer>();
 		this.skuqty.putAll(skuqty);
 	}
@@ -52,7 +56,7 @@ public class Orderp implements IPackageable{
 	public void takeInfoItem() {
 		for (Map.Entry<InventoryItem, Integer> entry : skuqty.entrySet()) {
 			 InventoryItem item = entry.getKey();
-			 int quantity = entry.getValue();        
+			// int quantity = entry.getValue();        
 			 // Stampo le coordinate dell'item
 			 item.toString();       
 			}
@@ -62,7 +66,7 @@ public class Orderp implements IPackageable{
 		for (Map.Entry<InventoryItem, Integer> entry : skuqty.entrySet()) {
 			InventoryItem item = entry.getKey();
 		    int quantity = entry.getValue();
-		    int itemSize = item.getDim(); // Assuming getSize() returns the size of the item
+		    int itemSize = item.getDetails().getDimension(); // Assuming getSize() returns the size of the item
 		        totalSize += itemSize * quantity;
 		    }
 		return totalSize;
@@ -75,19 +79,19 @@ public class Orderp implements IPackageable{
 		return totalitems;
 	}
 	public boolean tfFragility() {
-		boolean fr;
 		for (InventoryItem item : skuqty.keySet()) {
-			if (item.getFr()==true) { // Assuming isFragile() returns true if the item is fragile
+			if (item.getDetails().getFragility() > N) { 
 		    return true;
 		    }
 		}
 			return false;
 	}
+	
 	public void setSkuqtyIntegerValue(InventoryItem item, int value) {
 		skuqty.put(item, value);
 	}
 		
-	public Orderline selectOrder(Orderline o) {
+	public OrderLine selectOrder(OrderLine o) {
 		return o; //scelgo ordine in base alla linea del database
 	}
 	
@@ -129,7 +133,7 @@ public class Orderp implements IPackageable{
 		    } 	else {
 		        	System.out.println("Item not in the order, your items are:");
 		        	takeInfoItem();
-		        	throw new ItemNotFoundException("Item not found in the order");
+		        	throw new ItemNotFoundException();
 		    }
 		}
 

@@ -23,10 +23,6 @@ import it.unipv.ingsfw.SmartWarehouse.View.inventory.InventoryView;
 
 public class MainClassForTest {
 	
-	public MainClassForTest() {
-		System.out.println("QUESTO è il main");
-	}
-	
 	public static void main(String[] args) {
 		
 		new MainClassForTest();

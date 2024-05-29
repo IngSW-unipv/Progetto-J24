@@ -1,7 +1,8 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.inventory;
 
 public class ItemDetails {
-	private int fragility, dimension;
+	private int dimension;
+	private int fragility;
 	private Category category; 
 
 	public ItemDetails(int fragility, int dimension, Category category) {

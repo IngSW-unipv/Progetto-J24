@@ -1,16 +1,16 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.picking.packagestrategy;
 
-import it.unipv.ingsfw.SmartWarehouse.Model.picking.orderpicking.*;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.*;
-import java.util.*;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.List;
 
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.Model.picking.orderpicking.Orderp;
 
 public class PackageStrategy implements IPackageStrategy {
-	private Order o;
 	private int maxs=9;
 	private int maxm=12;
 	private int maxl=15;
+	private final int N=3;
 	public boolean typePack(Orderp o,int n) {
 		if(o.calculateTotalSize()<=n) {
 			if(o.tfFragility()==true) {
@@ -68,14 +68,14 @@ public class PackageStrategy implements IPackageStrategy {
 	private int calculateTotalSize(List<InventoryItem> items) {
 	    int totalSize = 0;
 	    for (InventoryItem item : items) {
-	        totalSize += item.getDim(); //calcolo la dimensione della lista degli elementi
+	        totalSize += item.getDetails().getDimension(); //calcolo la dimensione della lista degli elementi
 	    }
 	    return totalSize;
 	}
 
 	private boolean isPackageFragile(List<InventoryItem> items) {
 	    for (InventoryItem item : items) {
-	        if (item.getFr()) {
+	        if (item.getDetails().getFragility()>N) {
 	            return true; //vedo se è nella lista c'è un item fragile
 	        }
 	    }
