@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.OrderLine;
@@ -22,6 +24,8 @@ public class RegisterDAO implements IRegisterDAO {
 		conn=DBConnection.startConnection(conn,schema);
 		Statement st1;
 		ResultSet rs1;
+		String datetimeString;
+		LocalDateTime date;
 		
 		try {
 			st1 = conn.createStatement();
@@ -30,8 +34,10 @@ public class RegisterDAO implements IRegisterDAO {
             
 			ArrayList<OrderLine> o = new ArrayList<OrderLine>();
 			while(rs1.next()) {
+				datetimeString = rs1.getString(5);
+				date=LocalDateTime.parse(datetimeString,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 				o.add(new OrderLine(rs1.getInt(1),rs1.getString(2),
-						rs1.getInt(3),rs1.getString(4),rs1.getString(5), rs1.getBoolean(6)));
+						rs1.getInt(3),rs1.getString(4), date, rs1.getBoolean(6)));
 			}
 			return o;
 		}
@@ -43,6 +49,8 @@ public class RegisterDAO implements IRegisterDAO {
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;
 		ResultSet rs1;
+		String datetimeString;
+		LocalDateTime date;
 		
 		try {
 			
@@ -62,8 +70,10 @@ public class RegisterDAO implements IRegisterDAO {
                 	o = new ArrayList<>();
                 	currentOrderId = orderId;
             	}
+			    datetimeString = rs1.getString(5);
+				date=LocalDateTime.parse(datetimeString,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             	o.add(new OrderLine(orderId, rs1.getString(2),
-                    rs1.getInt(3), rs1.getString(4), rs1.getString(5), rs1.getBoolean(6)));
+                    rs1.getInt(3), rs1.getString(4), date, rs1.getBoolean(6)));
 				
 			}
 			
@@ -85,7 +95,9 @@ public class RegisterDAO implements IRegisterDAO {
 			for(OrderLine ord: o) {
 				String query = "insert into clientorders values("
 						+ord.getId()+",\""+ord.getSku()+"\","+ord.getQty()+
-						",\""+ord.getEmail()+"\",\""+ord.getDate()+"\","+ord.isPicked()+")";				
+						",\""+ord.getEmail()+"\""
+						+ ",\"" + ""+ord.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))+"\","
+						+ ""+ord.isPicked()+")";				
 				st1.executeUpdate(query);
 			}
 		}

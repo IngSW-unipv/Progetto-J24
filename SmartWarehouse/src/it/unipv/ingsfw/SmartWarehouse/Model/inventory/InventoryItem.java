@@ -67,7 +67,7 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
 
 	public void setQty(int qty) throws IllegalArgumentException {
 		if (qty < 0) {
-			throw new IllegalArgumentException("Quantity cannot be negative");
+			throw new IllegalArgumentException("Quantity cannot be negative, item: " + sku);
 		}
 		this.qty=qty;
 	}

@@ -65,7 +65,7 @@ CREATE TABLE clientorders (
   sku varchar(25) not NULL,
   qty int not NULL,
   email varchar(40) NOT NULL,
-  Odate varchar(30) DEFAULT NULL,
+  date datetime DEFAULT NULL,
   picked bool not NULL,
   primary key(id,sku,email),
   key sku (sku),

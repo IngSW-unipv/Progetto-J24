@@ -1,6 +1,7 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.Shop;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyKartExceptio;
+import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
 import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.IPayment;
@@ -31,12 +32,8 @@ public class Shop {
 		kart.remove(inv.findInventoryItem(sku));
 	}
 	
-	public void makeOrder() {
-		try {
-			reg.addOrd(kart.PayAndOrder(cl));
-		} catch (EmptyKartExceptio e) {
-			System.err.println("the kart is empty, please retry");
-		} 
+	public void makeOrder() throws IllegalArgumentException, EmptyKartExceptio, ItemNotFoundException {
+		reg.addOrd(kart.PayAndOrder(cl));
 	}
 	
 	

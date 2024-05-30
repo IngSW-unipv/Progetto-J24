@@ -5,6 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+
+import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyKartExceptio;
+import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentProcess;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Shop;
@@ -77,11 +80,13 @@ public class ShopController {
 					
 					PaymentProcess pay=new PaymentProcess(view.displayPaymentOption(), model.getCl().getEmail(), "warehause");		
 					try {
-						pay.startPayment(model.getKart().getTotal());
-						model.makeOrder();
-					} catch (PaymentException ex) {
-						ex.printStackTrace();
-						//stampare che i fondi sono stati insufficienti
+						if(pay.startPayment(model.getKart().getTotal())) {
+							view.displayInfo("pagamento di "+ model.getKart().getTotal()+ "euro effettuato");
+							model.makeOrder();
+						}
+						view.setInfoLabText(0);						
+					} catch (PaymentException | IllegalArgumentException | EmptyKartExceptio | ItemNotFoundException ex) {
+						view.displayWarn(ex.getMessage());						
 					}				
 				}
 			}
@@ -121,11 +126,11 @@ public class ShopController {
 					
 					PaymentProcess pay=new PaymentProcess(view.displayPaymentOption(), model.getCl().getEmail(), "magazzo");
 					try {
-						pay.startPayment(model.getPrimeImport());
-						view.displayInfo("pagamento");
-						
+						if(pay.startPayment(model.getPrimeImport())) {
+							view.displayInfo("pagamento di "+model.getPrimeImport()+"euro effettuato");
+						}
 					} catch (PaymentException ex) {
-						System.err.println("è stato impossibile effettuare l'abbonamento a prime");
+						view.displayWarn(ex.getMessage());
 					}
 					model.setPrime();
 				}

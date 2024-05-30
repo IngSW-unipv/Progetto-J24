@@ -26,10 +26,10 @@ public class ClientDAO implements IClientDAO{
 		
 		try {
 			st1 = conn.createStatement();
-			String query1="select* from clientorders where email="+email;
+			String query1="select* from clients where email=\""+email+"\"";
 			rs1=st1.executeQuery(query1);
 			while(rs1.next()) {
-				 c=new Client(rs1.getString(0),rs1.getString(1),rs1.getString(2),rs1.getString(3),rs1.getString(4));
+				 c=new Client(rs1.getString(1),rs1.getString(2),rs1.getString(3),rs1.getString(4),rs1.getString(5));
 			}
 			
 		}catch(Exception e){e.printStackTrace(); return c;}
