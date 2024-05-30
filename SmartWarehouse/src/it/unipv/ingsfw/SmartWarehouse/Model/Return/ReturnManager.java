@@ -8,16 +8,16 @@ import it.unipv.ingsfw.SmartWarehouse.Exception.UnableToReturnException;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 
-public class ResoManager {
+public class ReturnManager {
 	private ReturnServiceDAOFacade returnServiceFacade;
-	private static ResoManager istance;
-	private ResoManager() {
+	private static ReturnManager istance;
+	private ReturnManager() {
 		super();
         returnServiceFacade=ReturnServiceDAOFacade.getIstance();
 	}
-	public static ResoManager getIstance() {
+	public static ReturnManager getIstance() {
 		if(istance==null){
-			istance=new ResoManager();
+			istance=new ReturnManager();
 		}
 		return istance;
 	}

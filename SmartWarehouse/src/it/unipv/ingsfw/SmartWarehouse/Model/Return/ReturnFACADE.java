@@ -20,7 +20,7 @@ public class ReturnFACADE {
 		if(order==null) {
 			throw new NullPointerException("Selezionare un ordine per continuare");
 		}
-		this.rs=ResoManager.getIstance().getReturnService(order);
+		this.rs=ReturnManager.getIstance().getReturnService(order);
 	}
 	public void addItemToReturn(InventoryItem inventoryItem,String reason) throws UnableToReturnException, MissingReasonException {
 		rs.addItemToReturn(inventoryItem, reason);
