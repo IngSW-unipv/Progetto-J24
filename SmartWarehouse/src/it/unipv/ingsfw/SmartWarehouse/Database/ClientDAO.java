@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import it.unipv.ingsfw.SmartWarehouse.Model.Client;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
 
 
 public class ClientDAO implements IClientDAO{

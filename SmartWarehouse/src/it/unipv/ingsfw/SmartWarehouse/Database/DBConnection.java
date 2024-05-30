@@ -14,12 +14,13 @@ package it.unipv.ingsfw.SmartWarehouse.Database;
 		private static String password;
 		private static String dbDriver;
 		private static String dbURL;
-		private static DBConnection conn;
+		//private static DBConnection conn;
 		
 		private static void init() {
 			Properties p = new Properties(System.getProperties());
 			try {
-				p.load(new FileInputStream("properties\\DBConnection"));
+				//
+				p.load(new FileInputStream("/Users/giuliatrespiolli/Documents/GitHub/Progetto-J24/SmartWarehouse/properties/DBConnection"));
 				username=p.getProperty(PROPERTYNAME);
 				password=p.getProperty(PROPERTYPSW);
 				dbDriver =p.getProperty(PROPERTYDBDRIVER);

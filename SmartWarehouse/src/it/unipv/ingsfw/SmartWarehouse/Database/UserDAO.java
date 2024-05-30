@@ -8,40 +8,96 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supply;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.User;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.WarehouseOperator;
+
 import java.sql.Connection;
 
 public class UserDAO implements IUserDAO {
 	private String schema;
 	private Connection conn;
+	
 	public UserDAO() {
 		super();
-		this.schema = "smartwharehouse";
+		this.schema = "warehouse";
 	}
-	public boolean insertUser(User u) {
-		conn = DBConnection.startConnection(conn, schema);
+	
+	public User getOpById (String id) {
+		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;
-		boolean esito = true;
+		ResultSet rs1;
+		User result=null;
+				
 		try {
-			String query = "INSERT INTO `smartwarehouse`.`user` (`name`, `surname`, `email`, `address`, `Email`, `password`, `type`)"
-					+ " VALUES(?,?,?,?,?,?,?)";
-			st1 = conn.prepareStatement(query);
-			st1.setString(1, u.getName());
-			st1.setString(2, u.getSurname());
-			st1.setString(3, u.getEmail());
-			st1.setString(4, u.getAddress());
-			st1.setString(5, u.getPassword());
-			st1.setString(6,u.getType() );
-			st1.executeUpdate();
-
-		} catch (Exception e) {
+			String query= "select * from operator where id = ? ";
+			st1=conn.prepareStatement(query);
+			st1.setString(1, id);
+			rs1=st1.executeQuery();
+			if(rs1.next()) {
+				result= new WarehouseOperator(rs1.getString(1),rs1.getString(2), rs1.getString(3),rs1.getString(4));
+			}
+			
+		} catch  (Exception e) { 
 			e.printStackTrace();
-			esito = false;
-		}
+		} finally {
+	        DBConnection.closeConnection(conn); 
+	    }
+		return result;
+	}
 
-		DBConnection.closeConnection(conn);
-		return esito;
+	
+	public User getClientByEmailAndPassword(String email, String password) {
+		conn=DBConnection.startConnection(conn,schema);
+		PreparedStatement st1;
+		ResultSet rs1;
+		User result=null;
+				
+		try {
+			String query= "select * from clients where email = ? and password = ?";
+			st1=conn.prepareStatement(query);
+			st1.setString(1, email);
+			st1.setString(2, password);
+			rs1=st1.executeQuery();
+			
+			if(rs1.next()) {
+				result= new Client(rs1.getString(1),rs1.getString(2), rs1.getString(3),rs1.getString(4));
+			}
+			
+		} catch  (Exception e) { 
+			e.printStackTrace();
+		} finally {
+	        DBConnection.closeConnection(conn); 
+	    }
+		return result;
+	}
+
+	
+	//user valido
+	public boolean insertClient (Client u) {
+		conn=DBConnection.startConnection(conn,schema);
+		PreparedStatement st1;
+		
+		try {
+			String query="insert into clients (idsupply,sku,ids,price,maxqty) values (?,?,?,?,?)";
+			st1 = conn.prepareStatement(query);
+			st1.setString(1, s.getID_Supply());
+			st1.setString(2, s.getInventoryItem().getSku());
+			st1.setString(3, s.getSupplier().getIDS());
+			st1.setDouble(4, s.getPrice());
+			st1.setInt(5, s.getMaxqty());
+			st1.executeUpdate(); 
+			return true;
+		} catch  (Exception e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+	        DBConnection.closeConnection(conn); 
+	    }
 
 	}
+	
 	public String selectPassword(User u) {
 		String email = u.getEmail();
 		String result = new String();
@@ -158,7 +214,7 @@ public class UserDAO implements IUserDAO {
 
 	}
 	
-	 public List<User> getUsersFromDatabase() {
+	 public User getUsersFromDatabase() {
 	        List<User> userList = new ArrayList<>();
 	        Connection conn = null;
 	        PreparedStatement statement = null;

@@ -5,10 +5,10 @@ import java.util.HashSet;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyKartExceptio;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
-import it.unipv.ingsfw.SmartWarehouse.Model.Client;
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.IPayment;
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentProcess;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
 
 public class Kart {
 	HashMap<InventoryItem,Integer> skuqty;

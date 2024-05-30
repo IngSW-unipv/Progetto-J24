@@ -2,11 +2,11 @@ package it.unipv.ingsfw.SmartWarehouse.Model.Shop;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyKartExceptio;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
-import it.unipv.ingsfw.SmartWarehouse.Model.Client;
 import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.IPayment;
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentProcess;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
 
 public class Shop {
 	
@@ -16,11 +16,11 @@ public class Shop {
 	private Client cl;
 	private final double primeImport=50;
 	
-	public Shop(Client c) {	
+	public Shop() {	
 		this.kart = new Kart();
 		this.inv = SingletonManager.getInstance().getInventoryManager();
 		this.reg = RegisterFacade.getIstance();
-		this.cl = c;		
+		this.cl = (Client)SingletonManager.getInstance().getLoggedUser();		
 	}
 	
 	public void addToKart(String sku, int qty) throws IllegalArgumentException{

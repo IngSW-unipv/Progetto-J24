@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 
 import java.awt.event.ActionListener;
 
+import it.unipv.ingsfw.SmartWarehouse.View.RegistrationView;
+
 public class RegistrationController {
 	private RegistrationView view;
 	private User model;

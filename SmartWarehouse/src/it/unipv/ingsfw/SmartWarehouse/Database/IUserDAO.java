@@ -1,13 +1,13 @@
 package it.unipv.ingsfw.SmartWarehouse.Database;
-import java.util.List;
+
+
+import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.User;
 public interface IUserDAO {
 
-	public boolean insertUser(User u);
-	public String selectPassword(User u);
-	public List<User> getUsersFromDatabase();
-	public boolean deleteUser(User u);
-	public User selectUserByEmail(User u);
-	public String selectEmail(User u);
+	public User getClientByEmailAndPassword(String email, String password);
+	public User getOpById (String id);
+	public boolean insertClient (Client u);
 	
 	
 }

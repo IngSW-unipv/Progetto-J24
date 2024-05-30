@@ -1,8 +1,8 @@
 //
 package it.unipv.ingsfw.SmartWarehouse.Model.Payment;
 
-import it.unipv.ingsfw.SmartWarehouse.Model.Client;
 import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
 
 public class WalletPayment { 
 	

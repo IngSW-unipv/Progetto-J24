@@ -6,18 +6,15 @@ import java.awt.*;
 
 public class LoginView extends JFrame {
 
-	private static final long serialVersionUID = 1L;
-	private JPanel loginPanel;
 	private JTextField emailField;
 	private JPasswordField passwordField;
 	private JButton confirmButton;
-
-
+	
 	public LoginView() {
 
 		setTitle("Login");
         setSize(400, 150);
-        loginPanel = new JPanel(new BorderLayout());
+        JPanel loginPanel = new JPanel(new BorderLayout());
         loginPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         loginPanel.setBackground(new Color(214, 255, 255));
         add(loginPanel);
@@ -34,33 +31,41 @@ public class LoginView extends JFrame {
         passwordField = new JPasswordField();
         fieldsPanel.add(passwordField);
 
-        confirmButton = new JButton("Accedi");
+        confirmButton = new JButton("OK");
 
         loginPanel.add(confirmButton, BorderLayout.SOUTH);
 
-        // Centra la finestra
         setLocationRelativeTo(null);
 
-        // Imposta la chiusura dell'applicazione quando si chiude la finestra
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         setVisible(true);
     }
 
-	public JPanel getRegistrationPanel() {
-		return loginPanel;
+	public JTextField getEmailField() {
+		return emailField;
 	}
 
-	public String getEmail() {
-		return emailField.getText();
+	public void setEmailField(JTextField emailField) {
+		this.emailField = emailField;
 	}
-	
-	public char[] getPassword() {
-		return passwordField.getPassword();
+
+	public JPasswordField getPasswordField() {
+		return passwordField;
 	}
-	
+
+	public void setPasswordField(JPasswordField passwordField) {
+		this.passwordField = passwordField;
+	}
+
 	public JButton getConfirmButton() {
 		return confirmButton;
 	}
+
+	public void setConfirmButton(JButton confirmButton) {
+		this.confirmButton = confirmButton;
+	}
+	
+
 
 }

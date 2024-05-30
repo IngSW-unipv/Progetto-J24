@@ -9,13 +9,11 @@ public class RegistrationView extends JFrame {
 	private JPanel registrationPanel;
 	private JTextField nameField;
 	private JTextField surnameField;
-	private JTextField addressField;
 	private JTextField emailField;
-	private JComboBox <String> typeField;
 	private JPasswordField passwordField;
-	private JPasswordField confermaPasswordField;
-	private JButton registerButton;
-	private JButton switchToLoginButton;
+	private JButton confirmButton;
+
+
 
 	public RegistrationView() {
 
@@ -28,11 +26,11 @@ public class RegistrationView extends JFrame {
 		registrationPanel.setBackground(new Color(214, 255, 255));
 		add(registrationPanel);
 		
-		registrationPanel.add(new JLabel("Nome:"));
+		registrationPanel.add(new JLabel("Name:"));
 		nameField = new JTextField();
 		registrationPanel.add(nameField);
 	
-		registrationPanel.add(new JLabel("Cognome:"));
+		registrationPanel.add(new JLabel("Surname:"));
 		surnameField = new JTextField();
 		registrationPanel.add(surnameField);
 	
@@ -40,25 +38,15 @@ public class RegistrationView extends JFrame {
 		registrationPanel.add(new JLabel("Email:"));
 		emailField = new JTextField();
 		registrationPanel.add(emailField);
-
-		registrationPanel.add(new JLabel("Tipo:"));
-        String[] tipo = {"client", "operator"};
-		typeField = new JComboBox<>(tipo);
-		registrationPanel.add(typeField);
 		
 		registrationPanel.add(new JLabel("Password:"));
 		passwordField = new JPasswordField();
 		registrationPanel.add(passwordField);
 
-		registrationPanel.add(new JLabel("Conferma Password:"));
-		confermaPasswordField = new JPasswordField();
-		registrationPanel.add(confermaPasswordField);
 
-		registerButton = new JButton("Registrati");
-		switchToLoginButton = new JButton("Vai al Login");
+		confirmButton = new JButton("OK");
 
-		registrationPanel.add(registerButton);
-		registrationPanel.add(switchToLoginButton);
+		registrationPanel.add(confirmButton);
 
 		setLocationRelativeTo(null);
 
@@ -67,42 +55,56 @@ public class RegistrationView extends JFrame {
 		setVisible(true);
 		
 	}
-
-	public JPanel getRegistrationPanel() {
-		return registrationPanel;
-	}
 	
-	public String getNome() {
-		return nameField.getText();
-	}
-	
-	public String getCognome() {
-		return surnameField.getText();
+	public JTextField getNameField() {
+		return nameField;
 	}
 
-	public String getAddress() {
-		return addressField.getText();
+
+	public void setNameField(JTextField nameField) {
+		this.nameField = nameField;
 	}
 
-	public String getEmail() {
-		return emailField.getText();
-	}
-	
 
-	public char[] getPassword() {
-		return passwordField.getPassword();
+	public JTextField getSurnameField() {
+		return surnameField;
 	}
 
-	public char[] getConfermaPassword() {
-		return confermaPasswordField.getPassword();
+
+	public void setSurnameField(JTextField surnameField) {
+		this.surnameField = surnameField;
 	}
-	
-	public JButton getRegisterButton() {
-		return registerButton;
+
+
+	public JTextField getEmailField() {
+		return emailField;
 	}
-	
-	public JButton getLoginButton() {
-		return switchToLoginButton;
+
+
+	public void setEmailField(JTextField emailField) {
+		this.emailField = emailField;
 	}
+
+
+	public JPasswordField getPasswordField() {
+		return passwordField;
+	}
+
+
+	public void setPasswordField(JPasswordField passwordField) {
+		this.passwordField = passwordField;
+	}
+
+
+	public JButton getConfirmButton() {
+		return confirmButton;
+	}
+
+
+	public void setConfirmButton(JButton confirmButton) {
+		this.confirmButton = confirmButton;
+	}
+
+
 
 }

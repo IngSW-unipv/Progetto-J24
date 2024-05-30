@@ -8,21 +8,20 @@ import it.unipv.ingsfw.SmartWarehouse.Database.IReturnServiceDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.ISupplierDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.ISupplyDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.ISupplyOrderDAO;
+import it.unipv.ingsfw.SmartWarehouse.Database.IUserDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.InventoryDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.RegisterDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.ReturnServiceDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.SupplierDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.SupplyDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.SupplyOrderDAO;
+import it.unipv.ingsfw.SmartWarehouse.Database.UserDAO;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
-import it.unipv.ingsfw.SmartWarehouse.Model.operator.InventoryOperator;
-import it.unipv.ingsfw.SmartWarehouse.Model.operator.SupplyOperator;
-import it.unipv.ingsfw.SmartWarehouse.Model.operator.WarehouseOperator;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.User;
 
 public class SingletonManager {
 	
 	private static SingletonManager instance= null;
-	private WarehouseOperator op;
 	private IClientDAO clientDAO;
 	private IInventoryDAO inventoryDAO;
 	private IRegisterDAO registerDAO;
@@ -30,11 +29,12 @@ public class SingletonManager {
 	private ISupplierDAO supplierDAO;
 	private ISupplyDAO supplyDAO;
 	private ISupplyOrderDAO supplyOrderDAO;
+	private IUserDAO userDAO;
+
 	private User loggedUser;
 	private InventoryManager inventoryManager;
 	
 	private SingletonManager() {
-		op=new InventoryOperator();
 		clientDAO=new ClientDAO();
 		inventoryDAO=new InventoryDAO();
 		registerDAO=new RegisterDAO();
@@ -43,7 +43,7 @@ public class SingletonManager {
 		supplyDAO=new SupplyDAO();
 		supplyOrderDAO=new SupplyOrderDAO();
 		inventoryManager=new InventoryManager();
-		op=new InventoryOperator();
+		userDAO=new UserDAO();
 	}   
 	
 	public static synchronized SingletonManager getInstance() {
@@ -53,9 +53,6 @@ public class SingletonManager {
 		return instance;
 	}
 	
-	public WarehouseOperator getOp() {
-		return op;
-	}
 	public IClientDAO getClientDAO() {
 		return clientDAO;
 	}
@@ -112,10 +109,6 @@ public class SingletonManager {
 		SingletonManager.instance = instance;
 	}
 
-	public void setOp(WarehouseOperator op) {
-		this.op = op;
-	}
-
 	public void setClientDAO(IClientDAO clientDAO) {
 		this.clientDAO = clientDAO;
 	}
@@ -136,7 +129,13 @@ public class SingletonManager {
 		this.inventoryManager = inventoryManager;
 	}
 
+	public IUserDAO getUserDAO() {
+		return userDAO;
+	}
 
+	public void setUserDAO(IUserDAO userDAO) {
+		this.userDAO = userDAO;
+	}
 	
 	
 	

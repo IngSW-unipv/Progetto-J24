@@ -16,7 +16,9 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import it.unipv.ingsfw.SmartWarehouse.Controller.InventoryController;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Category;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
 
 public class InventoryView extends JFrame {
 	
@@ -265,7 +267,11 @@ public class InventoryView extends JFrame {
 		this.underLevel = underLevel;
 	}
 
-	
+	public static void main(String[] args) {
+		InventoryView i=new InventoryView();
+		InventoryManager m=new InventoryManager();
+		InventoryController ic=new InventoryController(m, i);
+	}
 }
 
 
