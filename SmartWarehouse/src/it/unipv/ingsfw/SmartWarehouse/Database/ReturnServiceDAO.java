@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import it.unipv.ingsfw.SmartWarehouse.Model.Return.ItemToBeReturned;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnService;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
@@ -18,7 +17,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 
 public class ReturnServiceDAO implements IReturnServiceDAO{
-	
+
 	private String schema;
 	private Connection conn;
 
@@ -30,12 +29,12 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 	@Override
 	public ReturnService selectByOrder(IReturnable returnableOrder) {
 		// TODO Auto-generated method stub
-		
+
 		ReturnService result = null;
 
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;
-	
+
 		ResultSet rs1;
 
 		try
@@ -49,9 +48,11 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 			{
 				result = new ReturnService(returnableOrder);
 			}
-		}catch (Exception e){e.printStackTrace();}
-
-		DBConnection.closeConnection(conn);
+		}catch (Exception e){
+			e.printStackTrace();
+		}finally {
+			DBConnection.closeConnection(conn);
+		}
 		return result;
 	}
 
@@ -62,7 +63,7 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;
-	
+
 		ResultSet rs1;
 
 		try
@@ -78,8 +79,9 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 				result.put(inventoryItem,rs1.getString(2));
 			}
 		}catch (Exception e){e.printStackTrace();}
-
-		DBConnection.closeConnection(conn);
+		finally {
+			DBConnection.closeConnection(conn);
+		}
 		return result;
 	}
 	public double selectMoneyAlreadyReturn(IReturnable returnableOrder) {
@@ -102,14 +104,16 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 			}
 		}catch (Exception e){e.printStackTrace();}
 
-		DBConnection.closeConnection(conn);
+		finally {
+			DBConnection.closeConnection(conn);
+		}
 		return result;
 	}
-	
+
 	public boolean insertReturnService(ReturnService returnService) {
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1; 		
-		
+
 		boolean esito=true;
 
 		try
@@ -117,21 +121,23 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 			String query="INSERT INTO RETURNSERVICE (OrderID,Item,Reason,MoneyAlreadyReturned) VALUES(?,?,?,?)";
 
 			st1 = conn.prepareStatement(query);
-			
+
 			for (Map.Entry<IInventoryItem, String> entry : returnService.getReturnedItems().entrySet()) {
-	            st1.setInt(1, returnService.getReturnableOrder().getId()); //evitare chiamate ricorsive
-	            st1.setString(2, entry.getKey().getSku()); 
-	            st1.setString(3, entry.getValue()); 
-	            st1.setDouble(4, returnService.getMoneyAlreadyReturned());
-	            st1.executeUpdate();
-	        }
+				st1.setInt(1, returnService.getReturnableOrder().getId()); //evitare chiamate ricorsive
+				st1.setString(2, entry.getKey().getSku()); 
+				st1.setString(3, entry.getValue()); 
+				st1.setDouble(4, returnService.getMoneyAlreadyReturned());
+				st1.executeUpdate();
+			}
 
 		}catch (Exception e){
 			e.printStackTrace();
 			esito=false;
 		}
 
-		DBConnection.closeConnection(conn);
+		finally {
+			DBConnection.closeConnection(conn);
+		}
 		return esito;
 
 	}
@@ -140,7 +146,7 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 		// TODO Auto-generated method stub
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1; 		
-		
+
 		boolean esito=true;
 
 		try
@@ -148,46 +154,44 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 			String query="INSERT INTO REFUNDMODE (OrderID,RefundMode,Date) VALUES(?,?,?)";
 
 			st1 = conn.prepareStatement(query);
-	        st1.setInt(1, rs.getReturnableOrder().getId()); //evitare chiamate ricorsive
-	        st1.setString(2,rm.toString()); 
-	        st1.setTimestamp(3,new java.sql.Timestamp(new Date().getTime()));
-	        st1.executeUpdate();
+			st1.setInt(1, rs.getReturnableOrder().getId()); //evitare chiamate ricorsive
+			st1.setString(2,rm.toString()); 
+			st1.setTimestamp(3,new java.sql.Timestamp(new Date().getTime()));
+			st1.executeUpdate();
 		}catch (Exception e){
 			e.printStackTrace();
 			esito=false;
 		}
 
-		DBConnection.closeConnection(conn);
+		finally {
+			DBConnection.closeConnection(conn);
+		}
 		return esito;
 	}
 	public boolean deleteReturnService(ReturnService rs) {
-		    conn = DBConnection.startConnection(conn, schema);
-		    boolean success=true;
-		    try {
-		        String query = "DELETE FROM RETURNSERVICE WHERE ORDERID = ?";
-		        PreparedStatement st1 = conn.prepareStatement(query);
-		        st1.setInt(1, rs.getReturnableOrder().getId()); 
-		        int rowsAffected = st1.executeUpdate();
-		        if (rowsAffected <= 0) {
-		            success = false;
-		            //System.out.println("Nessuna riga è stata eliminata");
-		        }
-		    } catch (SQLException e) {
-		        e.printStackTrace();
-		        success = false;
-		    }
-		    DBConnection.closeConnection(conn);
-		    return success;
-		
-	}
+		conn = DBConnection.startConnection(conn, schema);
+		boolean success=true;
+		try {
+			String query = "DELETE FROM RETURNSERVICE WHERE ORDERID = ?";
+			PreparedStatement st1 = conn.prepareStatement(query);
+			st1.setInt(1, rs.getReturnableOrder().getId()); 
+			int rowsAffected = st1.executeUpdate();
+			if (rowsAffected <= 0) {
+				success = false;
+				//System.out.println("Nessuna riga è stata eliminata");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			success = false;
+		}
+		finally {
+			DBConnection.closeConnection(conn);
+		}
+		return success;
 
-	@Override
-	public ArrayList<ReturnService> selectAll() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 
-	
+
 
 }

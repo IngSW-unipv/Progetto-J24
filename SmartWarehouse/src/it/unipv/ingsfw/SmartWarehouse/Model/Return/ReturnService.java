@@ -1,24 +1,16 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.Return;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-
 import it.unipv.ingsfw.SmartWarehouse.Exception.MissingReasonException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.UnableToReturnException;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 
 //
 
@@ -31,10 +23,10 @@ public class ReturnService {
 	 * Constructor and Checking the order date to verify returnability.
 	 */
 	public ReturnService(IReturnable returnableOrder) throws UnableToReturnException  {
+		this.returnableOrder = returnableOrder;
 		if(!ReturnValidator.checkReturnability(this)) {
 			throw new UnableToReturnException();
 		}
-		this.returnableOrder = returnableOrder;
 		this.returnedItems = new HashMap<>();
 		this.moneyAlreadyReturned=0;
 	}
@@ -60,7 +52,6 @@ public class ReturnService {
 		double moneyToBeReturned=0;
 		for(IInventoryItem inventoryItem:returnedItems.keySet()) {
 			moneyToBeReturned+=inventoryItem.getPrice();
-
 		}
 		moneyToBeReturned=moneyToBeReturned-moneyAlreadyReturned;
 		return moneyToBeReturned;
@@ -89,26 +80,27 @@ public class ReturnService {
 	/*
 	 * setters and getters
 	 */
+	public void setReturnableOrder(IReturnable returnableOrder) {
+		this.returnableOrder = returnableOrder;
+	}
 	public void setReturnedItems(Map<IInventoryItem, String> returnedItems) {
 		this.returnedItems = returnedItems;
 	}
-
 	public void setMoneyAlreadyReturned(double moneyAlreadyReturned) {
 		this.moneyAlreadyReturned = moneyAlreadyReturned;
 	}
 
-	public void setReturnableOrder(IReturnable returnableOrder) {
-		this.returnableOrder = returnableOrder;
-	}
+
 	public IReturnable getReturnableOrder() {
 		return returnableOrder;
-	}
-	public double getMoneyAlreadyReturned() {
-		return this.moneyAlreadyReturned;
 	}
 	public Map<IInventoryItem, String> getReturnedItems() {
 		return returnedItems;
 	}
+	public double getMoneyAlreadyReturned() {
+		return this.moneyAlreadyReturned;
+	}
+
 	/*
 	 * setters and getters ad hoc
 	 */
@@ -118,7 +110,7 @@ public class ReturnService {
 	public LocalDateTime getCriticalDate() {
 		return returnableOrder.getDate().plusDays(5);
 	}
-	public int getqtyYouAreAllowedToReturn(IInventoryItem inventoryItem) {
+	public int getQtyYouAreAllowedToReturn(IInventoryItem inventoryItem) {
 		return returnableOrder.getQtyBySku(inventoryItem.getSku());
 	}
 }
