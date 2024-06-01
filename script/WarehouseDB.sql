@@ -79,12 +79,14 @@ CREATE TABLE returnservice (
   OrderID int DEFAULT NULL,
   Item varchar(255) DEFAULT NULL,
   Reason varchar(255) DEFAULT NULL,
-  MoneyAlreadyReturned double DEFAULT NULL
+  MoneyAlreadyReturned double DEFAULT NULL,
+  ClientEmail varchar(40) NOT NULL
 );
 
 drop table if exists refundmode;
 CREATE TABLE refundmode (
   OrderID int DEFAULT NULL,
   RefundMode varchar(255) DEFAULT NULL,
-  Date timestamp NULL DEFAULT NULL
+  Date timestamp NULL DEFAULT NULL,
+  ClientEmail varchar(40) NOT NULL
 );
