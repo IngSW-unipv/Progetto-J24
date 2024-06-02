@@ -1,19 +1,17 @@
 package it.unipv.ingsfw.SmartWarehouse.View.inventory;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
+
 
 public class FirstDialog extends JDialog {
+	private static final long serialVersionUID = 1L;
 	private String sku;
 	private JButton plus;
 	private JButton minus;

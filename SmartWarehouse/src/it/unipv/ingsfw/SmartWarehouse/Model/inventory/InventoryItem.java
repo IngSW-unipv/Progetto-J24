@@ -4,14 +4,13 @@ import java.util.List;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.AuthorizationDeniedException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
-import it.unipv.ingsfw.SmartWarehouse.Exception.supply.InvalidSupplyException;
 import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
-import it.unipv.ingsfw.SmartWarehouse.Model.operator.InventoryOperator;
-import it.unipv.ingsfw.SmartWarehouse.Model.operator.WarehouseOperator;
 import it.unipv.ingsfw.SmartWarehouse.Model.randomGenerator.IRandomGenerator;
 import it.unipv.ingsfw.SmartWarehouse.Model.randomGenerator.RandomGenerator;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supply;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyDAOFacade;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.InventoryOperator;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.WarehouseOperator;
 
 public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> {
 	private String description;
@@ -117,7 +116,7 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
 	
 	private void checkAuthorization() throws AuthorizationDeniedException {
 		try {
-			WarehouseOperator op=SingletonManager.getInstance().getOp();
+			WarehouseOperator op= (WarehouseOperator)SingletonManager.getInstance().getLoggedUser();
 			InventoryOperator io=(InventoryOperator)op;
 		} catch (ClassCastException e) {
 			throw new AuthorizationDeniedException();
@@ -125,7 +124,7 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
 	}
 	 
 	//check that the operator is an InventoryOperator, only him can do this operation
-	//call on an inventoryItem created with the 2° constructor
+	//method called on an inventoryItem created with the 2° constructor
 	public IInventoryItem addToInventory() throws AuthorizationDeniedException {  
 		checkAuthorization();
 		InventoryDAOFacade.getInstance().insertItem(this);
@@ -134,7 +133,7 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
 	 
 	//check that the operator is an InventoryOperator
 	//delete also the supply and supplyOrders associated
-	public void delete() throws ItemNotFoundException, AuthorizationDeniedException, InvalidSupplyException {
+	public void delete() throws ItemNotFoundException, AuthorizationDeniedException { 
 		checkAuthorization();
 		if(InventoryDAOFacade.getInstance().findInventoryItemBySku(sku)!=null) { 
 			for(Supply supply: SupplyDAOFacade.getInstance().findSupplyBySku(sku)) {
@@ -154,7 +153,7 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
 		} else { 
 	        throw new ItemNotFoundException();  
 		}	  
-	}
+	} 
 	
 	//increase the quantity by 1
 	public boolean increaseQty() throws ItemNotFoundException, IllegalArgumentException {
@@ -167,7 +166,7 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
 		return this.updateQty(newQty);
 	}
 	 
-	//returns the suppliers with prices and maxQty order by price 
+	//returns the suppliers with prices and maxQty, sorted by price 
 	public List<Object[]> getSuppliersInfo() throws ItemNotFoundException {
 		if(InventoryDAOFacade.getInstance().findInventoryItemBySku(sku)!=null) {
 			return InventoryDAOFacade.getInstance().getSuppliersInfo(this);

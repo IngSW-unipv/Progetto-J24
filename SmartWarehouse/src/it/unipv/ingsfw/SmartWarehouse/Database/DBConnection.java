@@ -33,22 +33,16 @@ package it.unipv.ingsfw.SmartWarehouse.Database;
 
 		public static Connection startConnection(Connection conn, String schema)
 		{
-			init();
-			//System.out.println(dbURL);
-		
-			
+			init();			
 			
 			if ( isOpen(conn) )
 				closeConnection(conn);
 		
 			try 
-			{
-				
+			{				
 				dbURL=String.format(dbURL,schema); 
-			//	System.out.println(dbURL);
 				Class.forName(dbDriver);
 				conn = DriverManager.getConnection(dbURL, username, password);
-				//System.out.println(conn);
 			}
 			catch (Exception e) 
 			{
