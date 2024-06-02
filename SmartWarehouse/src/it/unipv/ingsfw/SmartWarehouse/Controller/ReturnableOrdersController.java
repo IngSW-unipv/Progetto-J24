@@ -12,7 +12,8 @@ import javax.swing.ButtonModel;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.UnableToReturnException;
 import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
-import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnFACADE;
+import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnManager;
+import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnService;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.RegisterFacade;
 import it.unipv.ingsfw.SmartWarehouse.View.ReturnItemsAndReasonsView;
@@ -24,20 +25,20 @@ import it.unipv.ingsfw.SmartWarehouse.View.ReturnableOrdersView;
 public class ReturnableOrdersController {
 
 	private ReturnableOrdersView returnableOrdersView;
-	
+
 	public ReturnableOrdersController(ReturnableOrdersView returnableOrdersView) {
 		this.returnableOrdersView=returnableOrdersView;
 		initWithClientOrders();
 		chooseOrderToReturn();
 	}
-	
-	
+
+
 	/*
 	 * Initializes the ReturnableOrdersView with client order.
 	 */
 	private void initWithClientOrders() {
-		ArrayList<Order> allClientOrders = RegisterFacade.getIstance().selectOrderWhereClient("john.doe@example.com"); 
-		//ArrayList<Order> allClientOrders = RegisterFacade.getIstance().selectOrderWhereClient(SingletonManager.getInstance().getLoggedUser().getEmail()); 
+		//ArrayList<Order> allClientOrders = RegisterFacade.getIstance().selectOrderWhereClient("john.doe@example.com"); 
+		ArrayList<Order> allClientOrders = RegisterFacade.getIstance().selectOrderWhereClient(SingletonManager.getInstance().getLoggedUser().getEmail()); 
 		ArrayList<String> ordersDescriptionsForButton = new ArrayList<>();
 		Integer[] orderIdForActionCommand=new Integer[allClientOrders.size()];
 		int count=0;
@@ -51,8 +52,8 @@ public class ReturnableOrdersController {
 			returnableOrdersView.getConfirmButton().setEnabled(false);
 		}
 	}
-	
-	
+
+
 	/*
 	 * Listener for confirmButton: choose the order
 	 */
@@ -65,31 +66,27 @@ public class ReturnableOrdersController {
 				// TODO Auto-generated method stub
 				manageAction();
 			}
-			
+
 			private void manageAction() {
-				
+
 				ButtonModel button=returnableOrdersView.getOrderButtonGroup().getSelection();
 				if(button==null) {
 					returnableOrdersView.showWarningMessagge("Selezionare un ordine per procedere.");
 					returnableOrdersView.setVisible(true);
 					return;
 				}
-	            returnableOrdersView.setVisible(false);
-                ReturnFACADE rf = null;
+				returnableOrdersView.setVisible(false);
+				ReturnService returnService=null;
 				try {
-					rf=ReturnFACADE.getInstance(RegisterFacade.getIstance().selectOrder(Integer.parseInt(button.getActionCommand())));
-					//rf = new ReturnFACADE(RegisterFacade.getIstance().selectOrder(Integer.parseInt(button.getActionCommand())));
-				} catch (NumberFormatException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					returnService=ReturnManager.getIstance().getReturnService(RegisterFacade.getIstance().selectOrder(Integer.parseInt(button.getActionCommand())));
+					//ReturnService returnService=order.createReturnService(); //order glielo passo a questo costruttorre e order avrà il metodo createReturn che chiama ResoManager.getInstance.getReturn ecc
 				} catch (UnableToReturnException e) {
 					// TODO Auto-generated catch block
 					returnableOrdersView.setVisible(true);
 					returnableOrdersView.showErrorMessagge(e.getMessage());
-					System.out.println("RIGA 88 CONTROLLER: e.getmessagge"+e.getMessage() );
 					return;
 				}
-                new ReturnController(rf,new ReturnItemsAndReasonsView(),returnableOrdersView); 
+				new ReturnController(returnService,new ReturnItemsAndReasonsView(),returnableOrdersView); 
 			}
 		};
 		returnableOrdersView.getConfirmButton().addActionListener(confirmButtonLister);

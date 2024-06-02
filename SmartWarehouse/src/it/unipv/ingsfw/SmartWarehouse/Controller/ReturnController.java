@@ -5,42 +5,33 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Map;
 
-import javax.swing.AbstractButton;
-import javax.swing.ButtonGroup;
 import javax.swing.ButtonModel;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
+
+import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.MissingReasonException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.UnableToReturnException;
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.RefundFactory;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.BankTransfer.BankTransfer;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.Voucher.VoucherRefund;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.Reasons;
-import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnFACADE;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnService;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnServiceDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.RegisterFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
-import it.unipv.ingsfw.SmartWarehouse.View.ReturnItemsAndReasonsView;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.View.ReturnItemsAndReasonsView;
 import it.unipv.ingsfw.SmartWarehouse.View.ReturnableOrdersView;
 
 public class ReturnController {
-	private ReturnFACADE returnFacade;
+	private ReturnService returnService;
 	private ReturnItemsAndReasonsView riarView;
 	private ReturnableOrdersView returnableOrdersView;
 	private static final String MOTIVAZIONE_PERSONALIZZATA ="Altro";
@@ -48,33 +39,32 @@ public class ReturnController {
 	/*
 	 * Controller for ReturnItemsAndReasonsView: it manages the choice of items to return, the reasons and the refund method
 	 */
-	public ReturnController(ReturnFACADE returnFacade,ReturnItemsAndReasonsView riarView,ReturnableOrdersView returnableOrdersView) {
-		this.returnFacade=returnFacade;
+	public ReturnController(ReturnService returnService,ReturnItemsAndReasonsView riarView,ReturnableOrdersView returnableOrdersView) {
+		this.returnService=returnService;
 		this.riarView=riarView;
 		this.returnableOrdersView=returnableOrdersView;
 		initWithItemOfTheOrder();
 		addItemsAndReasonsToReturnService();
 		initActionAndStateOfTheComponent();
 	}
-	
+
 	private void initWithItemOfTheOrder() {
-		int selectedOrderId=returnFacade.getReturnableOrder().getId();
+		int selectedOrderId=returnService.getReturnableOrder().getId();
 		riarView.getSelectedOrderLabel().setText("Ordine selezionato: " +selectedOrderId);
-        Order order = RegisterFacade.getIstance().selectOrder(selectedOrderId);
-        String skuForActionCommand[]=new String[order.getQtyTotal()];
-        ArrayList<InventoryItem> inventoryItem_keyOfOrderMap= new ArrayList<>(order.getMap().keySet());
-        ArrayList<String> itemsDescriptionsForButton= new ArrayList<>();
-        int count=0;
-        for(InventoryItem i:inventoryItem_keyOfOrderMap) {
-     	   for(int count2=0;count2<order.getQtyOfItem(i);count2++) {
-     		   itemsDescriptionsForButton.add(i.getDescription());
-     		   skuForActionCommand[count]=i.getSku();
-         	   count++;
-     	   }
-        }
-        Reasons.initializeReasons();
-        riarView.initWithItemOfTheOrder(itemsDescriptionsForButton,skuForActionCommand,Reasons.getReasons());
-        
+		Order order = RegisterFacade.getIstance().selectOrder(selectedOrderId);
+		String skuForActionCommand[]=new String[order.getQtyTotal()];
+		ArrayList<IInventoryItem> inventoryItem_keyOfOrderMap= new ArrayList<>(order.getMap().keySet());
+		ArrayList<String> itemsDescriptionsForButton= new ArrayList<>();
+		int count=0;
+		for(IInventoryItem i:inventoryItem_keyOfOrderMap) {
+			for(int count2=0;count2<order.getQtyOfItem((InventoryItem) i);count2++) {
+				itemsDescriptionsForButton.add(i.getDescription());
+				skuForActionCommand[count]=i.getSku();
+				count++;
+			}
+		}
+		Reasons.initializeReasons();
+		riarView.initWithItemOfTheOrder(itemsDescriptionsForButton,skuForActionCommand,Reasons.getReasons());
 	}
 
 	private void addItemsAndReasonsToReturnService() {
@@ -90,12 +80,13 @@ public class ReturnController {
 			}
 			private void manageAction() {
 				riarView.setVisible(false);
-				
+
 				/* 1) Management of product choice and reasons */
 				ArrayList<JCheckBox> checkBoxList = riarView.getCheckBoxList();
 				ArrayList<JComboBox<String>> reasonsDropdownList = riarView.getReasonsDropdownList();
 
 				boolean itemSelected = false;
+				IInventoryItem inventoryItem = null;
 				for (int i = 0; i < checkBoxList.size(); i++) {
 					JCheckBox checkBox = checkBoxList.get(i);
 					JComboBox<String> comboBox = reasonsDropdownList.get(i);
@@ -104,24 +95,17 @@ public class ReturnController {
 						itemSelected=true;
 						String reason = comboBox.getSelectedItem().toString();
 						String sku = checkBox.getActionCommand();
-						InventoryItem inventoryItem=InventoryDAOFacade.getInstance().findInventoryItemBySku(sku);
+						inventoryItem=InventoryDAOFacade.getInstance().findInventoryItemBySku(sku);
 						if(reason.equals(MOTIVAZIONE_PERSONALIZZATA)) {
 							reason = riarView.getCustomReasonAreaList().get(i).getText();
 						}
+						/* add item to return e then increase qty in warehouse */  
 						try {
-							returnFacade.addItemToReturn(inventoryItem, reason);
-						} catch (UnableToReturnException e) {
-							// TODO Auto-generated catch block
+							returnService.addItemToReturn(inventoryItem, reason);
+						} catch (MissingReasonException | UnableToReturnException e) {
+							removeItemsNotActuallyReturned();
 							riarView.setVisible(true);
 							riarView.showErrorMessagge(e.getMessage());
-							removeItemsNotActuallyReturned();
-							return;
-						} 
-						catch (MissingReasonException e) {
-							// TODO Auto-generated catch block
-							riarView.setVisible(true);
-							riarView.showErrorMessagge(e.getMessage());
-							removeItemsNotActuallyReturned();
 							return;
 						}
 					}
@@ -131,57 +115,53 @@ public class ReturnController {
 					riarView.showWarningMessagge("Selezionare almeno un prodotto da restituire");
 					return;
 				}
-				
-				
-				
-				
+
+
+
+
 				/* 2) Refund management */
-				StringBuilder message = new StringBuilder(returnFacade.toString()).append("Metodo di rimborso selezionato:\n");
+				StringBuilder message = new StringBuilder(returnService.toString()).append("Metodo di rimborso selezionato:\n");
 				ButtonModel button=riarView.getRefundButtonGroup().getSelection();
 				if(button==null) {
+					removeItemsNotActuallyReturned();
 					riarView.setVisible(true);
 					riarView.showWarningMessagge("Indicare la modalità di rimborso");
-					removeItemsNotActuallyReturned();
+					
 					return;
 				}
 				message.append(button.getActionCommand());
-				
+
 				// Recap popup to confirm or cancel the return.
 				int recapPopup = riarView.showConfirmPopUp(message.toString());
 				if(recapPopup==JOptionPane.OK_OPTION) {
-					//String clientEmail=SingletonManager.getInstance().getLoggedUser().getEmail();
-					double moneyToBeReturned=returnFacade.getMoneyToBeReturned();
+					IRefund refundMode;
 					if (button.getActionCommand().equals(ReturnItemsAndReasonsView.getBankTransferRadioText())) {
-						BankTransfer br = new BankTransfer(moneyToBeReturned,"EMAIL MAGAZZINO DA DEFINIRE","QUI METTERE: SingletonManager.getInstance().getLoggedUser().getEmail(); "); //chi istanzia bonifico?
+						refundMode = returnService.createBankTransferRefund();
+					}
+					else {
+						refundMode = returnService.createVoucherRefund();
+					}
+					try {
+						returnService.issueRefund(refundMode);
+					} catch (PaymentException e) {
+						removeItemsNotActuallyReturned();
+						riarView.setVisible(true);
+						riarView.showErrorMessagge(e.getMessage());
+						return;
+					}
+					returnService.setMoneyAlreadyReturned(returnService.getMoneyAlreadyReturned()+refundMode.getValue());
+					/*decrease item already Returned*/
+					for(IInventoryItem i:ReturnServiceDAOFacade.getIstance().readItem(returnService.getReturnableOrder())){
 						try {
-							IRefund refundMode=RefundFactory.getBankTransferAdapter(br);
-							returnFacade.setRefundMode(refundMode);
-							returnFacade.setMoneyAlreadyReturned(returnFacade.getMoneyAlreadyReturned()+br.getValue());
-							returnFacade.AddReturnToDB(refundMode);
-							riarView.showSuccessDialog("Pagamento andato a buon fine");
-						} catch (PaymentException e) {
-							// TODO Auto-generated catch block
-							riarView.setVisible(true);
-							riarView.showErrorMessagge("Operazione fallita, verificare i dati di pagamento");
-							removeItemsNotActuallyReturned();
-							return;
-						}
-					} else {
-						VoucherRefund vr = new VoucherRefund(moneyToBeReturned);
-						try {
-							IRefund refundMode=RefundFactory.getVoucherAdapter(vr);
-							returnFacade.setRefundMode(refundMode);
-							returnFacade.setMoneyAlreadyReturned(returnFacade.getMoneyAlreadyReturned()+vr.getValue());
-							returnFacade.AddReturnToDB(refundMode);
-							riarView.showSuccessDialog("Pagamento andato a buon fine");
-						} catch (PaymentException e) {
-							// TODO Auto-generated catch block
-							riarView.setVisible(true);
-							riarView.showErrorMessagge("Operazione fallita, verificare i dati di pagamento");
-							removeItemsNotActuallyReturned();
-							return;
+							i.decreaseQty();
+						} catch (IllegalArgumentException | ItemNotFoundException e) {
+							e.printStackTrace();
 						}
 					}
+					returnService.AddReturnToDB(refundMode);
+					/*increase all returned items from the beginning*/
+					returnService.updateWarehouseQty();
+					riarView.showSuccessDialog("Pagamento andato a buon fine");
 				}
 				else {
 					riarView.setVisible(true);
@@ -191,22 +171,21 @@ public class ReturnController {
 		};
 		riarView.getNextButton().addActionListener(NextButtonLister);
 	}
-	
+
 	private void removeItemsNotActuallyReturned() {
 		// TODO Auto-generated method stub
-		returnFacade.removeAllFromReturn();
-		ReturnService returnService=returnFacade.getRs();
+		returnService.removeAllFromReturn();
 		returnService.setReturnedItems(ReturnServiceDAOFacade.getIstance().readItemAndReason(returnService.getReturnableOrder()));
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
 
 
 	private void initActionAndStateOfTheComponent() {
@@ -217,11 +196,11 @@ public class ReturnController {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange() == ItemEvent.SELECTED) {
-					// Abilita la JComboBox corrispondente quando la casella di controllo viene selezionata
+					// Abilito la JComboBox corrispondente quando la casella di controllo viene selezionata
 					int index = riarView.getCheckBoxList().indexOf(e.getSource());
 					riarView.getReasonsDropdownList().get(index).setEnabled(true);
 				} else if(e.getStateChange() == ItemEvent.DESELECTED) {
-					// Disabilita la JComboBox corrispondente quando la casella di controllo viene deselezionata
+					// Disabilito la JComboBox corrispondente quando la casella di controllo viene deselezionata
 					int index = riarView.getCheckBoxList().indexOf(e.getSource());
 					riarView.getReasonsDropdownList().get(index).setSelectedItem("Scegli una motivazione");
 					riarView.getReasonsDropdownList().get(index).setEnabled(false);
@@ -252,7 +231,6 @@ public class ReturnController {
 				riarView.getCustomReasonLabelList().get(index).setVisible(selectedReason.equals("Altro"));
 				riarView.getCustomReasonAreaList().get(index).setVisible(selectedReason.equals("Altro"));
 			}
-
 		};
 		for(int i=0;i<riarView.getReasonsDropdownList().size();i++) {
 			riarView.getReasonsDropdownList().get(i).addActionListener(comboListener);

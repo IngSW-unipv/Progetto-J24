@@ -1,16 +1,22 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.Return;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.MissingReasonException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.UnableToReturnException;
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
+import it.unipv.ingsfw.SmartWarehouse.Model.Refund.RefundFactory;
+import it.unipv.ingsfw.SmartWarehouse.Model.Refund.BankTransfer.BankTransfer;
+import it.unipv.ingsfw.SmartWarehouse.Model.Refund.Voucher.VoucherRefund;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
 
 //
 
@@ -18,17 +24,16 @@ public class ReturnService {
 	private IReturnable returnableOrder;
 	private Map<IInventoryItem, String> returnedItems;
 	private double moneyAlreadyReturned;
-
 	/*
 	 * Constructor and Checking the order date to verify returnability.
 	 */
 	public ReturnService(IReturnable returnableOrder) throws UnableToReturnException  {
 		this.returnableOrder = returnableOrder;
+		this.returnedItems = new HashMap<>();
+		this.moneyAlreadyReturned=0;
 		if(!ReturnValidator.checkReturnability(this)) {
 			throw new UnableToReturnException();
 		}
-		this.returnedItems = new HashMap<>();
-		this.moneyAlreadyReturned=0;
 	}
 
 	/*
@@ -47,8 +52,7 @@ public class ReturnService {
 	public String setReason(String reason) throws MissingReasonException {
 		return Reasons.findReason(reason);
 	}
-	public double getMoneyToBeReturned()
-	{
+	public double getMoneyToBeReturned(){
 		double moneyToBeReturned=0;
 		for(IInventoryItem inventoryItem:returnedItems.keySet()) {
 			moneyToBeReturned+=inventoryItem.getPrice();
@@ -56,8 +60,25 @@ public class ReturnService {
 		moneyToBeReturned=moneyToBeReturned-moneyAlreadyReturned;
 		return moneyToBeReturned;
 	}
-	public boolean setRefundMode(IRefund rm) throws PaymentException { //valutare la gestione di boolean al posto di void
+	public IRefund createBankTransferRefund() {
+		BankTransfer br = new BankTransfer(getMoneyToBeReturned(),"EMAIL MAGAZZINO DA DEFINIRE",SingletonManager.getInstance().getLoggedUser().getEmail() );
+		return RefundFactory.getBankTransferAdapter(br);
+	}
+	public IRefund createVoucherRefund() {
+		VoucherRefund vr = new VoucherRefund(getMoneyToBeReturned());
+		return RefundFactory.getVoucherAdapter(vr);
+	}
+	public boolean issueRefund(IRefund rm) throws PaymentException {
 		return rm.issueRefund();
+	}
+	public void updateWarehouseQty(){
+		for(IInventoryItem i:getReturnedItemsKeySet()) {
+			try {
+				InventoryDAOFacade.getInstance().findInventoryItemBySku(i.getSku()).increaseQty();
+			} catch (IllegalArgumentException | ItemNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	public void AddReturnToDB(IRefund rm) {
 		//Adding the return to the DB
@@ -65,16 +86,14 @@ public class ReturnService {
 		resoManager.addReturnServiceToDB(this);
 		resoManager.addRefundModeToDB(this,rm);
 	}
-	public String toString()
-	{
+	public String toString(){
 		StringBuilder s= new StringBuilder();
 		s.append("Reso dell'ordine: ").append(returnableOrder.getId());
 		s.append("\ngli articoli restituiti sono: \n");
 		for(IInventoryItem inventoryItem:returnedItems.keySet()) {
-			s.append(inventoryItem.getSku()).append(" ").append(inventoryItem.getDescription()).append(" la cui motivazione è: ").append(returnedItems.get(inventoryItem)).append(" in data "+LocalDate.now()).append("\n");
+			s.append(inventoryItem.getSku()).append(" ").append(inventoryItem.getDescription()).append(" la cui motivazione è: ").append(returnedItems.get(inventoryItem)).append("\n");
 		}
 		return s.toString();
-
 	} 
 
 	/*
@@ -113,4 +132,6 @@ public class ReturnService {
 	public int getQtyYouAreAllowedToReturn(IInventoryItem inventoryItem) {
 		return returnableOrder.getQtyBySku(inventoryItem.getSku());
 	}
+
+
 }

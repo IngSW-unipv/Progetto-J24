@@ -1,8 +1,8 @@
 //
 package it.unipv.ingsfw.SmartWarehouse.Model.Return;
 
+import it.unipv.ingsfw.SmartWarehouse.Exception.ReturnableOrderNullPointerException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.UnableToReturnException;
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 
@@ -27,6 +27,9 @@ public class ReturnManager {
 	 * DAO Methods
 	 */
     public ReturnService getReturnService(IReturnable returnableOrder) throws UnableToReturnException {
+    	if(returnableOrder==null) {
+    		throw new ReturnableOrderNullPointerException();
+    	}
     	ReturnService rs=returnServiceDAOFacade.findByOrder(returnableOrder);
     	 if(rs==null) {
     		 return new ReturnService(returnableOrder);

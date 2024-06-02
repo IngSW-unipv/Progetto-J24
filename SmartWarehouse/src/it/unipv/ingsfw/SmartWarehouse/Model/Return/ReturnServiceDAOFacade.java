@@ -1,6 +1,7 @@
 //
 package it.unipv.ingsfw.SmartWarehouse.Model.Return;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import it.unipv.ingsfw.SmartWarehouse.Database.IReturnServiceDAO;
@@ -22,7 +23,7 @@ public class ReturnServiceDAOFacade {
 			istance=new ReturnServiceDAOFacade();
 		}
 		return istance;
-	} 
+	}
 	
 	public ReturnService findByOrder(IReturnable returnableOrder) {
 		return rsdao.selectByOrder(returnableOrder);
@@ -30,6 +31,9 @@ public class ReturnServiceDAOFacade {
 	}
 	public Map<IInventoryItem, String> readItemAndReason(IReturnable returnableOrder){
 		return rsdao.selectItemAndReason(returnableOrder);
+	}
+	public ArrayList<IInventoryItem> readItem(IReturnable returnableOrder){
+		return rsdao.selectItem(returnableOrder);
 	}
 	public double readMoneyAlreadyReturned(IReturnable returnableOrder) {
 		return rsdao.selectMoneyAlreadyReturn(returnableOrder);

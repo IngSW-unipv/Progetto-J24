@@ -5,23 +5,26 @@ import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 
 public class BankTransferAdapter implements IRefund {
-		
-		private BankTransfer br; 
 
-		public BankTransferAdapter(BankTransfer br) {
+	private BankTransfer br; 
 
-			this.br=br;
-		}
-		@Override
-		public boolean issueRefund() throws PaymentException {
-			return br.makeBankTransfer();
-		}
-		 public String toString() {
-			return br.toString();
-		}
+	public BankTransferAdapter(BankTransfer br) {
+
+		this.br=br;
+	}
+	@Override
+	public boolean issueRefund() throws PaymentException {
+		return br.makeBankTransfer();
+	}
+	public double getValue() {
+		return br.getValue();
+	}
+	public String toString() {
+		return br.toString();
+	}
 
 
 }
-	
-	
+
+
 
