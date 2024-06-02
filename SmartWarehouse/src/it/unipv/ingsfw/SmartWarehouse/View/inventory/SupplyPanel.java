@@ -1,32 +1,22 @@
 package it.unipv.ingsfw.SmartWarehouse.View.inventory;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.ListCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Category;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.replenishmentStrategy.CategoryStrategy;
-import it.unipv.ingsfw.SmartWarehouse.Model.supply.replenishmentStrategy.IReplenishmentStrategy;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.replenishmentStrategy.ThresholdStrategy;
 
 public class SupplyPanel extends JPanel{
-	 private JButton newSupplier;
+	 private static final long serialVersionUID = 1L;
+	private JButton newSupplier;
 	 private JButton newSupply;
 	 private JButton allSuppliers;
 	 private JButton allSupplies;

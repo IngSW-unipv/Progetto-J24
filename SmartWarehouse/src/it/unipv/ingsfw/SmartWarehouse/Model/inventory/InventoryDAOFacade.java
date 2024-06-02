@@ -2,12 +2,8 @@ package it.unipv.ingsfw.SmartWarehouse.Model.inventory;
 
 import java.util.List;
 
-import it.unipv.ingsfw.SmartWarehouse.Controller.InventoryController;
 import it.unipv.ingsfw.SmartWarehouse.Database.IInventoryDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.InventoryDAO;
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
-import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.InventoryOperator;
-import it.unipv.ingsfw.SmartWarehouse.View.inventory.InventoryView;
 
 //contains all the DAO methods about inventory
 public class InventoryDAOFacade {

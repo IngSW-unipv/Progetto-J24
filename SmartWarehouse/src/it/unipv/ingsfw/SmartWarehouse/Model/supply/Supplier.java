@@ -6,8 +6,7 @@ import it.unipv.ingsfw.SmartWarehouse.Exception.supplier.SupplierAlreadyExistsEx
 import it.unipv.ingsfw.SmartWarehouse.Exception.supplier.SupplierDoesNotExistException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.supply.InvalidSupplyException;
 import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
-import it.unipv.ingsfw.SmartWarehouse.Model.operator.SupplyOperator;
-import it.unipv.ingsfw.SmartWarehouse.Model.operator.WarehouseOperator;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.SupplyOperator;
 
 public class Supplier {
 	private String IDS, fullname, address, email;
@@ -53,7 +52,6 @@ public class Supplier {
 		this.email = email;
 	}
 	 
-	//check valid fields
 	public void add() throws InvalidSupplierException, AuthorizationDeniedException {
 		this.checkSupplierAuthorization(); 
 		if(supplyDAOFacade.findSupplier(IDS)==null) {
@@ -78,8 +76,7 @@ public class Supplier {
 	
 	private boolean checkSupplierAuthorization() throws AuthorizationDeniedException {
 		try {
-			WarehouseOperator op=SingletonManager.getInstance().getOp();
-			SupplyOperator su = (SupplyOperator) op;
+			SupplyOperator op= (SupplyOperator)SingletonManager.getInstance().getLoggedUser();
 			return true;
 		} catch(ClassCastException e) {
 			throw new AuthorizationDeniedException();

@@ -19,8 +19,8 @@ package it.unipv.ingsfw.SmartWarehouse.Database;
 		private static void init() {
 			Properties p = new Properties(System.getProperties());
 			try {
-				//
-				p.load(new FileInputStream("/Users/giuliatrespiolli/Documents/GitHub/Progetto-J24/SmartWarehouse/properties/DBConnection"));
+				///Users/giuliatrespiolli/Documents/GitHub/Progetto-J24/SmartWarehouse/properties/DBConnection
+				p.load(new FileInputStream(""));
 				username=p.getProperty(PROPERTYNAME);
 				password=p.getProperty(PROPERTYPSW);
 				dbDriver =p.getProperty(PROPERTYDBDRIVER);

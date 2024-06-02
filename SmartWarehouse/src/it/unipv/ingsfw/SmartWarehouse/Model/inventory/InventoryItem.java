@@ -116,8 +116,7 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
 	
 	private void checkAuthorization() throws AuthorizationDeniedException {
 		try {
-			WarehouseOperator op= (WarehouseOperator)SingletonManager.getInstance().getLoggedUser();
-			InventoryOperator io=(InventoryOperator)op;
+			InventoryOperator op= (InventoryOperator)SingletonManager.getInstance().getLoggedUser();
 		} catch (ClassCastException e) {
 			throw new AuthorizationDeniedException();
 		}

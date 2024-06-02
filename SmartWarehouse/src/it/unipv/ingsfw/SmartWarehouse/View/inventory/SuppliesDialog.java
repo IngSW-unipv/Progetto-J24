@@ -6,6 +6,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 public class SuppliesDialog extends JDialog{
+	private static final long serialVersionUID = 1L;
 	private DefaultTableModel tableModel;
 	private JTable table;
 
