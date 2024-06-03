@@ -1,10 +1,11 @@
 package it.unipv.ingsfw.SmartWarehouse.Controller;
 
 import java.awt.event.ActionEvent;
+
+
 import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
-
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyFieldException;
 import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
@@ -15,6 +16,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.User;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.WarehouseOperator;
 import it.unipv.ingsfw.SmartWarehouse.View.LoginOpView;
 import it.unipv.ingsfw.SmartWarehouse.View.LoginView;
 import it.unipv.ingsfw.SmartWarehouse.View.MainView;
@@ -46,7 +48,7 @@ public class MainController {
 				if (r==1) {
 					mainView.setVisible(false);
 					loginView = new LoginView();
-					okLiginClientButton();
+					okLoginClientButton();
 				} else {
 					regView = new RegistrationView();
 					okRegistrationClientButton() ;
@@ -71,7 +73,7 @@ public class MainController {
 		mainView.getOperatorButton().addActionListener(operatorListener);
 	} 
 	
-	private void okLiginClientButton() {
+	private void okLoginClientButton() {
 		ActionListener okListener=new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				manageAction();
@@ -80,13 +82,16 @@ public class MainController {
 			private void manageAction() {
 				Login login = new Login();
 				try {
+					
 					login.loginClient(loginView.getEmailField().getText(), String.valueOf(loginView.getPasswordField().getPassword()));
+					loginView.setVisible(false);
+					new ShopController(new Shop(), new ShopFrame()); 
+					
+					
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(loginView, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
 				}
-				loginView.setVisible(false);
-				new ShopController(new Shop(), new ShopFrame()); 
-				new ShopFrame();			
+			
 			}
 		};
 		loginView.getConfirmButton().addActionListener(okListener);
@@ -104,12 +109,15 @@ public class MainController {
 				Registration registration = new Registration(c);
 				try {
 					registration.registerClient();
+					regView.setVisible(false);
+					//metto trycatch
+					loginView = new LoginView();
+					okLoginClientButton();	
+					
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(loginOpView, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
 				}
-				regView.setVisible(false);
-				loginView = new LoginView();
-				okLiginClientButton();	
+				
 			}
 		};
 		regView.getConfirmButton().addActionListener(okListener);
@@ -123,19 +131,25 @@ public class MainController {
 
 			private void manageAction() {
 				Login login = new Login();
+				String idview=String.valueOf(loginOpView.getTextId().getPassword());
 				try {
 					login.loginOp(String.valueOf(loginOpView.getTextId().getPassword()));
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(loginOpView, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
 				}
 				loginOpView.setVisible(false);
-				InventoryView iv=new InventoryView();
-				new InventoryController(new InventoryManager(), iv);
-				new SupplyController(new SupplyManager(), iv.getSupplyPanel());
-				//controller picking
+				if(idview.charAt(0) == 'i') {
+					InventoryView iv=new InventoryView();
+					new InventoryController(new InventoryManager(), iv);
+					new SupplyController(new SupplyManager(), iv.getSupplyPanel());
+				}
+				else if(idview.charAt(0) == 'p') {
+					//picking
+				}
+				
 			}
 		};
-		loginOpView.getOk().addActionListener(okListener);
+		loginOpView.getConfirmButton().addActionListener(okListener);
 	}
 	
 }
