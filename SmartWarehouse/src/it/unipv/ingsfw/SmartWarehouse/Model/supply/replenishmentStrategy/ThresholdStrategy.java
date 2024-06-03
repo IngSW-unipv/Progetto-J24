@@ -9,7 +9,11 @@ import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyDAOFacade;
 
 public class ThresholdStrategy implements IReplenishmentStrategy {
 	
-	//replenish item until the threshold
+	public ThresholdStrategy() {
+		
+	}
+	
+	//replenish items until the threshold
 	@Override
 	public void replenish(List<InventoryItem> items) throws AuthorizationDeniedException {
 		int q;

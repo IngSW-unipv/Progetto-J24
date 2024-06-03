@@ -1,9 +1,14 @@
 package it.unipv.ingsfw.SmartWarehouse.Exception;
 
 public class ItemNotFoundException extends Exception {
-	private static String errorMessage = "Item not found";
+
+    private static final long serialVersionUID = 1L;
 
 	public ItemNotFoundException() {
-		super(errorMessage);
-	}
+        super("Item not found");
+    }
+
+    public ItemNotFoundException(String message) {
+        super(message);
+    }
 }

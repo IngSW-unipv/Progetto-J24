@@ -4,17 +4,16 @@ import java.time.LocalDateTime;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.AuthorizationDeniedException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
+import it.unipv.ingsfw.SmartWarehouse.Exception.supplier.InvalidSupplierException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.supplier.SupplierDoesNotExistException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.supply.InvalidSupplyException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.supply.SupplyAlreadyExistsException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.supply.SupplyDoesNotExistException;
 import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
-import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentProcess;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
-import it.unipv.ingsfw.SmartWarehouse.Model.operator.SupplyOperator;
-import it.unipv.ingsfw.SmartWarehouse.Model.operator.WarehouseOperator;
 import it.unipv.ingsfw.SmartWarehouse.Model.randomGenerator.*;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.SupplyOperator;
 
 public class Supply {
 	private String ID_Supply;
@@ -22,7 +21,7 @@ public class Supply {
 	private InventoryItem inventoryItem;
 	private double price;
 	private int maxqty; 
-	
+
 	public Supply(String ID_Supply, Supplier supplier, InventoryItem inventoryItem, double price, int maxqty) {
 		this.ID_Supply = ID_Supply;
 		this.supplier = supplier;
@@ -31,7 +30,7 @@ public class Supply {
 		this.maxqty = maxqty;
 	} 
 	
-	//useful to dao
+	//useful to DAO
 	public Supply(String ID_Supply, String sku, String ids, double price, int maxqty) {
 		this.ID_Supply = ID_Supply;
 		this.supplier = SupplyDAOFacade.getInstance().findSupplier(ids);
@@ -45,8 +44,8 @@ public class Supply {
 		this.ID_Supply=this.generateUnivoqueID_Supply();
 		this.supplier = SupplyDAOFacade.getInstance().findSupplier(ids);
 		this.inventoryItem = InventoryDAOFacade.getInstance().findInventoryItemBySku(sku); 
-		this.setPrice(price);; 
-		this.setMaxqty(maxqty);;
+		this.setPrice(price); 
+		this.setMaxqty(maxqty);
 	} 
 
 	public String getID_Supply() {
@@ -83,7 +82,7 @@ public class Supply {
 		}
 		this.price=price;
 	}
-
+	
 	public int getMaxqty() {
 		return maxqty;
 	}
@@ -95,14 +94,9 @@ public class Supply {
 		this.maxqty=maxqty;
 	}
 	
-	@Override
-	public String toString() {
-		return ID_Supply+" "+ supplier.getIDS()+" "+inventoryItem.getSku()+" "+price+" "+maxqty;
-	}
-	
-	//method called on a supply built whit the third constructor
-	public void add() throws AuthorizationDeniedException, ItemNotFoundException, SupplierDoesNotExistException, SupplyAlreadyExistsException {
-		this.checkSupplierAuthorization();
+	//method called on a supply built with the third constructor
+	public void add() throws AuthorizationDeniedException, ItemNotFoundException, InvalidSupplierException, InvalidSupplyException {
+		this.checkreplenishAuthorization();
 		//check the presence of the inventoryItem
 		if(inventoryItem==null) { 
 			throw new ItemNotFoundException(); 
@@ -120,7 +114,7 @@ public class Supply {
 	} 
 	
 	public void delete() throws InvalidSupplyException, AuthorizationDeniedException {
-		this.checkSupplierAuthorization();
+		this.checkreplenishAuthorization();
 		//check the presence of the supply
 		if(SupplyDAOFacade.getInstance().findSupply(ID_Supply)!=null) {
 			//delete orders of that supply
@@ -132,8 +126,8 @@ public class Supply {
 	} 
 
 	//check that qty is less than maxQty
-	public SupplyOrder buy(int qty) throws AuthorizationDeniedException, SupplyDoesNotExistException, IllegalArgumentException {
-		//check the presence of the supply
+	public SupplyOrder buy(int qty) throws AuthorizationDeniedException, InvalidSupplyException, IllegalArgumentException {
+		//check the presence of the supply in the DB
 		if(SupplyDAOFacade.getInstance().findSupply(ID_Supply)==null) {
 			throw new SupplyDoesNotExistException();
 		}
@@ -147,16 +141,15 @@ public class Supply {
 	} 
 	  
 	public SupplyOrder replenishSupply(int qty) throws AuthorizationDeniedException {
-		this.checkSupplierAuthorization();
+		this.checkreplenishAuthorization();
 		SupplyOrder o=new SupplyOrder(SupplyDAOFacade.getInstance().nextNOrder(), ID_Supply, qty, price*qty, LocalDateTime.now());
 		SupplyDAOFacade.getInstance().insertSupplyOrder(o);
 		return o;
 	} 
 	
-	private void checkSupplierAuthorization() throws AuthorizationDeniedException {
+	private void checkreplenishAuthorization() throws AuthorizationDeniedException {
 		try {
-			WarehouseOperator op=SingletonManager.getInstance().getOp();
-			SupplyOperator su = (SupplyOperator) op;
+			SupplyOperator op= (SupplyOperator)SingletonManager.getInstance().getLoggedUser();
 		} catch(ClassCastException e) {
 			throw new AuthorizationDeniedException();
 		}
@@ -170,4 +163,5 @@ public class Supply {
 		}
 		return s; 
 	} 
+	
 }

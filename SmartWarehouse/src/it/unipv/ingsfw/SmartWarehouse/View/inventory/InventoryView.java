@@ -16,12 +16,12 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-import it.unipv.ingsfw.SmartWarehouse.Controller.InventoryController;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Category;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
+
 
 public class InventoryView extends JFrame {
 	
+	private static final long serialVersionUID = 1L;
 	private JTable table;
 	private DefaultTableModel tableModel;
 	private JTextField skutf;
@@ -265,12 +265,6 @@ public class InventoryView extends JFrame {
 
 	public void setUnderLevel(JButton underLevel) {
 		this.underLevel = underLevel;
-	}
-
-	public static void main(String[] args) {
-		InventoryView i=new InventoryView();
-		InventoryManager m=new InventoryManager();
-		InventoryController ic=new InventoryController(m, i);
 	}
 }
 

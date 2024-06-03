@@ -8,7 +8,6 @@ import it.unipv.ingsfw.SmartWarehouse.Controller.ReturnController;
 import it.unipv.ingsfw.SmartWarehouse.Controller.ReturnableOrdersController;
 import it.unipv.ingsfw.SmartWarehouse.Controller.ShopController;
 import it.unipv.ingsfw.SmartWarehouse.Controller.SupplyController;
-import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnFACADE;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Shop;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Category;
@@ -27,8 +26,8 @@ public class MainClassForTest {
 	public static void main(String[] args) {
 	
 		
-		Client client1= new Client("John", "Doe", "john.doe@example.com", "123 Main St, Anytown, USA", "password1");
-		Client client2= new Client("Jane", "Smith", "jane.smith@example.com", "123 Main St, Anytown, USA", "letmein");
+		Client client1= new Client("John", "Doe", "john.doe@example.com", "password1");
+		Client client2= new Client("Jane", "Smith", "jane.smith@example.com", "letmein");
 		
 		Position pos1=new Position("linea1","pod1","bin1");
 		ItemDetails itemDetails1=new ItemDetails(1,1,Category.ELECTRONICS);
@@ -44,7 +43,7 @@ public class MainClassForTest {
 		skuqty.put(inventoryItem1, 5);
 		skuqty.put(inventoryItem2, 2);
 		
-		ShopController shc=new ShopController(new Shop(client2), new ShopFrame());
+		ShopController shc=new ShopController(new Shop(), new ShopFrame());
 			
 		
 		/*

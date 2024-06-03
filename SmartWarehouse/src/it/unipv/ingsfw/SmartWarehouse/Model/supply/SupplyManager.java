@@ -7,7 +7,6 @@ import it.unipv.ingsfw.SmartWarehouse.Exception.AuthorizationDeniedException;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.replenishmentStrategy.IReplenishmentStrategy;
 
-
 public class SupplyManager {
 	private SupplyDAOFacade supplyDAOFacade;
 	private IReplenishmentStrategy replenishmentStrategy;
@@ -60,5 +59,6 @@ public class SupplyManager {
 	public void getOrderedSupplyOrders(List<SupplyOrder> orders){
 		 Collections.sort(orders);
 	} 
+
 }
  

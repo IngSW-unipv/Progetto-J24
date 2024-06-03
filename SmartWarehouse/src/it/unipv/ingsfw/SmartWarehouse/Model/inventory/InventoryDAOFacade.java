@@ -52,4 +52,5 @@ public class InventoryDAOFacade {
 	public List<Object[]> getSuppliersInfo(InventoryItem i){
 		return inventoryDAO.getSuppliersInfo(i);
 	}
+	
 }

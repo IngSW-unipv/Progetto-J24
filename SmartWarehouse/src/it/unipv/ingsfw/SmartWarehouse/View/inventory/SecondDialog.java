@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class SecondDialog extends JDialog{
+	private static final long serialVersionUID = 1L;
 	private String ids;
 	private JTextField qty;
 	private JPanel panel;

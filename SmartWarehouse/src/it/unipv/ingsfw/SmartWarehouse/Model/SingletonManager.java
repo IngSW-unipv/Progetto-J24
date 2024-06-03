@@ -1,3 +1,4 @@
+
 package it.unipv.ingsfw.SmartWarehouse.Model;
 
 import it.unipv.ingsfw.SmartWarehouse.Database.IInventoryDAO;

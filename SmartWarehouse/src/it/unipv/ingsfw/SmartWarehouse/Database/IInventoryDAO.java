@@ -5,8 +5,6 @@ import java.util.List;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Position;
 
-
-
 public interface IInventoryDAO {
 	List<InventoryItem> selectAllInventory();
 	public boolean insertItemToInventory(InventoryItem i);

@@ -25,7 +25,7 @@ public class InventoryController {
 	public InventoryController(InventoryManager w, InventoryView iv) {
         this.w = w;
         this.iv = iv;
-        updateInventory(w.getInventory()); // Aggiorna la tabella con gli articoli iniziali        
+        updateInventory(w.getInventory());       
         find();
         findPosition();
         underLevel();
@@ -36,7 +36,7 @@ public class InventoryController {
     }
 	
 	private void updateInventory(List<InventoryItem> items) {
-        iv.getTableModel().setRowCount(0);
+        iv.cleanTable();
         for (InventoryItem i : items) {
             iv.addInventoryItem(i.getSku(), i.getDescription(), i.getPrice(), i.getQty(), i.getStdLevel(), i.getPos().getLine(), i.getPos().getPod(), i.getPos().getBin(),
             		i.getDetails().getFragility(), i.getDetails().getDimension(), i.getDetails().getCategory().getLabel());

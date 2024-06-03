@@ -3,9 +3,7 @@ package it.unipv.ingsfw.SmartWarehouse.Database;
 import java.util.List;
 
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
-import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supplier;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supply;
-
 
 public interface ISupplyDAO {
 	public List<Supply> selectAllSupplies();
