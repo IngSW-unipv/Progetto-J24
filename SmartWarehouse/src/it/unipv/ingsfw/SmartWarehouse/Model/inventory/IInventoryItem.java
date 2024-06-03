@@ -20,4 +20,5 @@ public interface IInventoryItem {
 	public boolean decreaseQty() throws ItemNotFoundException, IllegalArgumentException;
 	public List<Object[]> getSuppliersInfo() throws ItemNotFoundException;
 }
+
   

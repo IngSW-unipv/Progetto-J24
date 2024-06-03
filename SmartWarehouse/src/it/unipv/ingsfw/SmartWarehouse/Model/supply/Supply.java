@@ -21,7 +21,7 @@ public class Supply {
 	private InventoryItem inventoryItem;
 	private double price;
 	private int maxqty; 
-	
+
 	public Supply(String ID_Supply, Supplier supplier, InventoryItem inventoryItem, double price, int maxqty) {
 		this.ID_Supply = ID_Supply;
 		this.supplier = supplier;
@@ -44,8 +44,8 @@ public class Supply {
 		this.ID_Supply=this.generateUnivoqueID_Supply();
 		this.supplier = SupplyDAOFacade.getInstance().findSupplier(ids);
 		this.inventoryItem = InventoryDAOFacade.getInstance().findInventoryItemBySku(sku); 
-		this.setPrice(price);; 
-		this.setMaxqty(maxqty);;
+		this.setPrice(price); 
+		this.setMaxqty(maxqty);
 	} 
 
 	public String getID_Supply() {
@@ -82,7 +82,7 @@ public class Supply {
 		}
 		this.price=price;
 	}
-
+	
 	public int getMaxqty() {
 		return maxqty;
 	}

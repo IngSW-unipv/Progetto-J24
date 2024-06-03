@@ -10,7 +10,6 @@ import it.unipv.ingsfw.SmartWarehouse.Model.randomGenerator.RandomGenerator;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supply;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.InventoryOperator;
-import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.WarehouseOperator;
 
 public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> {
 	private String description;
@@ -34,6 +33,7 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
 		this.pos=pos;
 	}
 
+	//used to create new InventoryItem
 	public InventoryItem(String description, ItemDetails details, double price, int stdLevel, Position pos) throws IllegalArgumentException {
 		super();
 		this.description = description;
