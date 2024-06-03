@@ -1,7 +1,5 @@
 package it.unipv.ingsfw.SmartWarehouse.Model;
 
-import it.unipv.ingsfw.SmartWarehouse.Database.ClientDAO;
-import it.unipv.ingsfw.SmartWarehouse.Database.IClientDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.IInventoryDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.IRegisterDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.IReturnServiceDAO;
@@ -21,8 +19,8 @@ import it.unipv.ingsfw.SmartWarehouse.Model.user.User;
 
 public class SingletonManager {
 	
+	//aggiungere clientDAO
 	private static SingletonManager instance= null;
-	private IClientDAO clientDAO;
 	private IInventoryDAO inventoryDAO;
 	private IRegisterDAO registerDAO;
 	private IReturnServiceDAO returnServiceDAO;
@@ -35,7 +33,6 @@ public class SingletonManager {
 	private InventoryManager inventoryManager;
 	
 	private SingletonManager() {
-		clientDAO=new ClientDAO();
 		inventoryDAO=new InventoryDAO();
 		registerDAO=new RegisterDAO();
 		returnServiceDAO=new ReturnServiceDAO();
@@ -51,10 +48,6 @@ public class SingletonManager {
 			instance = new SingletonManager();
 		}
 		return instance;
-	}
-	
-	public IClientDAO getClientDAO() {
-		return clientDAO;
 	}
 	
 	public IInventoryDAO getInventoryDAO() {
@@ -107,10 +100,6 @@ public class SingletonManager {
 
 	public static void setInstance(SingletonManager instance) {
 		SingletonManager.instance = instance;
-	}
-
-	public void setClientDAO(IClientDAO clientDAO) {
-		this.clientDAO = clientDAO;
 	}
 
 	public User getLoggedUser() {
