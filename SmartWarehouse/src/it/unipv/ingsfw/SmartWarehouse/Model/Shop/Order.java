@@ -109,9 +109,5 @@ public class Order implements IReturnable{
 		}
 		return totalQty;
 	}
-	@Override
-	public void setDate(String date) {
-		// TODO Auto-generated method stub
-	}
 	
 }

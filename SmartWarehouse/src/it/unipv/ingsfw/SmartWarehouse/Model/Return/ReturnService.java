@@ -127,11 +127,9 @@ public class ReturnService {
 		return getReturnedItems().keySet();
 	}
 	public LocalDateTime getCriticalDate() {
-		return returnableOrder.getDate().plusDays(5);
+		return returnableOrder.getDate().plusDays(30);
 	}
 	public int getQtyYouAreAllowedToReturn(IInventoryItem inventoryItem) {
 		return returnableOrder.getQtyBySku(inventoryItem.getSku());
 	}
-
-
 }

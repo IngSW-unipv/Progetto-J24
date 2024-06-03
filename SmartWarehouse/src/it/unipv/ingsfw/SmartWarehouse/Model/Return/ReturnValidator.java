@@ -9,7 +9,7 @@ public class ReturnValidator {
 	}
 	public static boolean checkReturnability(ReturnService returnService){
 		LocalDateTime criticalDate=returnService.getCriticalDate();
-		if (criticalDate.isAfter(LocalDateTime.now())) {
+		if (LocalDateTime.now().isAfter(criticalDate)) {
 			return false;
 		}
 		return true;

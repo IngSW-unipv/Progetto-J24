@@ -12,5 +12,5 @@ public interface IReturnable {
 	public int getId();
 	public LocalDateTime getDate();
 	public HashSet<InventoryItem> getSet();
-	public void setDate(String date);
+	public void setDate(LocalDateTime date);
 }
