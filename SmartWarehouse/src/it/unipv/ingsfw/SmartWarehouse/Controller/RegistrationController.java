@@ -2,17 +2,22 @@ package it.unipv.ingsfw.SmartWarehouse.Controller;
 
 import java.awt.event.ActionEvent;
 
-import java.awt.event.ActionListener;
 
+
+import java.awt.event.ActionListener;
+import it.unipv.ingsfw.SmartWarehouse.Model.authentication.Registration;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.User;
+import it.unipv.ingsfw.SmartWarehouse.View.LoginClView;
 import it.unipv.ingsfw.SmartWarehouse.View.RegistrationView;
 
 public class RegistrationController {
 	private RegistrationView view;
-	private User model;
+	private Client c;
 
-	public RegistrationController(RegistrationView view, User model) {
+	public RegistrationController(RegistrationView view, Client c) {
 		this.view = view;
-		this.model = model;
+		this.c =c;
 		initComponents();
 	}
 
@@ -25,21 +30,16 @@ public class RegistrationController {
 			}
 
 			private void manageAction() {
-				model.setName(view.getNome());
-				model.setSurname(view.getCognome());
-				model.setEmail(view.getEmail());
-				model.setAddress(view.getAddress());
-				model.setEmail(view.getEmail());
-				model.setPassword(String.valueOf(view.getPassword()));
-				Registration reg = new Registration(model);
-				if(reg.register(String.valueOf(view.getConfermaPassword())))
+				c.setName(String.valueOf(view.getNameField()));
+				c.setSurname(String.valueOf(view.getSurnameField()));
+				c.setEmail(String.valueOf(view.getEmailField()));
+				Registration reg = new Registration(c);
 					view.dispose();
-					
 
 			}
 
 		};
-		view.getRegisterButton().addActionListener(confirm);
+		view.getConfirmButton().addActionListener(confirm);
 		ActionListener switchToLogin = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -47,14 +47,14 @@ public class RegistrationController {
 			}
 
 			private void manageAction() {
-				LoginView loginView = new LoginView();
+				LoginClView loginView = new LoginClView();
 				loginView.setVisible(true);
 				view.dispose();
 
 			}
 		};
 
-		view.getLoginButton().addActionListener(switchToLogin);
+		view.getConfirmButton().addActionListener(switchToLogin);
 
 	}
 
