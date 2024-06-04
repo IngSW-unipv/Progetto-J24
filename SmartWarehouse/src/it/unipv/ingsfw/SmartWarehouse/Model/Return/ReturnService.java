@@ -18,6 +18,7 @@ public class ReturnService {
 	private IReturnable returnableOrder;
 	private Map<IInventoryItem, String> returnedItems;
 	private double moneyAlreadyReturned;
+	private ReturnServiceDAOFacade returnServiceDAOFacade;
 	/*
 	 * Constructor and Checking the order date to verify returnability.
 	 */
@@ -25,6 +26,7 @@ public class ReturnService {
 		this.returnableOrder = returnableOrder;
 		this.returnedItems = new HashMap<>();
 		this.moneyAlreadyReturned=0;
+		this.returnServiceDAOFacade=ReturnServiceDAOFacade.getIstance();
 		if(!ReturnValidator.checkReturnability(this)) {
 			throw new UnableToReturnException();
 		}
@@ -59,7 +61,7 @@ public class ReturnService {
 	}
 	public void updateWarehouseQty(){
 		/*decrease item already Returned*/
-		for(IInventoryItem i:ReturnServiceDAOFacade.getIstance().readItem(this.returnableOrder)){
+		for(IInventoryItem i:returnServiceDAOFacade.readItem(this.returnableOrder)){
 			try {
 				if(i!=null)
 				i.decreaseQty();
@@ -78,9 +80,8 @@ public class ReturnService {
 	}
 	public void AddReturnToDB(IRefund rm) {
 		//Adding the return to the DB
-		ReturnManager returnManager=ReturnManager.getIstance(); //chiedere se è meglio averlo come attributo e chiedere l'istanza una volta sola nel costruttore
-		returnManager.addReturnServiceToDB(this);
-		returnManager.addRefundModeToDB(this,rm);
+		returnServiceDAOFacade.writeReturnService(this);
+		returnServiceDAOFacade.writeRefundMode(this,rm);
 	}
 	public String toString(){
 		StringBuilder s= new StringBuilder();

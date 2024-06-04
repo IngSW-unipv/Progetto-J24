@@ -9,7 +9,6 @@ import it.unipv.ingsfw.SmartWarehouse.Database.ReturnServiceDAO;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 
 public class ReturnServiceDAOFacade {
 	private static ReturnServiceDAOFacade istance;

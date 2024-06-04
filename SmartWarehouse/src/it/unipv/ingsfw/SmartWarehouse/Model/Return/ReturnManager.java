@@ -3,7 +3,6 @@ package it.unipv.ingsfw.SmartWarehouse.Model.Return;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.ReturnableOrderNullPointerException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.UnableToReturnException;
-import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 
 public class ReturnManager {
@@ -38,11 +37,4 @@ public class ReturnManager {
     	 rs.setMoneyAlreadyReturned(returnServiceDAOFacade.readMoneyAlreadyReturned(returnableOrder));
     	 return rs;
     }
-    public boolean addReturnServiceToDB(ReturnService rs){
-    	return returnServiceDAOFacade.writeReturnService(rs);
-    }
-	public boolean addRefundModeToDB(ReturnService rs, IRefund rm) {
-		// TODO Auto-generated method stub
-		return returnServiceDAOFacade.writeRefundMode(rs,rm);
-	}
 }
