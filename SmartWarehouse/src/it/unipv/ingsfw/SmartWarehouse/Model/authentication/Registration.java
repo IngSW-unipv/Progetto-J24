@@ -1,9 +1,12 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.authentication;
 
 import javax.swing.JFrame;
-
+import it.unipv.ingsfw.SmartWarehouse.Exception.AccountAlreadyExistsException;
+import it.unipv.ingsfw.SmartWarehouse.Exception.DatabaseException;
+import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyFieldException;
 import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.User;
 
 public class Registration {
 	private Client c;
@@ -11,21 +14,27 @@ public class Registration {
 	public Registration(Client c) {
 		this.c=c;
 	}
-
-	//gestire eccezioni!!!!
-	public boolean registerClient() throws Exception {
-		//fieldCheck
-		if(SingletonManager.getInstance().getUserDAO().getClientByEmailAndPassword(c.getEmail(), c.getPassword())==null){
-			SingletonManager.getInstance().getUserDAO().insertClient(c);
+	
+	public boolean registerClient() throws AccountAlreadyExistsException,DatabaseException {
+		boolean result =false;
+		if(SingletonManager.getInstance().getUserDAO().getClientByEmail(c.getEmail())==null){
+			boolean resultDB= SingletonManager.getInstance().getUserDAO().insertClient(c);
+				result=true;
+				if(resultDB=false) {
+					throw new DatabaseException();
+				}
+				
 		} else {
-			throw new Exception();
+			throw new AccountAlreadyExistsException();
 		}
+		return result;
 	}
 
-	private void fieldCheck(String password) throws EmptyFieldException {
-		if (this.u.getEmail().isEmpty() || this.u.getName().isEmpty() || this.u.getSurname().isEmpty()
-				|| this.u.getEmail().isEmpty() || this.u.getAddress().isEmpty()
-				|| String.valueOf(this.u.getPassword()).equals("") || password.equals("")) {
+	private void fieldCheck() throws EmptyFieldException {
+		
+		if (this.c.getEmail().isEmpty() || this.c.getName().isEmpty() || this.c.getSurname().isEmpty()
+				|| this.c.getEmail().isEmpty()|| String.valueOf(this.c.getPassword()).equals("") )
+		{
 			throw new EmptyFieldException();
 		}
 	}
