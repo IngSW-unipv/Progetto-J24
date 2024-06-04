@@ -40,7 +40,6 @@ public class ReturnManager {
     }
     public boolean addReturnServiceToDB(ReturnService rs){
     	return returnServiceDAOFacade.writeReturnService(rs);
-    	
     }
 	public boolean addRefundModeToDB(ReturnService rs, IRefund rm) {
 		// TODO Auto-generated method stub

@@ -9,16 +9,10 @@ import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.MissingReasonException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.UnableToReturnException;
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
-import it.unipv.ingsfw.SmartWarehouse.Model.Refund.RefundFactory;
-import it.unipv.ingsfw.SmartWarehouse.Model.Refund.BankTransfer.BankTransfer;
-import it.unipv.ingsfw.SmartWarehouse.Model.Refund.Voucher.VoucherRefund;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
-
-//
 
 public class ReturnService { 
 	private IReturnable returnableOrder;
@@ -60,18 +54,20 @@ public class ReturnService {
 		moneyToBeReturned=moneyToBeReturned-moneyAlreadyReturned;
 		return moneyToBeReturned;
 	}
-	public IRefund createBankTransferRefund() {
-		BankTransfer br = new BankTransfer(getMoneyToBeReturned(),"EMAIL MAGAZZINO DA DEFINIRE",SingletonManager.getInstance().getLoggedUser().getEmail() );
-		return RefundFactory.getBankTransferAdapter(br);
-	}
-	public IRefund createVoucherRefund() {
-		VoucherRefund vr = new VoucherRefund(getMoneyToBeReturned());
-		return RefundFactory.getVoucherAdapter(vr);
-	}
 	public boolean issueRefund(IRefund rm) throws PaymentException {
 		return rm.issueRefund();
 	}
 	public void updateWarehouseQty(){
+		/*decrease item already Returned*/
+		for(IInventoryItem i:ReturnServiceDAOFacade.getIstance().readItem(this.returnableOrder)){
+			try {
+				if(i!=null)
+				i.decreaseQty();
+			} catch (IllegalArgumentException | ItemNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+		/*increase all item qty*/
 		for(IInventoryItem i:getReturnedItemsKeySet()) {
 			try {
 				InventoryDAOFacade.getInstance().findInventoryItemBySku(i.getSku()).increaseQty();
@@ -82,9 +78,9 @@ public class ReturnService {
 	}
 	public void AddReturnToDB(IRefund rm) {
 		//Adding the return to the DB
-		ReturnManager resoManager=ReturnManager.getIstance(); //chiedere se è meglio averlo come attributo e chiedere l'istanza una volta sola nel costruttore
-		resoManager.addReturnServiceToDB(this);
-		resoManager.addRefundModeToDB(this,rm);
+		ReturnManager returnManager=ReturnManager.getIstance(); //chiedere se è meglio averlo come attributo e chiedere l'istanza una volta sola nel costruttore
+		returnManager.addReturnServiceToDB(this);
+		returnManager.addRefundModeToDB(this,rm);
 	}
 	public String toString(){
 		StringBuilder s= new StringBuilder();

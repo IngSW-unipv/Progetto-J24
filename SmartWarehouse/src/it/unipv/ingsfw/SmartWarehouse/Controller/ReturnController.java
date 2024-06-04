@@ -15,6 +15,7 @@ import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.MissingReasonException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.UnableToReturnException;
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.RefundFactory;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.BankTransfer.BankTransfer;
@@ -136,10 +137,12 @@ public class ReturnController {
 				if(recapPopup==JOptionPane.OK_OPTION) {
 					IRefund refundMode;
 					if (button.getActionCommand().equals(ReturnItemsAndReasonsView.getBankTransferRadioText())) {
-						refundMode = returnService.createBankTransferRefund();
+						BankTransfer br = new BankTransfer(returnService.getMoneyToBeReturned(),"EMAIL MAGAZZINO DA DEFINIRE",SingletonManager.getInstance().getLoggedUser().getEmail());
+						refundMode=RefundFactory.getBankTransferAdapter(br);
 					}
 					else {
-						refundMode = returnService.createVoucherRefund();
+						VoucherRefund vr = new VoucherRefund(returnService.getMoneyToBeReturned());
+						refundMode=RefundFactory.getVoucherAdapter(vr);
 					}
 					try {
 						returnService.issueRefund(refundMode);
@@ -150,17 +153,8 @@ public class ReturnController {
 						return;
 					}
 					returnService.setMoneyAlreadyReturned(returnService.getMoneyAlreadyReturned()+refundMode.getValue());
-					/*decrease item already Returned*/
-					for(IInventoryItem i:ReturnServiceDAOFacade.getIstance().readItem(returnService.getReturnableOrder())){
-						try {
-							i.decreaseQty();
-						} catch (IllegalArgumentException | ItemNotFoundException e) {
-							e.printStackTrace();
-						}
-					}
-					returnService.AddReturnToDB(refundMode);
-					/*increase all returned items from the beginning*/
 					returnService.updateWarehouseQty();
+					returnService.AddReturnToDB(refundMode);
 					riarView.showSuccessDialog("Pagamento andato a buon fine");
 				}
 				else {
