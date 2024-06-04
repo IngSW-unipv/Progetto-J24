@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 
 public class LoginOpView extends JFrame {
 	private JPasswordField textId;
-	private JButton ok;
+	private JButton confirm;
 
 	public LoginOpView() {
 		setTitle("Login");
@@ -30,8 +30,8 @@ public class LoginOpView extends JFrame {
         panel.add(textId);
         
         
-        ok=new JButton("OK");
-        panel.add(ok);
+        confirm=new JButton("OK");
+        panel.add(confirm);
         
 	}
 	
@@ -43,11 +43,11 @@ public class LoginOpView extends JFrame {
 		this.textId = textId;
 	}
 
-	public JButton getOk() {
-		return ok;
+	public JButton getConfirmButton() {
+		return confirm;
 	}
 
-	public void setOk(JButton ok) {
-		this.ok = ok;
+	public void setConfirmButton(JButton confirm) {
+		this.confirm = confirm;
 	}
 }
