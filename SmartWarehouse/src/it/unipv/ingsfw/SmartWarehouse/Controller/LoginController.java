@@ -1,39 +1,45 @@
 package it.unipv.ingsfw.SmartWarehouse.Controller;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-public class LoginController {
-	private LoginView view;
-	private User model;
 
-	public LoginController(LoginView view, User model) {
+
+import java.awt.event.ActionListener;
+
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
+import it.unipv.ingsfw.SmartWarehouse.Model.authentication.Login;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.User;
+import it.unipv.ingsfw.SmartWarehouse.View.LoginClView;
+public class LoginClController {
+	private LoginClView view;
+	private Client c;
+
+	public LoginClController(LoginClView view, Client c) {
 		this.view = view;
-		this.model = model;
+		this.c = c;
 		initComponents();
 	}
 
+
 	private void initComponents() {
 
-		ActionListener confirm = new ActionListener() {
+		ActionListener confirmCl = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				manageAction();
+				manageClAction();
 			}
 
-			private void manageAction() {
-				model.setEmail(view.getEmail());
-				model.setPassword(String.valueOf(view.getPassword()));
-				
-				Login logger = new Login(SingletonUser.getInstance().getUserDAO().selectUserByEmail(model));
-				if (logger.login())
+				private void manageClAction() {
+					c.setEmail((String.valueOf(view.getEmailField())));
+					c.setPassword((String.valueOf(view.getPasswordField())));
+					Login logger = new Login();
 					view.dispose();
 
 			}
 
 		};
 
-		view.getConfirmButton().addActionListener(confirm);
-
-	}
-
+	        view.getConfirmButton().addActionListener(confirmCl);
+	    }
+		
 }
