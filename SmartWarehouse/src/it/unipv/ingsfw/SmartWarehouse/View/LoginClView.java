@@ -1,26 +1,34 @@
 package it.unipv.ingsfw.SmartWarehouse.View;
 
 import javax.swing.*;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+
 import java.awt.*;
 
 
-public class LoginView extends JFrame {
+public class LoginClView extends JFrame {
 
 	private JTextField emailField;
 	private JPasswordField passwordField;
 	private JButton confirmButton;
 	
-	public LoginView() {
+	public LoginClView() {
+		
+		try {
+			UIManager.setLookAndFeel(new NimbusLookAndFeel());
+		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
 
 		setTitle("Login");
         setSize(400, 150);
         JPanel loginPanel = new JPanel(new BorderLayout());
         loginPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        loginPanel.setBackground(new Color(214, 255, 255));
+        loginPanel.setBackground(Color.blue);
         add(loginPanel);
 
         JPanel fieldsPanel = new JPanel(new GridLayout(2, 2, 10, 10));
-        fieldsPanel.setBackground(new Color(214, 255, 255));
+        fieldsPanel.setBackground(Color.blue);
         loginPanel.add(fieldsPanel, BorderLayout.CENTER);
 
         fieldsPanel.add(new JLabel("email:"));
