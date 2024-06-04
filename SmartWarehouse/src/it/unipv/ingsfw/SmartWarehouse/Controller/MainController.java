@@ -18,7 +18,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.User;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.WarehouseOperator;
 import it.unipv.ingsfw.SmartWarehouse.View.LoginOpView;
-import it.unipv.ingsfw.SmartWarehouse.View.LoginView;
+import it.unipv.ingsfw.SmartWarehouse.View.LoginClView;
 import it.unipv.ingsfw.SmartWarehouse.View.MainView;
 import it.unipv.ingsfw.SmartWarehouse.View.RegistrationView;
 import it.unipv.ingsfw.SmartWarehouse.View.ShopFrame;
@@ -26,7 +26,7 @@ import it.unipv.ingsfw.SmartWarehouse.View.inventory.InventoryView;
 
 public class MainController {
 	MainView mainView;
-	LoginView loginView;
+	LoginClView loginView;
 	RegistrationView regView;
 	LoginOpView loginOpView;
 	
@@ -47,7 +47,7 @@ public class MainController {
 				int r = mainView.logOrReg();
 				if (r==1) {
 					mainView.setVisible(false);
-					loginView = new LoginView();
+					loginView = new LoginClView();
 					okLoginClientButton();
 				} else {
 					regView = new RegistrationView();
@@ -110,8 +110,8 @@ public class MainController {
 				try {
 					registration.registerClient();
 					regView.setVisible(false);
-					//metto trycatch
-					loginView = new LoginView();
+					//trycatch
+					loginView = new LoginClView();
 					okLoginClientButton();	
 					
 				} catch (Exception e) {
