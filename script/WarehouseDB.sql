@@ -90,3 +90,12 @@ CREATE TABLE refundmode (
   Date timestamp NULL DEFAULT NULL,
   ClientEmail varchar(40) NOT NULL
 );
+
+drop table if exists operator;
+CREATE TABLE operator (
+    OperatorID VARCHAR(10) PRIMARY KEY NOT NULL,
+    name VARCHAR(100) DEFAULT NULL,
+    surname VARCHAR(100) DEFAULT NULL,
+    email VARCHAR(100) DEFAULT NULL
+);
+
