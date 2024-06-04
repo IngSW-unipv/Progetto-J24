@@ -2,16 +2,14 @@ package it.unipv.ingsfw.SmartWarehouse.Model.picking.packagestrategy;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
-import it.unipv.ingsfw.SmartWarehouse.Model.picking.orderpicking.Orderp;
-
+import it.unipv.ingsfw.SmartWarehouse.Model.Shop.*;
 public class PackageStrategy implements IPackageStrategy {
 	private int maxs=9;
 	private int maxm=12;
 	private int maxl=15;
 	private final int N=3;
-	public boolean typePack(Orderp o,int n) {
+	public boolean typePack(Order o,int n) {
 		if(o.calculateTotalSize()<=n) {
 			if(o.tfFragility()==true) {
 				System.out.println("you need a fragility pack:");
@@ -20,7 +18,7 @@ public class PackageStrategy implements IPackageStrategy {
 		}
 		return false;
 	}
-	public void morePack(Orderp o) {
+	public void morePack(Order o) {
 	    int totalsize = o.calculateTotalSize();
 	    int numPacks = totalsize / maxl; //per calcolo dei pacchi
 	    if (totalsize % maxl!= 0) {
@@ -44,7 +42,6 @@ public class PackageStrategy implements IPackageStrategy {
 	    }
 	}
 	public void printPackageInfo(List<List<InventoryItem>> packs) {
-	    // Itera attraverso ogni lista di elementi nei pacchi
 	    for (int i = 0; i < packs.size(); i++) {
 	        List<InventoryItem> pack = packs.get(i);
 	        System.out.println("Package " + (i + 1) + ":");
@@ -83,7 +80,7 @@ public class PackageStrategy implements IPackageStrategy {
 	}
 	
 	@Override
-	public boolean calculatePackageSizes(Orderp o) {
+	public boolean calculatePackageSizes(Order o) {
 		if(typePack(o,maxs)==true) {
 			System.out.println("use a Small pack");
 		}
@@ -97,7 +94,7 @@ public class PackageStrategy implements IPackageStrategy {
 			morePack(o);
 		}
 		return true;
-	} 
+	}
 }
 
    
