@@ -9,8 +9,14 @@ import javax.swing.JButton;
 import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyKartExceptio;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
+import it.unipv.ingsfw.SmartWarehouse.Model.Payment.IPayment;
+import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentFactory;
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentProcess;
+import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IStdPrimePaymentStrategy;
+import it.unipv.ingsfw.SmartWarehouse.Model.Shop.PrimeStrategy;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Shop;
+import it.unipv.ingsfw.SmartWarehouse.Model.Shop.StdStrategy;
+import it.unipv.ingsfw.SmartWarehouse.Model.picking.orderpicking.IPackageable;
 import it.unipv.ingsfw.SmartWarehouse.View.ReturnableOrdersView;
 import it.unipv.ingsfw.SmartWarehouse.View.ShopFrame;
 
@@ -77,11 +83,27 @@ public class ShopController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(view.displayConfirm()==0) {
+					IPayment mode=null;
+					switch (view.displayPaymentOption()) {
+				    case 0:
+				        mode = PaymentFactory.getPayPalAdapter();
+				        break;
+				    case 1:
+				        mode = PaymentFactory.getWalletPaymentAdapter();
+				        break;
+					}
 					
-					PaymentProcess pay=new PaymentProcess(view.displayPaymentOption(), model.getCl().getEmail(), "warehause");		
+					PaymentProcess pay=new PaymentProcess(mode, model.getCl().getEmail(), "warehause");
+					IStdPrimePaymentStrategy stdprimestr;
+					
+					if(model.getCl().getPrime()) {
+						stdprimestr = new PrimeStrategy();
+					}
+					else stdprimestr = new StdStrategy();
+					
 					try {
 						if(pay.startPayment(model.getKart().getTotal())) {
-							view.displayInfo("pagamento di "+ model.getKart().getTotal()+ "euro effettuato");
+							view.displayInfo("pagamento di "+ stdprimestr.pay( model.getKart().getTotal() )+ "euro effettuato");
 							model.makeOrder();
 						}
 						view.setInfoLabText(0);						
@@ -123,8 +145,17 @@ public class ShopController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(view.displayConfirm()==0 && !model.getCl().getPrime()) {
+					IPayment mode=null;
+					switch (view.displayPaymentOption()) {
+				    case 0:
+				        mode = PaymentFactory.getPayPalAdapter();
+				        break;
+				    case 1:
+				        mode = PaymentFactory.getWalletPaymentAdapter();
+				        break;
+					}
 					
-					PaymentProcess pay=new PaymentProcess(view.displayPaymentOption(), model.getCl().getEmail(), "magazzo");
+					PaymentProcess pay=new PaymentProcess(mode, model.getCl().getEmail(), "magazzo");
 					try {
 						if(pay.startPayment(model.getPrimeImport())) {
 							view.displayInfo("pagamento di "+model.getPrimeImport()+"euro effettuato");

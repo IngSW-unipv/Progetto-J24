@@ -167,7 +167,7 @@ public class ShopFrame extends JFrame{
 		JOptionPane.showMessageDialog(this, info, "PAYMENT INFO",JOptionPane.WARNING_MESSAGE);
 	}
 	
-	public IPayment displayPaymentOption() throws NumberFormatException{
+	public int displayPaymentOption() throws NumberFormatException{
 		String[] option = {"PayPall", "Wallet"};
 		int met=JOptionPane.showOptionDialog(
                 this,                               
@@ -179,16 +179,7 @@ public class ShopFrame extends JFrame{
                 option,                            
                 option[0]                          
         );
-		IPayment mode=null;
-		switch (met) {
-	    case 0:
-	        mode = PaymentFactory.getPayPalAdapter();
-	        break;
-	    case 1:
-	        mode = PaymentFactory.getWalletPaymentAdapter();
-	        break;
-		}
-		return mode;
+		return met;
 	}
 	
 	public int displayConfirm() {
