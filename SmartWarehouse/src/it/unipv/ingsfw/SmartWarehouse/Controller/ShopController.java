@@ -15,6 +15,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentProcess;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IStdPrimePaymentStrategy;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.PrimeStrategy;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Shop;
+import it.unipv.ingsfw.SmartWarehouse.Model.Shop.StdPrimePaymentFactory;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.StdStrategy;
 import it.unipv.ingsfw.SmartWarehouse.Model.picking.orderpicking.IPackageable;
 import it.unipv.ingsfw.SmartWarehouse.View.ReturnableOrdersView;
@@ -94,16 +95,11 @@ public class ShopController {
 					}
 					
 					PaymentProcess pay=new PaymentProcess(mode, model.getCl().getEmail(), "warehause");
-					IStdPrimePaymentStrategy stdprimestr;
-					
-					if(model.getCl().getPrime()) {
-						stdprimestr = new PrimeStrategy();
-					}
-					else stdprimestr = new StdStrategy();
-					
+					IStdPrimePaymentStrategy stdprimestr = StdPrimePaymentFactory.spedi(model.getCl().getPrime());
+					double total = stdprimestr.pay( model.getKart().getTotal() );
 					try {
-						if(pay.startPayment(model.getKart().getTotal())) {
-							view.displayInfo("pagamento di "+ stdprimestr.pay( model.getKart().getTotal() )+ "euro effettuato");
+						if(pay.startPayment(total)) {
+							view.displayInfo("pagamento di "+ total + "euro effettuato");
 							model.makeOrder();
 						}
 						view.setInfoLabText(0);						
