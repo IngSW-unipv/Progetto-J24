@@ -106,22 +106,19 @@ public class ReturnItemsAndReasonsView extends JFrame{
 			checkBox.setActionCommand(skuForActionCommand[count3]);
 			count3++;
 			checkBoxList.add(checkBox);
-			itemAndReasonPanel.add(checkBox,gbc);
+			itemAndReasonPanel.add(checkBox,itemAndReasonPanel.getGbc());
 
-			gbc.gridx = 1;
+			itemAndReasonPanel.constraintsForComboBox();
 			JComboBox<String> reasonsDropdown = new JComboBox<String>(map.values().toArray(new String[0]));
 			reasonsDropdown.setSelectedItem("Scegli una motivazione");
 			reasonsDropdown.setEnabled(false);
 			reasonsDropdownList.add(reasonsDropdown);
-			itemAndReasonPanel.add(reasonsDropdown, gbc);
+			itemAndReasonPanel.add(reasonsDropdown, itemAndReasonPanel.getGbc());
 
-			gbc.gridx = 0;
-			gbc.gridy = GridBagConstraints.RELATIVE;
-			gbc.gridwidth = 2;
-			gbc.insets = new Insets(10, 0, 0, 0); // Aggiungi spazio tra il JComboBox e la JLabel
-
+		
+			itemAndReasonPanel.constraintsForTextArea();
 			JLabel customReasonLabel=new JLabel("Descrivi il motivo della restituzione");
-			itemAndReasonPanel.add(customReasonLabel, gbc);
+			itemAndReasonPanel.add(customReasonLabel, itemAndReasonPanel.getGbc());
 
 			JTextArea customReasonArea = new JTextArea(4, 10); // 2 righe e 10 colonne
 			customReasonArea.setColumns(10);
@@ -136,9 +133,9 @@ public class ReturnItemsAndReasonsView extends JFrame{
 			customReasonLabel.setVisible(false);
 			customReasonAreaList.add(customReasonArea); 
 			customReasonLabelList.add(customReasonLabel);
-			gbc.gridy = GridBagConstraints.RELATIVE;
+			itemAndReasonPanel.getGbc().gridy = GridBagConstraints.RELATIVE;
 
-			itemAndReasonPanel.add(customReasonArea, gbc);
+			itemAndReasonPanel.add(customReasonArea, itemAndReasonPanel.getGbc());
 			orderDetailsPanel.add(itemAndReasonPanel);
 		}
 
