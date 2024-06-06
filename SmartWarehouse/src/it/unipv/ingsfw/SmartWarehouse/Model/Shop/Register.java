@@ -3,19 +3,17 @@ package it.unipv.ingsfw.SmartWarehouse.Model.Shop;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import it.unipv.ingsfw.SmartWarehouse.Database.IRegisterDAO;
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
 
 public class Register {
 	private int id;
-	IRegisterDAO red;
-	InventoryManager inv;		//serve nella fase di ricostruzione
+	RegisterDAOFacade red;
+	InventoryManager inv;		
 	
 	public Register() {
-		this.red = SingletonManager.getInstance().getRegisterDAO();
-		this.inv=new InventoryManager();
+		this.red = RegisterDAOFacade.getIstance();
+		this.inv= new InventoryManager();
 		this.id=this.red.selectLastId() + 1;
 	}
 	
