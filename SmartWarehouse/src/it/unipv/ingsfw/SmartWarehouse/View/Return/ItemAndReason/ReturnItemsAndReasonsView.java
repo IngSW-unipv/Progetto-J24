@@ -1,6 +1,6 @@
 
 //
-package it.unipv.ingsfw.SmartWarehouse.View;
+package it.unipv.ingsfw.SmartWarehouse.View.Return.ItemAndReason;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -46,8 +46,8 @@ import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 
 public class ReturnItemsAndReasonsView extends JFrame{
 	private JPanel mainPanel;
-	private JPanel orderDetailsPanel;
-	private JPanel itemAndReasonsPanel;
+	private OrderDetailsPanel orderDetailsPanel;
+	private ItemAndReasonPanel itemAndReasonPanel;
 	private JPanel confirmPanel;
 	private JPanel backPanel;
 	private JPanel refundPanel;
@@ -85,55 +85,35 @@ public class ReturnItemsAndReasonsView extends JFrame{
 		setLocationRelativeTo(null); // Centra la finestra
 		setResizable(true);
 
-
 		mainPanel = new JPanel();
 		mainPanel.repaint();
 		mainPanel.setLayout(new BorderLayout());
 		getContentPane().add(mainPanel);
 
-		orderDetailsPanel=new JPanel();
-		orderDetailsPanel.repaint();
-		orderDetailsPanel.setLayout(new BoxLayout(orderDetailsPanel, BoxLayout.Y_AXIS));
-		selectedOrderLabel = new JLabel();
-		JLabel ItemAndReasonsLabel = new JLabel("Scegli cosa restituire");
-
-		orderDetailsPanel.add(selectedOrderLabel);
-		orderDetailsPanel.add(ItemAndReasonsLabel);
-
-		JScrollPane scrollPane = new JScrollPane(orderDetailsPanel);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-		mainPanel.add(scrollPane, BorderLayout.WEST);
+		orderDetailsPanel=new OrderDetailsPanel();
+		mainPanel.add(orderDetailsPanel.getScrollPane(), BorderLayout.WEST);
 	}
+	
 	public void initWithItemOfTheOrder(ArrayList<String> itemsDescriptionsForButton, String[] skuForActionCommand,Map<String, String> map) {
 		// TODO Auto-generated method stub
 		int count3=0;
 		for (String i : itemsDescriptionsForButton) {
-
-			itemAndReasonsPanel = new JPanel();
-			itemAndReasonsPanel.setLayout(new GridBagLayout());
-			GridBagConstraints gbc = new GridBagConstraints();
-			gbc.gridx = 0;
-			gbc.gridy = GridBagConstraints.RELATIVE;
-			gbc.fill = GridBagConstraints.HORIZONTAL;
-			gbc.anchor = GridBagConstraints.WEST;
-			gbc.insets = new Insets(5, 5, 5, 20); // Aggiungi margini attorno ai componenti
+			itemAndReasonPanel= new ItemAndReasonPanel();
+			itemAndReasonPanel.constraintsForCheckBox();
 
 
 			JCheckBox checkBox=new JCheckBox(i);
 			checkBox.setActionCommand(skuForActionCommand[count3]);
 			count3++;
 			checkBoxList.add(checkBox);
-			itemAndReasonsPanel.add(checkBox,gbc);
+			itemAndReasonPanel.add(checkBox,gbc);
 
 			gbc.gridx = 1;
 			JComboBox<String> reasonsDropdown = new JComboBox<String>(map.values().toArray(new String[0]));
 			reasonsDropdown.setSelectedItem("Scegli una motivazione");
 			reasonsDropdown.setEnabled(false);
 			reasonsDropdownList.add(reasonsDropdown);
-			itemAndReasonsPanel.add(reasonsDropdown, gbc);
+			itemAndReasonPanel.add(reasonsDropdown, gbc);
 
 			gbc.gridx = 0;
 			gbc.gridy = GridBagConstraints.RELATIVE;
@@ -141,7 +121,7 @@ public class ReturnItemsAndReasonsView extends JFrame{
 			gbc.insets = new Insets(10, 0, 0, 0); // Aggiungi spazio tra il JComboBox e la JLabel
 
 			JLabel customReasonLabel=new JLabel("Descrivi il motivo della restituzione");
-			itemAndReasonsPanel.add(customReasonLabel, gbc);
+			itemAndReasonPanel.add(customReasonLabel, gbc);
 
 			JTextArea customReasonArea = new JTextArea(4, 10); // 2 righe e 10 colonne
 			customReasonArea.setColumns(10);
@@ -158,8 +138,8 @@ public class ReturnItemsAndReasonsView extends JFrame{
 			customReasonLabelList.add(customReasonLabel);
 			gbc.gridy = GridBagConstraints.RELATIVE;
 
-			itemAndReasonsPanel.add(customReasonArea, gbc);
-			orderDetailsPanel.add(itemAndReasonsPanel);
+			itemAndReasonPanel.add(customReasonArea, gbc);
+			orderDetailsPanel.add(itemAndReasonPanel);
 		}
 
 		//mainPanel.add(orderDetailsPanel, BorderLayout.CENTER);
@@ -270,7 +250,7 @@ public class ReturnItemsAndReasonsView extends JFrame{
 	}
 
 	public JPanel getItemAndReasonsPanel() {
-		return itemAndReasonsPanel;
+		return itemAndReasonPanel;
 	}
 	public ButtonGroup getRefundButtonGroup() {
 		return refundButtonGroup;

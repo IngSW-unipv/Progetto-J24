@@ -1,5 +1,5 @@
 //
-package it.unipv.ingsfw.SmartWarehouse.View;
+package it.unipv.ingsfw.SmartWarehouse.View.Return.Orders;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -24,7 +24,7 @@ import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 public class ReturnableOrdersView extends JFrame{
 
 	private JPanel mainPanel;
-	private JPanel selectOrderPanel;
+	private SelectOrderPanel selectOrderPanel;
 	private JPanel confirmPanel;
 	private JPanel backPanel;
 	private ButtonGroup orderButtonGroup;
@@ -59,19 +59,11 @@ public class ReturnableOrdersView extends JFrame{
 		mainPanel.setLayout(new BorderLayout());
 		getContentPane().add(mainPanel);
 
-		selectOrderPanel = new JPanel();
-		selectOrderPanel.repaint();
-		selectOrderPanel.setLayout(new GridLayout(0, 1)); // 0 righe per una colonna dinamica
-		JLabel selectOrderLabel = new JLabel("Scegli un ordine e conferma se vuoi cominciare una procedura di reso\n");
-		selectOrderPanel.add(selectOrderLabel);
-	    JScrollPane scrollPane = new JScrollPane(selectOrderPanel);
-	    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-	    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-	    mainPanel.add(scrollPane, BorderLayout.CENTER);
+		selectOrderPanel = new SelectOrderPanel();
+		mainPanel.add(selectOrderPanel.getScrollPane(),BorderLayout.CENTER);
 		
 	}
 	public void initWithClientOrders(ArrayList<String> ordersDescriptionsForButton, Integer[] orderIdForActionCommand) {
-		System.out.println(ordersDescriptionsForButton.size());
 		orderButtonGroup = new ButtonGroup();
 		int count=0;
 		for (String i : ordersDescriptionsForButton) {
@@ -83,7 +75,6 @@ public class ReturnableOrdersView extends JFrame{
 		}
 		completeTheView();
 	}
-
 	private void completeTheView() {
 		// TODO Auto-generated method stub
 		confirmPanel = new JPanel();

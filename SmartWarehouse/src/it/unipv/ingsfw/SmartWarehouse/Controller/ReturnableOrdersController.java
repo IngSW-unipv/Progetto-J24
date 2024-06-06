@@ -16,8 +16,8 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnService;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.RegisterFacade;
-import it.unipv.ingsfw.SmartWarehouse.View.ReturnItemsAndReasonsView;
-import it.unipv.ingsfw.SmartWarehouse.View.ReturnableOrdersView;
+import it.unipv.ingsfw.SmartWarehouse.View.Return.ItemAndReason.ReturnItemsAndReasonsView;
+import it.unipv.ingsfw.SmartWarehouse.View.Return.Orders.ReturnableOrdersView;
 
 /*
  * Controller for ReturnableOrdersView: it manages the choice of order to return.
