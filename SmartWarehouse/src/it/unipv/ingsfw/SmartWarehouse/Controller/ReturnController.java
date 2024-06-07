@@ -34,16 +34,14 @@ import it.unipv.ingsfw.SmartWarehouse.View.Return.Orders.ReturnableOrdersView;
 public class ReturnController {
 	private ReturnService returnService;
 	private ReturnItemsAndReasonsView riarView;
-	private ReturnableOrdersView returnableOrdersView;
 	private static final String MOTIVAZIONE_PERSONALIZZATA ="Altro";
 
 	/*
 	 * Controller for ReturnItemsAndReasonsView: it manages the choice of items to return, the reasons and the refund method
 	 */
-	public ReturnController(ReturnService returnService,ReturnItemsAndReasonsView riarView,ReturnableOrdersView returnableOrdersView) {
+	public ReturnController(ReturnService returnService,ReturnItemsAndReasonsView riarView) {
 		this.returnService=returnService;
 		this.riarView=riarView;
-		this.returnableOrdersView=returnableOrdersView;
 		initWithItemOfTheOrder();
 		addItemsAndReasonsToReturnService();
 		initActionAndStateOfTheComponent();
@@ -127,7 +125,7 @@ public class ReturnController {
 					removeItemsNotActuallyReturned();
 					riarView.setVisible(true);
 					riarView.showWarningMessagge("Indicare la modalità di rimborso");
-					
+
 					return;
 				}
 				message.append(button.getActionCommand());
@@ -186,6 +184,7 @@ public class ReturnController {
 		/*
 		 * Listener for the checkBox: If you don't select an item you won't be able to choose the reason
 		 */
+		/*
 		ItemListener addItemListener=new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
@@ -203,12 +202,13 @@ public class ReturnController {
 		};
 		for(int i=0;i<riarView.getCheckBoxList().size();i++) {
 			riarView.getCheckBoxList().get(i).addItemListener(addItemListener);
-		}
+		} /*
 
 
 		/*
 		 * Listener for the reasons.
 		 */
+		/*
 		ActionListener comboListener=new ActionListener() {
 
 			@Override
@@ -229,9 +229,16 @@ public class ReturnController {
 		for(int i=0;i<riarView.getReasonsDropdownList().size();i++) {
 			riarView.getReasonsDropdownList().get(i).addActionListener(comboListener);
 		}
+		 */
+		
+		
+		
+		
+		
 		/*
 		 * Listener for the backButton
 		 */
+		/*
 		ActionListener backButtonLister=new ActionListener() {
 
 			@Override
@@ -246,5 +253,6 @@ public class ReturnController {
 
 		};
 		riarView.getBackButton().addActionListener(backButtonLister);
+		*/
 	}
 }

@@ -22,11 +22,11 @@ import it.unipv.ingsfw.SmartWarehouse.View.Return.Orders.ReturnableOrdersView;
 /*
  * Controller for ReturnableOrdersView: it manages the choice of order to return.
  */
-public class ReturnableOrdersController {
+public class ReturnableOrdersHandler {
 
 	private ReturnableOrdersView returnableOrdersView;
 
-	public ReturnableOrdersController(ReturnableOrdersView returnableOrdersView) {
+	public ReturnableOrdersHandler(ReturnableOrdersView returnableOrdersView) {
 		this.returnableOrdersView=returnableOrdersView;
 		initWithClientOrders();
 		chooseOrderToReturn();
@@ -86,7 +86,7 @@ public class ReturnableOrdersController {
 					returnableOrdersView.showErrorMessagge(e.getMessage());
 					return;
 				}
-				new ReturnController(returnService,new ReturnItemsAndReasonsView(),returnableOrdersView); 
+				new ReturnController(returnService,new ReturnItemsAndReasonsView(returnableOrdersView)); 
 			}
 		};
 		returnableOrdersView.getConfirmButton().addActionListener(confirmButtonLister);

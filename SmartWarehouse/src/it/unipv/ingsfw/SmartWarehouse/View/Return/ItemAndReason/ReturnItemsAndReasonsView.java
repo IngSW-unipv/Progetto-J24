@@ -43,6 +43,10 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Shop.OrderLine;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.RegisterFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.BackButtonListenerForReturnItemsAndReasonView;
+import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.CheckBoxListener;
+import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.ComboBoxListener;
+import it.unipv.ingsfw.SmartWarehouse.View.Return.Orders.ReturnableOrdersView;
 
 public class ReturnItemsAndReasonsView extends JFrame{
 	private JPanel mainPanel;
@@ -50,22 +54,24 @@ public class ReturnItemsAndReasonsView extends JFrame{
 	private ItemAndReasonPanel itemAndReasonPanel;
 	private JPanel confirmPanel;
 	private JPanel backPanel;
-	private JPanel refundPanel;
+	private RefundPanel refundPanel;
 	private JLabel selectedOrderLabel;
 	private ArrayList<JCheckBox> checkBoxList=new ArrayList<JCheckBox>();
 	private ArrayList< JComboBox<String> > reasonsDropdownList=new ArrayList< JComboBox<String> >();
-	private ArrayList<JTextArea> customReasonAreaList=new ArrayList<JTextArea>();
+	private ArrayList<CustomReasonArea> customReasonAreaList=new ArrayList<CustomReasonArea>();
 	private ArrayList<JLabel> customReasonLabelList=new ArrayList<JLabel>();
-	private ButtonGroup refundButtonGroup;
 	public static final String VOUCHER_RADIO_TEXT = "VOUCHER (consigliato): ricevi il rimborso all'istante su un voucher senza scadenza spendibile in tutto lo shop.";
 	public static final String BANK_TRANSFER_RADIO_TEXT = "Bonifico Bancario: ricevi un bonifico sulla carta che hai utilizzato per effettuare l'acquisto. Tempi stimati 14 giorni lavorativi.";
 
 	private JButton backButton;
 	private JButton nextButton;
+	private ReturnableOrdersView returnableOrdersView;
 
 
 
-	public ReturnItemsAndReasonsView() {
+	public ReturnItemsAndReasonsView(ReturnableOrdersView returnableOrdersView) {
+		this.returnableOrdersView=returnableOrdersView;
+		
 		setTitle("Items and Reasons");
 		setSize(600,400);
 
@@ -93,7 +99,7 @@ public class ReturnItemsAndReasonsView extends JFrame{
 		orderDetailsPanel=new OrderDetailsPanel();
 		mainPanel.add(orderDetailsPanel.getScrollPane(), BorderLayout.WEST);
 	}
-	
+
 	public void initWithItemOfTheOrder(ArrayList<String> itemsDescriptionsForButton, String[] skuForActionCommand,Map<String, String> map) {
 		// TODO Auto-generated method stub
 		int count3=0;
@@ -115,21 +121,12 @@ public class ReturnItemsAndReasonsView extends JFrame{
 			reasonsDropdownList.add(reasonsDropdown);
 			itemAndReasonPanel.add(reasonsDropdown, itemAndReasonPanel.getGbc());
 
-		
+
 			itemAndReasonPanel.constraintsForTextArea();
 			JLabel customReasonLabel=new JLabel("Descrivi il motivo della restituzione");
 			itemAndReasonPanel.add(customReasonLabel, itemAndReasonPanel.getGbc());
 
-			JTextArea customReasonArea = new JTextArea(4, 10); // 2 righe e 10 colonne
-			customReasonArea.setColumns(10);
-			customReasonArea.setMinimumSize(new Dimension(1, 1)); // Set a minimum size
-			customReasonArea.setLineWrap(true); // Abilita l'andare a capo automatico
-			customReasonArea.setWrapStyleWord(true); // Evita di spezzare le parole
-
-			LineBorder border = new LineBorder(Color.BLACK); 
-			customReasonArea.setBorder(BorderFactory.createCompoundBorder(border, BorderFactory.createEmptyBorder(5, 5, 5, 5))); // Aggiungi spaziatura interna
-
-			customReasonArea.setVisible(false);
+			CustomReasonArea customReasonArea = new CustomReasonArea(); // 2 righe e 10 colonne
 			customReasonLabel.setVisible(false);
 			customReasonAreaList.add(customReasonArea); 
 			customReasonLabelList.add(customReasonLabel);
@@ -138,10 +135,27 @@ public class ReturnItemsAndReasonsView extends JFrame{
 			itemAndReasonPanel.add(customReasonArea, itemAndReasonPanel.getGbc());
 			orderDetailsPanel.add(itemAndReasonPanel);
 		}
+		addCheckBoxListener();
+		addComboBoxListener();
+
 
 		//mainPanel.add(orderDetailsPanel, BorderLayout.CENTER);
 		completeTheView();
 
+	}
+
+
+	private void addCheckBoxListener() {
+		CheckBoxListener checkBoxListener=new CheckBoxListener(this);
+		for(int i=0;i<this.getCheckBoxList().size();i++) {
+			this.getCheckBoxList().get(i).addItemListener(checkBoxListener);
+		}
+	}
+	private void addComboBoxListener() {
+		ComboBoxListener comboBoxListener=new ComboBoxListener(this);
+		for(int i=0;i<this.getReasonsDropdownList().size();i++) {
+			this.getReasonsDropdownList().get(i).addActionListener(comboBoxListener);
+		}
 	}
 
 	private void completeTheView() {
@@ -159,34 +173,20 @@ public class ReturnItemsAndReasonsView extends JFrame{
 		mainPanel.add(backPanel, BorderLayout.NORTH);
 
 
-		refundPanel = new JPanel();
-		refundPanel.repaint();
-		refundPanel.setLayout(new GridLayout(0, 1));
-		//refundPanel.setLayout(new BoxLayout(refundPanel, BoxLayout.Y_AXIS));
-		JLabel refundLabel = new JLabel("Scegli la modalità con cui preferisci essere rimborsato:");
-		JRadioButton voucherRadioButton = new JRadioButton(VOUCHER_RADIO_TEXT);
-		JRadioButton bankTransferRadioButton = new JRadioButton(BANK_TRANSFER_RADIO_TEXT);
-		voucherRadioButton.setActionCommand(VOUCHER_RADIO_TEXT);
-		bankTransferRadioButton.setActionCommand(BANK_TRANSFER_RADIO_TEXT);
-		refundButtonGroup = new ButtonGroup();
-		refundButtonGroup.add(voucherRadioButton);
-		refundButtonGroup.add(bankTransferRadioButton);
-		refundPanel.add(refundLabel);
-		refundPanel.add(voucherRadioButton);
-		refundPanel.add(bankTransferRadioButton);
-
-		// Aggiungi bordi evidenziati
-		refundPanel.setBorder(BorderFactory.createTitledBorder("Modalità di Rimborso")); //   bordo titolato
-		refundPanel.setBackground(Color.cyan); // colore di sfondo
+		refundPanel = new RefundPanel();
 		JPanel uselessPanel=new JPanel(new BorderLayout());
 		uselessPanel.repaint();
 		mainPanel.add(uselessPanel,BorderLayout.EAST);
 		uselessPanel.add(refundPanel,BorderLayout.SOUTH);
 
-		//pack();
+		addBackButtonListener();
 		setVisible(true);
-
 	}
+	private void addBackButtonListener() {
+		BackButtonListenerForReturnItemsAndReasonView bb=new BackButtonListenerForReturnItemsAndReasonView(this, this.returnableOrdersView);
+		this.getBackButton().addActionListener(bb);
+	}
+
 	public int showConfirmPopUp(String recap) {
 		return JOptionPane.showConfirmDialog(this, recap, "Conferma restituzione", JOptionPane.OK_CANCEL_OPTION);
 
@@ -238,7 +238,7 @@ public class ReturnItemsAndReasonsView extends JFrame{
 		return backButton;
 	}
 
-	public ArrayList<JTextArea> getCustomReasonAreaList() {
+	public ArrayList<CustomReasonArea> getCustomReasonAreaList() {
 		return customReasonAreaList;
 	}
 
@@ -246,11 +246,11 @@ public class ReturnItemsAndReasonsView extends JFrame{
 		return customReasonLabelList;
 	}
 
-	public JPanel getItemAndReasonsPanel() {
+	public ItemAndReasonPanel getItemAndReasonsPanel() {
 		return itemAndReasonPanel;
 	}
 	public ButtonGroup getRefundButtonGroup() {
-		return refundButtonGroup;
+		return refundPanel.getRefundButtonGroup();
 	}
 
 	public JLabel getSelectedOrderLabel() {
