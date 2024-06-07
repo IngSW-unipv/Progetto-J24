@@ -19,7 +19,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Shop;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.StdPrimePaymentFactory;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.StdStrategy;
 import it.unipv.ingsfw.SmartWarehouse.Model.picking.orderpicking.IPackageable;
-import it.unipv.ingsfw.SmartWarehouse.View.ReturnableOrdersView;
+import it.unipv.ingsfw.SmartWarehouse.View.Return.Orders.ReturnableOrdersView;
 import it.unipv.ingsfw.SmartWarehouse.View.ShopFrame;
 
 public class ShopController {
@@ -175,7 +175,7 @@ public class ShopController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				new ReturnableOrdersController(new ReturnableOrdersView());
+				new ReturnableOrdersHandler(new ReturnableOrdersView());
 
 			}
 		};
