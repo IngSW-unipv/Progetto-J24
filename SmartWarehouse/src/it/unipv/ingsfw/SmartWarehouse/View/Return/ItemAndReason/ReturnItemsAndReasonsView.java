@@ -70,6 +70,7 @@ public class ReturnItemsAndReasonsView extends JFrame{
 
 
 	public ReturnItemsAndReasonsView(ReturnableOrdersView returnableOrdersView) {
+		super();
 		this.returnableOrdersView=returnableOrdersView;
 		
 		setTitle("Items and Reasons");

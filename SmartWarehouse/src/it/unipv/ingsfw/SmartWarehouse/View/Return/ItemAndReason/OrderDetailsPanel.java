@@ -12,6 +12,7 @@ public class OrderDetailsPanel extends JPanel{
 	private JScrollPane scrollPane;
 
 	public OrderDetailsPanel() {
+		super();
 		this.repaint();
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		selectedOrderLabel = new JLabel();

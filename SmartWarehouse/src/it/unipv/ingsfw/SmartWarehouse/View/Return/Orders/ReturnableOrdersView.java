@@ -21,6 +21,9 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
+import it.unipv.ingsfw.SmartWarehouse.View.ShopFrame;
+import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.BackButtonListenerForReturnableOrdersView;
+
 public class ReturnableOrdersView extends JFrame{
 
 	private JPanel mainPanel;
@@ -30,12 +33,15 @@ public class ReturnableOrdersView extends JFrame{
 	private ButtonGroup orderButtonGroup;
 	private JButton confirmButton;
 	private JButton backButton;
+	private ShopFrame shopFrame;
 
 
 	/*
 	 * Init the View
 	 */
-	public ReturnableOrdersView() {
+	public ReturnableOrdersView(ShopFrame shopFrame) {
+		super();
+		this.shopFrame=shopFrame;
 		setTitle("Return Service");
 		setSize(400, 200);
 
@@ -88,9 +94,16 @@ public class ReturnableOrdersView extends JFrame{
 		backButton = new JButton("Back",UIManager.getIcon("FileView.directoryIcon"));
 		backPanel.add(backButton);
 		mainPanel.add(backPanel, BorderLayout.NORTH);
-		//pack();
+		
+		addBackButtonListener();
+		
 		setVisible(true);
 
+	}
+	private void addBackButtonListener() {
+		BackButtonListenerForReturnableOrdersView bb=new BackButtonListenerForReturnableOrdersView(this,this.shopFrame);
+		this.backButton.addActionListener(bb);
+		
 	}
 	public void showWarningMessagge(String message) {
 		JOptionPane.showMessageDialog(this, message, "Alert", JOptionPane.WARNING_MESSAGE);

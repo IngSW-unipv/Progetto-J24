@@ -13,6 +13,7 @@ public class ComboBoxListener implements ActionListener{
 	private ReturnItemsAndReasonsView riarView;
 
 	public ComboBoxListener(ReturnItemsAndReasonsView returnItemsAndReasonsView) {
+		super();
 		this.riarView=returnItemsAndReasonsView;
 	}
 

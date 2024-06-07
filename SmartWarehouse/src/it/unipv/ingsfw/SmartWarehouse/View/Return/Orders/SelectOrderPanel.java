@@ -10,6 +10,7 @@ public class SelectOrderPanel extends JPanel{
 	
 	private JScrollPane scrollPane;
 	public SelectOrderPanel() {
+		super();
 		this.repaint();
 		this.setLayout(new GridLayout(0, 1)); // 0 righe per una colonna dinamica
 		JLabel selectOrderLabel = new JLabel("Scegli un ordine e conferma se vuoi cominciare una procedura di reso\n");

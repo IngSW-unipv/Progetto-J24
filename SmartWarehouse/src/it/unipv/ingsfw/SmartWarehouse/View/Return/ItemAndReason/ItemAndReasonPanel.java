@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 public class ItemAndReasonPanel extends JPanel{
 	private GridBagConstraints gbc;
 	public ItemAndReasonPanel(){
+		super();
 		this.setLayout(new GridBagLayout());
 		gbc = new GridBagConstraints();
 	}

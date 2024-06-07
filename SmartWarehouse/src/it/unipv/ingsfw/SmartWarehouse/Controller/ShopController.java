@@ -175,7 +175,7 @@ public class ShopController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				new ReturnableOrdersHandler(new ReturnableOrdersView());
+				new ReturnableOrdersHandler(new ReturnableOrdersView(view));
 
 			}
 		};

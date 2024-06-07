@@ -11,6 +11,7 @@ public class CheckBoxListener implements ItemListener{
 	private ReturnItemsAndReasonsView riarView;
 
 	public CheckBoxListener(ReturnItemsAndReasonsView returnItemsAndReasonsView) {
+		super();
 		this.riarView=returnItemsAndReasonsView;
 	}
 
