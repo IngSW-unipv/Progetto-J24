@@ -2,20 +2,19 @@ package it.unipv.ingsfw.SmartWarehouse.Database;
 
 
 import java.sql.PreparedStatement;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supply;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.User;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.WarehouseOperator;
-
 import java.sql.Connection;
 
-public class UserDAO implements IUserDAO {
+public class UserDAO implements IUserDAO{
 	private String schema;
 	private Connection conn;
 	
@@ -24,45 +23,21 @@ public class UserDAO implements IUserDAO {
 		this.schema = "warehouse";
 	}
 	
-	public User getOpById (String id) {
+	public User getClientByEmail(String email) {
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;
 		ResultSet rs1;
 		User result=null;
 				
 		try {
-			String query= "select * from operator where id = ? ";
-			st1=conn.prepareStatement(query);
-			st1.setString(1, id);
-			rs1=st1.executeQuery();
-			if(rs1.next()) {
-				result= new WarehouseOperator(rs1.getString(1),rs1.getString(2), rs1.getString(3),rs1.getString(4));
-			}
-			
-		} catch  (Exception e) { 
-			e.printStackTrace();
-		} finally {
-	        DBConnection.closeConnection(conn); 
-	    }
-		return result;
-	}
-
-	
-	public User getClientByEmailAndPassword(String email, String password) {
-		conn=DBConnection.startConnection(conn,schema);
-		PreparedStatement st1;
-		ResultSet rs1;
-		User result=null;
-				
-		try {
-			String query= "select * from clients where email = ? and password = ?";
+			String query= "select * from clients where email = ? ";
 			st1=conn.prepareStatement(query);
 			st1.setString(1, email);
-			st1.setString(2, password);
 			rs1=st1.executeQuery();
 			
 			if(rs1.next()) {
-				result= new Client(rs1.getString(1),rs1.getString(2), rs1.getString(3),rs1.getString(4),rs1.getBoolean(5),rs1.getDouble(6));
+				System.out.println(rs1.getString(4));
+				result= new Client(rs1.getString(1),rs1.getString(2), rs1.getString(3),rs1.getString(4));
 			}
 			
 		} catch  (Exception e) { 
@@ -75,18 +50,17 @@ public class UserDAO implements IUserDAO {
 
 	
 	//user valido
-	public boolean insertClient (Client u) {
+	public boolean insertClient (Client c) {
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;
 		
 		try {
-			String query="insert into clients (idsupply,sku,ids,price,maxqty) values (?,?,?,?,?)";
+			String query="insert into clients (name,surname,email,password) values (?,?,?,?)";
 			st1 = conn.prepareStatement(query);
-			st1.setString(1, s.getID_Supply());
-			st1.setString(2, s.getInventoryItem().getSku());
-			st1.setString(3, s.getSupplier().getIDS());
-			st1.setDouble(4, s.getPrice());
-			st1.setInt(5, s.getMaxqty());
+			st1.setString(1, c.getName());
+			st1.setString(2, c.getSurname());
+			st1.setString(3, c.getEmail());
+			st1.setString(4, c.getPassword());
 			st1.executeUpdate(); 
 			return true;
 		} catch  (Exception e) {
@@ -97,7 +71,7 @@ public class UserDAO implements IUserDAO {
 	    }
 
 	}
-	
+		
 	public String selectPassword(User u) {
 		String email = u.getEmail();
 		String result = new String();
@@ -107,7 +81,7 @@ public class UserDAO implements IUserDAO {
 
 		try {
 			st1 = conn.createStatement();
-			String query = "SELECT Password FROM smartwarehouse.user " + "WHERE Email= '" + email + "'";
+			String query = "select password from clients" + "where email= '" + email + "'";
 
 			rs1 = st1.executeQuery(query);
 
@@ -133,7 +107,7 @@ public class UserDAO implements IUserDAO {
 
 		try {
 			st1 = conn.createStatement();
-			String query = "SELECT email FROM smartwarehouse.user " + "WHERE email= '" + email + "'";
+			String query = "select email from clients " + "where email= '" + email + "'";
 
 			rs1 = st1.executeQuery(query);
 
@@ -152,17 +126,15 @@ public class UserDAO implements IUserDAO {
 	public User selectUserByEmail(User u) {
 
 		String emails = u.getEmail();
-		String pw = u.getPassword();
+		String pw=null; //= u.getPassword();
 		User result = null;
-
 		conn = DBConnection.startConnection(conn, schema);
 		Statement st1;
 		ResultSet rs1;
 
 		try {
 			st1 = conn.createStatement();
-			String query = "SELECT * FROM smartwharehouse.user WHERE email= '" + emails + "'"
-					+ "and utente.Password='"+pw+"'";
+			String query = "select * from clients where email= '" + emails ;
 
 			rs1 = st1.executeQuery(query);
 
@@ -170,11 +142,9 @@ public class UserDAO implements IUserDAO {
 
 				String name= rs1.getString("name");
 				String surname = rs1.getString("surname");
-				String address = rs1.getString("address");
 				String email = rs1.getString("email");
-				String type = rs1.getString("type");
 				String password = rs1.getString("password");
-				result = new User(name, surname, address, email,type, password);
+				result = new User(name, surname, email);
 			}else {
 				return u;
 			}
@@ -187,7 +157,6 @@ public class UserDAO implements IUserDAO {
 		return result;
 	}
 	
-	//Metodo utile nel test della registrazione
 	public boolean deleteUser(User u) {
 
 		conn = DBConnection.startConnection(conn, schema);
@@ -198,7 +167,7 @@ public class UserDAO implements IUserDAO {
 		try {
 			
 			
-			String query = "DELETE FROM `smartwarehous`.`user` WHERE (`email` = '"+u.getEmail()+"')";
+			String query = "delete from `clients` where (`email` = '"+u.getEmail()+"')";
 					
 			st1 = conn.prepareStatement(query);
 
@@ -214,7 +183,8 @@ public class UserDAO implements IUserDAO {
 
 	}
 	
-	 public User getUsersFromDatabase() {
+	 public List<User> getUsersFromDatabase() {
+		 
 	        List<User> userList = new ArrayList<>();
 	        Connection conn = null;
 	        PreparedStatement statement = null;
@@ -222,19 +192,15 @@ public class UserDAO implements IUserDAO {
 
 	        try {
 	            conn = DBConnection.startConnection(conn, schema);
-	            String query = "SELECT * FROM user"; // Query per selezionare tutti gli utenti
+	            String query = "select * from user"; // Query per selezionare tutti gli utenti
 	            statement = conn.prepareStatement(query);
 	            resultSet = statement.executeQuery();
 
 	            while (resultSet.next()) {
 	                String name = resultSet.getString("name");
 	                String surname = resultSet.getString("surname");
-	                String address = resultSet.getString("addres");
 	                String email = resultSet.getString("email");
-	                String type = resultSet.getString("type");
-	                String password = resultSet.getString("Password");
-
-	                User user = new User(name, surname, address, email,type, password);
+	                User user = new User(name, surname, email);
 	                userList.add(user);
 	            }
 	        } catch (SQLException e) {
@@ -244,4 +210,50 @@ public class UserDAO implements IUserDAO {
 	        DBConnection.closeConnection(conn);
 	        return userList;
 	    }
+	 public User getOpById (String id) {
+			conn=DBConnection.startConnection(conn,schema);
+			PreparedStatement st1;
+			ResultSet rs1;
+			User result=null;
+					
+			try {
+				String query= "select * from operator where OperatorID = ? ";
+				st1=conn.prepareStatement(query);
+				st1.setString(1, id);
+				rs1=st1.executeQuery();
+				if(rs1.next()) {
+					result= new WarehouseOperator(rs1.getString(1),rs1.getString(2), rs1.getString(3),rs1.getString(4));
+				}
+				
+			} catch  (Exception e) { 
+				e.printStackTrace();
+			} finally {
+		        DBConnection.closeConnection(conn); 
+		    }
+			return result;
+		}
+	//per inserire gli op
+		public boolean insertOperator(WarehouseOperator op) {
+			conn=DBConnection.startConnection(conn,schema);
+			PreparedStatement st1;
+			boolean result=true;
+			
+			try {
+				String query=" insert into operator (OperatorID,name,surname,email) values (?,?,?,?)";
+				st1 = conn.prepareStatement(query);
+				st1.setString(1, op.getId());
+				st1.setString(2, op.getName());
+				st1.setString(3, op.getSurname());
+				st1.setString(4,op.getEmail());
+				st1.executeUpdate();
+				
+			} catch (Exception e) {
+			    e.printStackTrace();
+			    result=false;
+			} finally {
+			    DBConnection.closeConnection(conn);
+			}
+			return result;
+			
+		}
 }
