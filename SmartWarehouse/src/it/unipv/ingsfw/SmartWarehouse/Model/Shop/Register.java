@@ -39,7 +39,7 @@ public class Register {
 	
 	
 	
-	private Order rebuildOrder(ArrayList<OrderLine> o, int id) { 
+	public Order rebuildOrder(ArrayList<OrderLine> o, int id) { 
 		HashMap<InventoryItem, Integer> hs = new HashMap<InventoryItem, Integer>();
 		OrderLine temp=o.get(0);
 		for(OrderLine ord: o) {
