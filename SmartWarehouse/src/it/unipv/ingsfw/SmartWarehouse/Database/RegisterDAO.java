@@ -3,12 +3,18 @@ package it.unipv.ingsfw.SmartWarehouse.Database;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.OrderLine;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Category;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.ItemDetails;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Position;
 
 public class RegisterDAO implements IRegisterDAO {
 	
@@ -107,7 +113,7 @@ public class RegisterDAO implements IRegisterDAO {
 	
 	@Override
 	public int selectLastId() {
-		conn=DBConnection.startConnection(conn, schema);
+		conn=DBConnection.startConnection(conn,schema);
 		Statement st1;
 		
 		try {
@@ -122,5 +128,89 @@ public class RegisterDAO implements IRegisterDAO {
 			
 		}catch(Exception e) {e.printStackTrace(); return -1;}
 	}
+	
+	public ArrayList<Integer> selectAllIds() {
+	    conn=DBConnection.startConnection(conn,schema);
+	    Statement st1;
+	    ResultSet rs1;
+	    try {
+	        st1 = conn.createStatement();
+	        String query = "SELECT id FROM clientorders ";
+	        rs1 = st1.executeQuery(query);
 
+	        ArrayList<Integer> orderIds = new ArrayList<>();
+	        while (rs1.next()) {
+	            orderIds.add(rs1.getInt("id"));
+	        }
+	        return orderIds;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return null;
+	    }
+	}
+	public ArrayList<OrderLine> showAllOrder() { 
+		conn=DBConnection.startConnection(conn,schema);
+		Statement st1;
+		ResultSet rs1;
+		String datetimeString;
+		LocalDateTime date;
+		
+		try {
+			st1 = conn.createStatement();
+			String query1="select* from clientorders ";
+			rs1=st1.executeQuery(query1);
+            
+			ArrayList<OrderLine> o = new ArrayList<OrderLine>();
+			while(rs1.next()) {
+				datetimeString = rs1.getString(5);
+				date=LocalDateTime.parse(datetimeString,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+				o.add(new OrderLine(rs1.getInt(1),rs1.getString(2),
+						rs1.getInt(3),rs1.getString(4), date, rs1.getBoolean(6)));
+			}
+			return o;
+		}
+		catch (Exception e){e.printStackTrace(); return null;}
+	}
+	public int selectId(int id) {
+		conn=DBConnection.startConnection(conn,schema);
+		Statement st1;
+		
+		try {
+			st1=conn.createStatement();
+			String query="select id from clientorders";
+			ResultSet rs1;
+			
+			rs1=st1.executeQuery(query);
+			if(rs1.next()) {
+				return rs1.getInt(1);
+			}else return 0;
+			
+		}catch(Exception e) {e.printStackTrace(); return -1;}
+	} 
+	/*
+	 * when i finish packing,then i change the picked column
+	 */
+	public boolean setPicked(int orderId) {
+	    Connection conn = null;
+	    PreparedStatement st1 = null;
+	    boolean result;
+
+	    try {
+	        conn = DBConnection.startConnection(conn, schema);
+	        String query = "update clientorders set picked = true where id = ?";
+	        st1 = conn.prepareStatement(query);
+	        st1.setInt(1, orderId);
+	        
+	        int rowsUpdated = st1.executeUpdate();
+	        return rowsUpdated > 0;
+	        
+	    } catch (Exception e) {
+		    e.printStackTrace();
+		    result=false;
+		} finally {
+		    DBConnection.closeConnection(conn);
+		}
+		return result;
+	}
+	
 }
