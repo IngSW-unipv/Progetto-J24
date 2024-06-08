@@ -14,11 +14,8 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Payment.IPayment;
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentFactory;
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentProcess;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IStdPrimePaymentStrategy;
-import it.unipv.ingsfw.SmartWarehouse.Model.Shop.PrimeStrategy;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Shop;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.StdPrimePaymentFactory;
-import it.unipv.ingsfw.SmartWarehouse.Model.Shop.StdStrategy;
-import it.unipv.ingsfw.SmartWarehouse.Model.picking.orderpicking.IPackageable;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Orders.ReturnableOrdersView;
 import it.unipv.ingsfw.SmartWarehouse.View.ShopFrame;
 

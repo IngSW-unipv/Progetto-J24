@@ -13,9 +13,9 @@ import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 
 public class OrderP extends Order {
 	private HashMap<InventoryItem, Integer> skuqty;
-	public OrderP(HashMap<InventoryItem, Integer> skuqty, String email) {
-		super(skuqty, email);
-		// TODO Auto-generated constructor stub
+	public OrderP(HashMap<InventoryItem, Integer> skuqty, int id, String email, LocalDateTime date) {
+		super(skuqty, id, email, date);
+		skuqty = super.getSkuqty();
 	}
 	/*
 	 * method for calculate the total dimension of the order

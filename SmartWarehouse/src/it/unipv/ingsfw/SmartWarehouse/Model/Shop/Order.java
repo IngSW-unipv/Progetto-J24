@@ -32,6 +32,18 @@ public class Order implements IReturnable{
 		return id;
 	}
 
+	public HashMap<InventoryItem, Integer> getSkuqty() {
+		return skuqty;
+	}
+	
+	public void setSkuqty(HashMap<InventoryItem, Integer> skuqty) {
+		this.skuqty = skuqty;
+	}
+	
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
 	public void setId(int id) {
 		this.id = id;
 	}

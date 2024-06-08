@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
+import it.unipv.ingsfw.SmartWarehouse.Model.picking.orderpicking.OrderP;
 
 public class Register {
 	private int id;
@@ -45,7 +46,7 @@ public class Register {
 		for(OrderLine ord: o) {
 			hs.put(inv.findInventoryItem(ord.getSku()), ord.getQty());
 		}
-		return new Order(hs, id, temp.getEmail(), temp.getDate());
+		return new OrderP(hs, id, temp.getEmail(), temp.getDate());
 	}
 	
 	private ArrayList<OrderLine> makeLine(Order o) {
