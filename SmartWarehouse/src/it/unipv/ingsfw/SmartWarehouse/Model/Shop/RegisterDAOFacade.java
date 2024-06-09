@@ -1,7 +1,6 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.Shop;
 
 import java.util.ArrayList;
-
 import it.unipv.ingsfw.SmartWarehouse.Database.IRegisterDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.RegisterDAO;
 
@@ -28,12 +27,20 @@ public class RegisterDAOFacade{
 		regD.insertOrder(o);
 		
 	}
-
 	public int selectLastId() {
 		return regD.selectLastId();
 	}
-
 	public ArrayList<ArrayList<OrderLine>> selectOrderWhereClient(String email) {
 		return regD.selectOrderWhereClient(email);
 	}
+	/*
+	 * for picking controller
+	 */
+	public ArrayList<Integer> selectAllIds() {
+		return regD.selectAllIds();
+	}
+	public int selectId(int id) {
+		return regD.selectId(id);
+	}
+	
 }
