@@ -11,9 +11,5 @@ public class AccountAlreadyExistsException extends Exception{
 		super(errorMessage);
 
 	}
-
-	public void showPopup() {
-		PopupManager.showPopup(errorMessage);
-	}
 	
 }
