@@ -9,4 +9,8 @@ public interface IRegisterDAO {
 	public void insertOrder(ArrayList<OrderLine> o);
 	public int selectLastId();
 	public ArrayList< ArrayList<OrderLine> > selectOrderWhereClient(String email);
+	public ArrayList<Integer> selectAllIds() ;
+	public ArrayList<OrderLine> showAllOrder();
+	public int selectId(int id);
 }
+

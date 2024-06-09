@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
+import it.unipv.ingsfw.SmartWarehouse.Exception.AccountAlreadyExistsException;
+import it.unipv.ingsfw.SmartWarehouse.Exception.DatabaseException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyFieldException;
 import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Shop;
@@ -20,6 +22,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.WarehouseOperator;
 import it.unipv.ingsfw.SmartWarehouse.View.LoginOpView;
 import it.unipv.ingsfw.SmartWarehouse.View.LoginClView;
 import it.unipv.ingsfw.SmartWarehouse.View.MainView;
+import it.unipv.ingsfw.SmartWarehouse.View.PickingView;
 import it.unipv.ingsfw.SmartWarehouse.View.RegistrationView;
 import it.unipv.ingsfw.SmartWarehouse.View.ShopFrame;
 import it.unipv.ingsfw.SmartWarehouse.View.inventory.InventoryView;
@@ -42,7 +45,6 @@ public class MainController {
 			public void actionPerformed(ActionEvent e) {
 				manageAction();
 			}
-
 			private void manageAction() {
 				int r = mainView.logOrReg();
 				if (r==1) {
@@ -64,7 +66,6 @@ public class MainController {
 			public void actionPerformed(ActionEvent e) {
 				manageAction();
 			}
-
 			private void manageAction() {
 				loginOpView = new LoginOpView();
 				okOpButtonInit();
@@ -72,13 +73,11 @@ public class MainController {
 		};
 		mainView.getOperatorButton().addActionListener(operatorListener);
 	} 
-	
 	private void okLoginClientButton() {
 		ActionListener okListener=new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				manageAction();
 			}
-
 			private void manageAction() {
 				Login login = new Login();
 				try {
@@ -96,39 +95,37 @@ public class MainController {
 		};
 		loginView.getConfirmButton().addActionListener(okListener);
 	}
-	
 	private void okRegistrationClientButton() {
-		ActionListener okListener=new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				manageAction();
-			}
-
-			private void manageAction() {
-				Client c = new Client (regView.getNameField().getText(), regView.getSurnameField().getText(),
-						regView.getEmailField().getText(), String.valueOf(regView.getPasswordField().getPassword()));
-				Registration registration = new Registration(c);
-				try {
-					registration.registerClient();
-					regView.setVisible(false);
-					//trycatch
-					loginView = new LoginClView();
-					okLoginClientButton();	
-					
-				} catch (Exception e) {
-					JOptionPane.showMessageDialog(loginOpView, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
-				}
-				
-			}
-		};
-		regView.getConfirmButton().addActionListener(okListener);
-	}
+        ActionListener okListener = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    manageAction();
+                } catch (EmptyFieldException | AccountAlreadyExistsException | DatabaseException e1) {
+                    JOptionPane.showMessageDialog(regView, e1.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            private void manageAction() throws EmptyFieldException, AccountAlreadyExistsException, DatabaseException {
+                Client c = new Client(
+                    regView.getNameField().getText(),
+                    regView.getSurnameField().getText(),
+                    regView.getEmailField().getText(),
+                    String.valueOf(regView.getPasswordField().getPassword())
+                );
+                Registration registration = new Registration(c);
+                registration.registerClient();
+                regView.setVisible(false);
+                loginView = new LoginClView();
+                okLoginClientButton();
+            }
+        };
+        regView.getConfirmButton().addActionListener(okListener);
+    }
 	
 	private void okOpButtonInit() {
 		ActionListener okListener=new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				manageAction();
 			}
-
 			private void manageAction() {
 				Login login = new Login();
 				String idview=String.valueOf(loginOpView.getTextId().getPassword());
@@ -138,15 +135,15 @@ public class MainController {
 					JOptionPane.showMessageDialog(loginOpView, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
 				}
 				loginOpView.setVisible(false);
-				if(idview.charAt(0) == 'i') {
+				if(idview.charAt(0) == 'i' || idview.charAt(0)=='s') { 
 					InventoryView iv=new InventoryView();
 					new InventoryController(new InventoryManager(), iv);
 					new SupplyController(new SupplyManager(), iv.getSupplyPanel());
 				}
-				else if(idview.charAt(0) == 'p') {
-					//picking
-				}
-				
+				else{
+					PickingView viewp =new PickingView();
+					new PickingController(viewp);
+				}	
 			}
 		};
 		loginOpView.getConfirmButton().addActionListener(okListener);

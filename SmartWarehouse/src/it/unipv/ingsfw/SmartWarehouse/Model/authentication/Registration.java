@@ -15,7 +15,8 @@ public class Registration {
 		this.c=c;
 	}
 	
-	public boolean registerClient() throws AccountAlreadyExistsException,DatabaseException {
+	public boolean registerClient() throws AccountAlreadyExistsException,DatabaseException, EmptyFieldException {
+		fieldCheck();
 		boolean result =false;
 		if(SingletonManager.getInstance().getUserDAO().getClientByEmail(c.getEmail())==null){
 			boolean resultDB= SingletonManager.getInstance().getUserDAO().insertClient(c);
