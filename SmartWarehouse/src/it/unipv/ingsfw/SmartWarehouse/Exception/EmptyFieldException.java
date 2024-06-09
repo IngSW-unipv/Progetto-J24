@@ -10,9 +10,10 @@ public class EmptyFieldException extends Exception {
 		super(errorMessage);
 	}
 
-	public void showPopup() {
-		PopupManager.showPopup(errorMessage);
-	}
 
 }
+
+
+
+
 
