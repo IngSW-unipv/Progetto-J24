@@ -55,7 +55,6 @@ public class ReturnItemsAndReasonsView extends JFrame{
 	private JPanel confirmPanel;
 	private JPanel backPanel;
 	private RefundPanel refundPanel;
-	private JLabel selectedOrderLabel;
 	private ArrayList<JCheckBox> checkBoxList=new ArrayList<JCheckBox>();
 	private ArrayList< JComboBox<String> > reasonsDropdownList=new ArrayList< JComboBox<String> >();
 	private ArrayList<CustomReasonArea> customReasonAreaList=new ArrayList<CustomReasonArea>();
@@ -255,7 +254,7 @@ public class ReturnItemsAndReasonsView extends JFrame{
 	}
 
 	public JLabel getSelectedOrderLabel() {
-		return selectedOrderLabel;
+		return orderDetailsPanel.getSelectedOrderLabel();
 	}
 
 
