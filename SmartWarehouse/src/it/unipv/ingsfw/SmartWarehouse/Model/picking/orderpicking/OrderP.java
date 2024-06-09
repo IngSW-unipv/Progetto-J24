@@ -15,11 +15,12 @@ public class OrderP extends Order {
 	private HashMap<InventoryItem, Integer> skuqty;
 	public OrderP(HashMap<InventoryItem, Integer> skuqty, int id, String email, LocalDateTime date) {
 		super(skuqty, id, email, date);
-		skuqty = super.getSkuqty();
+		this.skuqty = super.getSkuqty();
 	}
 	/*
 	 * method for calculate the total dimension of the order
 	 */
+	
 	public int calculateTotalSize() { 
 		int totalSize = 0;
 		for (Map.Entry<InventoryItem, Integer> entry : skuqty.entrySet()) {
@@ -31,6 +32,7 @@ public class OrderP extends Order {
 		return totalSize;
 	}
 	/*
+	 *
 	 * method to transform the order from a hashmap to a list
 	 */
 	
@@ -39,33 +41,46 @@ public class OrderP extends Order {
 		for (Map.Entry<InventoryItem, Integer> entry : skuqty.entrySet()) {
 			InventoryItem item = entry.getKey();
 		    int quantity = entry.getValue();
-		    // Aggiungi l'elemento ripetutamente per il numero di volte specificato nella mappa
 	        for (int i = 0; i < quantity; i++) {
 	             itemList.add(item);
 	        }
 		}    
 		return itemList;
 	}
+	/*
+	 *method for show the items and some details in the order
+	 */
+	public List<String> getItemDetails() {
+	    List<String> itemDetailsList = new ArrayList<>();
+	    for (Map.Entry<InventoryItem, Integer> entry : skuqty.entrySet()) {
+	        InventoryItem item = entry.getKey();
+	        int quantity = entry.getValue();
+	        String itemDetails = "SKU: " + item.getSku() + "," + item.getPos() + ", Quantità: " + quantity+"\n";
+	        itemDetailsList.add(itemDetails);
+	    }
+	    return itemDetailsList;
+	}
+	/*
+	 * method for select a item and a quantity
+	 */
+	public void selectItemqty(String sku, int qty) throws ItemNotFoundException, QuantityMismatchException {
+	    boolean itemFound = false;
+	    for (Map.Entry<InventoryItem, Integer> entry : skuqty.entrySet()) {
+	        if (entry.getKey().getSku().equals(sku)) {
+	            itemFound = true;
+	            int actualQuantity = entry.getValue();
+	            if (actualQuantity != qty) {
+	                throw new QuantityMismatchException("Quantity mismatch for item " + sku + ". Actual quantity in order: " + actualQuantity);
+	            }
+	            System.out.println("Item found at position: " + entry.getKey().getPos());
+	            System.out.println("SKU: " + entry.getKey().getSku());
+	        }
+	    }
+
+	    if (!itemFound) {
+	        throw new ItemNotFoundException("Item not found for SKU: " + sku);
+	    }
+	}
+	    
 	
-	
-	public void selectItemqty(InventoryItem item, int desiredQuantity) throws ItemNotFoundException, QuantityMismatchException {		   
-		if (skuqty.containsKey(item)) {
-		    int actualQuantity = skuqty.get(item); // Ottieni la quantità effettiva dell'elemento nell'ordine
-		    if (actualQuantity != desiredQuantity) {
-		        System.out.println("Quantity mismatch for item " + item.getSku() + ". Actual quantity in order: " + actualQuantity);
-		        throw new QuantityMismatchException("Quantity mismatch for item " + item.getSku() + ". Actual quantity in order: " + actualQuantity);
-		    }
-		    	for (Map.Entry<InventoryItem, Integer> entry : skuqty.entrySet()) {
-		    		if (entry.getKey().equals(item)) {
-		    			System.out.println("Item found at position: ");
-		    			item.getPos();
-		    			System.out.println("SKU: " + entry.getKey().getSku()); // Assuming there's a method getSku() in the Item class
-		    		}
-		    	}
-		    } 	else {
-		        	System.out.println("Item not in the order, your items are:");
-		        	toString();
-		        	throw new ItemNotFoundException();
-		    }
-		}
 }
