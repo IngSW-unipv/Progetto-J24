@@ -10,8 +10,6 @@ public class DatabaseException extends Exception {
 		super(errorMessage);
 
 	}
-	public void showPopup() {
-		PopupManager.showPopup(errorMessage);
-	}
+	
 
 }

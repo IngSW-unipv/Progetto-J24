@@ -2,15 +2,16 @@ package it.unipv.ingsfw.SmartWarehouse.View;
 
 import javax.swing.*;
 import java.awt.*;
-
+import java.util.HashMap;
 
 public class PickingView {
-	private JFrame frame;
+    private JFrame frame;
     private JButton small;
     private JButton medium;
     private JButton large;
     private JButton calculatePack;
     private JButton packed;
+    private JButton itemButton;
     private JTextArea text;
     private JTextArea packageSummaryTextArea;
     private JPanel ListId;
@@ -19,13 +20,14 @@ public class PickingView {
     private int selectedOrderId = -1;
 
     public PickingView() {
-    	frame = new JFrame("Order");
+        frame = new JFrame("Order");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
 
         small = new JButton("Small");
         medium = new JButton("Medium");
         large = new JButton("Large");
+        itemButton = new JButton("Item");
         
         calculatePack = new JButton("Calculate Package");
         packed = new JButton("Packed");
@@ -42,10 +44,6 @@ public class PickingView {
         selected.setEditable(false);
         JScrollPane selectedScrollPane = new JScrollPane(selected);
 
-        selected = new JTextArea();
-        selected.setEditable(false);
-        JScrollPane messageScrollPane = new JScrollPane(selected);
-
         ListId = new JPanel();
         ListId.setLayout(new BoxLayout(ListId, BoxLayout.Y_AXIS));
         ListId.add(new JLabel("Order IDs"));
@@ -58,7 +56,7 @@ public class PickingView {
         packPanel.add(small);
         packPanel.add(medium);
         packPanel.add(large);
-        //packPanel.add(fragility);
+        packPanel.add(itemButton);
         packPanel.add(calculatePack);
         packPanel.add(packed);
 
@@ -72,7 +70,7 @@ public class PickingView {
 
         JPanel messagePanel = new JPanel(new BorderLayout());
         messagePanel.add(new JLabel("Messages:"), BorderLayout.NORTH);
-        messagePanel.add(messageScrollPane, BorderLayout.CENTER);
+        messagePanel.add(selectedScrollPane, BorderLayout.CENTER);
 
         Dimension panelSize = new Dimension(250, 200);
         orderDetailsPanel.setPreferredSize(panelSize);
@@ -91,7 +89,7 @@ public class PickingView {
 
         frame.getContentPane().add(mainPanel);
         frame.setVisible(true);
-     }	
+    }
 
     public JButton displayOrderIds(int id) {
         JButton b = new JButton();
@@ -123,98 +121,105 @@ public class PickingView {
     public void setSelectedOrderId(int selectedOrderId) {
         this.selectedOrderId = selectedOrderId;
     }
+
     public JFrame getFrame() {
-		return frame;
-	}
+        return frame;
+    }
 
-	public void setFrame(JFrame frame) {
-		this.frame = frame;
-	}
+    public void setFrame(JFrame frame) {
+        this.frame = frame;
+    }
 
-	public JButton getSmall() {
-		return small;
-	}
+    public JButton getSmall() {
+        return small;
+    }
 
-	public void setSmall(JButton small) {
-		this.small = small;
-	}
+    public void setSmall(JButton small) {
+        this.small = small;
+    }
 
-	public JButton getMedium() {
-		return medium;
-	}
+    public JButton getMedium() {
+        return medium;
+    }
 
-	public void setMedium(JButton medium) {
-		this.medium = medium;
-	}
+    public void setMedium(JButton medium) {
+        this.medium = medium;
+    }
 
-	public JButton getLarge() {
-		return large;
-	}
+    public JButton getLarge() {
+        return large;
+    }
 
-	public void setLarge(JButton large) {
-		this.large = large;
-	}
+    public void setLarge(JButton large) {
+        this.large = large;
+    }
 
-	
+    public JButton getCalculatePack() {
+        return calculatePack;
+    }
 
-	public JButton getCalculatePack() {
-		return calculatePack;
-	}
+    public void setCalculatePack(JButton calculatePack) {
+        this.calculatePack = calculatePack;
+    }
 
-	public void setCalculatePack(JButton calculatePack) {
-		this.calculatePack = calculatePack;
-	}
+    public JButton getPacked() {
+        return packed;
+    }
 
-	public JButton getPacked() {
-		return packed;
-	}
+    public void setPacked(JButton packed) {
+        this.packed = packed;
+    }
 
-	public void setPacked(JButton packed) {
-		this.packed = packed;
-	}
+    public JButton getItemButton() {
+        return itemButton;
+    }
 
-	public JTextArea getText() {
-		return text;
-	}
+    public void setItemButton(JButton itemButton) {
+        this.itemButton = itemButton;
+    }
 
-	public void setText(JTextArea text) {
-		this.text = text;
-	}
+    public JTextArea getText() {
+        return text;
+    }
 
-	public JTextArea getPackageSummaryTextArea() {
-		return packageSummaryTextArea;
-	}
+    public void setText(JTextArea text) {
+        this.text = text;
+    }
 
-	public void setPackageSummaryTextArea(JTextArea packageSummaryTextArea) {
-		this.packageSummaryTextArea = packageSummaryTextArea;
-	}
+    public JTextArea getPackageSummaryTextArea() {
+        return packageSummaryTextArea;
+    }
 
-	public JTextArea getSelected() {
-		return selected;
-	}
+    public void setPackageSummaryTextArea(JTextArea packageSummaryTextArea) {
+        this.packageSummaryTextArea = packageSummaryTextArea;
+    }
 
-	public void setSelected(JTextArea selected) {
-		this.selected = selected;
-	}
+    public JTextArea getSelected() {
+        return selected;
+    }
 
-	public JPanel getListId() {
-		return ListId;
-	}
+    public void setSelected(JTextArea selected) {
+        this.selected = selected;
+    }
 
-	public void setListId(JPanel listId) {
-		ListId = listId;
-	}
+    public JPanel getListId() {
+        return ListId;
+    }
 
-	public JPanel getOrderItemsPanel() {
-		return orderItemsPanel;
-	}
+    public void setListId(JPanel listId) {
+        ListId = listId;
+    }
 
-	public void setOrderItemsPanel(JPanel orderItemsPanel) {
-		this.orderItemsPanel = orderItemsPanel;
-	}
+    public JPanel getOrderItemsPanel() {
+        return orderItemsPanel;
+    }
 
-	public void displayPackageInfo(String packageInfo) {
-        packageSummaryTextArea.setText(packageInfo); 
+    public void setOrderItemsPanel(JPanel orderItemsPanel) {
+        this.orderItemsPanel = orderItemsPanel;
+    }
+
+    public void displayPackageInfo(String packageInfo) {
+        packageSummaryTextArea.setText(packageInfo);
     }
 
     public void showErrorMessage(String message) {
@@ -228,6 +233,7 @@ public class PickingView {
     public void showPackageInfo(Object packageInfo) {
         JOptionPane.showMessageDialog(frame, packageInfo, "Package Information", JOptionPane.INFORMATION_MESSAGE);
     }
+
     public String[] getPackageDetails() {
         JPanel panel = new JPanel(new GridLayout(2, 2));
         JLabel quantityLabel = new JLabel("Quantity:");
@@ -240,6 +246,26 @@ public class PickingView {
         int result = JOptionPane.showConfirmDialog(null, panel, "Enter Package Details", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             return new String[]{quantityField.getText(), Boolean.toString(fragilityCheckBox.isSelected())};
+        } else {
+            return null;
+        }
+    }
+
+    public HashMap<String, Integer> getItemDetails() {
+        JPanel panel = new JPanel(new GridLayout(2, 2));
+        JLabel itemLabel = new JLabel("Item:");
+        JTextField itemField = new JTextField();
+        JLabel quantityLabel = new JLabel("Quantity:");
+        JTextField quantityField = new JTextField();
+        panel.add(itemLabel);
+        panel.add(itemField);
+        panel.add(quantityLabel);
+        panel.add(quantityField);
+        int result = JOptionPane.showConfirmDialog(null, panel, "Enter Item Details", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            HashMap<String, Integer> itemDetails = new HashMap<>();
+            itemDetails.put(itemField.getText(), Integer.parseInt(quantityField.getText()));
+            return itemDetails;
         } else {
             return null;
         }
