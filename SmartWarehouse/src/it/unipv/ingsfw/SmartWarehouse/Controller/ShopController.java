@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.SwingUtilities;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyKartExceptio;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
@@ -27,9 +28,11 @@ public class ShopController {
 		this.model=model;
 		this.view=view;
 		this.view.makeShop(this.model.getInv());
+		this.view.setWalletLabImp(model.getCl().getWallet());
 		
 		if(this.model.getCl().getPrime()) {
 			this.view.getPrime().setBackground(Color.green);
+			this.view.getPrime().setText("You are Prime");
 		}
 		
 		initcomponents();
@@ -100,10 +103,11 @@ public class ShopController {
 							view.displayInfo("pagamento di "+ total + "euro effettuato");
 							model.makeOrder();
 						}
-						view.setInfoLabText(0);						
+						view.setInfoLabText(model.getKart().getSkuqty().size());						
 					} catch (PaymentException | IllegalArgumentException | EmptyKartExceptio | ItemNotFoundException ex) {
 						view.displayWarn(ex.getMessage());						
-					}				
+					}
+					view.setWalletLabImp(model.getCl().getWallet());
 				}
 			}
 		};
@@ -151,17 +155,20 @@ public class ShopController {
 					
 					PaymentProcess pay=new PaymentProcess(mode, model.getCl().getEmail(), "magazzo");
 					try {
-						if(pay.startPayment(model.getPrimeImport())) {
-							view.displayInfo("pagamento di "+model.getPrimeImport()+"euro effettuato");
-						}
+						pay.startPayment(model.getPrimeImport()); 
+						view.displayInfo("pagamento di "+model.getPrimeImport()+"euro effettuato");
+						model.setPrime();
+						view.getPrime().setBackground(Color.green);
+						view.getPrime().setText("You are Prime");
+						
 					} catch (PaymentException ex) {
 						view.displayWarn(ex.getMessage());
 					}
-					model.setPrime();
 				}
 				if(model.getCl().getPrime()) {
 					view.getPrime().setBackground(Color.green);
 				}
+				view.setWalletLabImp(model.getCl().getWallet());
 			}
 		};
 		

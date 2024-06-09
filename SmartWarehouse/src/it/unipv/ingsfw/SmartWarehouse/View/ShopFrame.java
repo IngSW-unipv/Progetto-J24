@@ -16,8 +16,6 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
-import it.unipv.ingsfw.SmartWarehouse.Model.Payment.IPayment;
-import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentFactory;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
 
@@ -54,6 +52,7 @@ public class ShopFrame extends JFrame{
 		kart.setPreferredSize(new Dimension(90, 40));
 		pay.setPreferredSize(new Dimension(90, 40));
 		orders.setPreferredSize(new Dimension(110, 40));
+		prime.setPreferredSize(new Dimension(90, 40));
 		
 		kart.setFocusable(false);
 		shop.setFocusable(false);
@@ -228,6 +227,14 @@ public class ShopFrame extends JFrame{
 	
 	public void setInfoLabText(int i) {
 		this.kartInfoLab.setText("elementi nel carrello: "+i);
+	}
+	
+	public void setWalletLabImp(double tot) {
+		this.wallet.setText("Wallet: "+ tot +" euro");
+	}
+	
+	public JLabel getWalletLab() {
+		return this.wallet;
 	}
 
 	public JButton getOrders() {
