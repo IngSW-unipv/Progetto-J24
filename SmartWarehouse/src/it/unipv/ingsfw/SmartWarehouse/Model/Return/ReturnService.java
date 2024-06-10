@@ -39,14 +39,10 @@ public class ReturnService {
 		if(!ReturnValidator.checkReturnabilityOfInventoryItem(inventoryItem,this)){
 			throw new UnableToReturnException(returnableOrder.getDescBySku(inventoryItem.getSku()));
 		}
-		returnedItems.put(inventoryItem,setReason(reason));
+		returnedItems.put(inventoryItem,getReason(reason));
 	}
-
 	public void removeAllFromReturn() {
 		returnedItems.clear();
-	}
-	public String setReason(String reason) throws MissingReasonException {
-		return Reasons.findReason(reason);
 	}
 	public double getMoneyToBeReturned(){
 		double moneyToBeReturned=0;
@@ -55,6 +51,9 @@ public class ReturnService {
 		}
 		moneyToBeReturned=moneyToBeReturned-moneyAlreadyReturned;
 		return moneyToBeReturned;
+	}
+	private String getReason(String reason) throws MissingReasonException {
+		return Reasons.findReason(reason);
 	}
 	public boolean issueRefund(IRefund rm) throws PaymentException {
 		return rm.issueRefund();
@@ -83,6 +82,10 @@ public class ReturnService {
 		returnServiceDAOFacade.writeReturnService(this);
 		returnServiceDAOFacade.writeRefundMode(this,rm);
 	}
+	
+	/*
+	 * toString() Method
+	 */
 	public String toString(){
 		StringBuilder s= new StringBuilder();
 		s.append("Reso dell'ordine: ").append(returnableOrder.getId());
@@ -105,7 +108,6 @@ public class ReturnService {
 	public void setMoneyAlreadyReturned(double moneyAlreadyReturned) {
 		this.moneyAlreadyReturned = moneyAlreadyReturned;
 	}
-
 
 	public IReturnable getReturnableOrder() {
 		return returnableOrder;

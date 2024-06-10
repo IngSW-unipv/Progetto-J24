@@ -44,7 +44,6 @@ public class ReturnController {
 		this.riarView=riarView;
 		initWithItemOfTheOrder();
 		addItemsAndReasonsToReturnService();
-		initActionAndStateOfTheComponent();
 	}
 
 	private void initWithItemOfTheOrder() {
@@ -98,7 +97,7 @@ public class ReturnController {
 						if(reason.equals(MOTIVAZIONE_PERSONALIZZATA)) {
 							reason = riarView.getCustomReasonAreaList().get(i).getText();
 						}
-						/* add item to return e then increase qty in warehouse */  
+						/* add item to return*/ 
 						try {
 							returnService.addItemToReturn(inventoryItem, reason);
 						} catch (MissingReasonException | UnableToReturnException e) {
@@ -168,91 +167,5 @@ public class ReturnController {
 		// TODO Auto-generated method stub
 		returnService.removeAllFromReturn();
 		returnService.setReturnedItems(ReturnServiceDAOFacade.getIstance().readItemAndReason(returnService.getReturnableOrder()));
-	}
-
-
-
-
-
-
-
-
-
-
-
-	private void initActionAndStateOfTheComponent() {
-		/*
-		 * Listener for the checkBox: If you don't select an item you won't be able to choose the reason
-		 */
-		/*
-		ItemListener addItemListener=new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				if(e.getStateChange() == ItemEvent.SELECTED) {
-					// Abilito la JComboBox corrispondente quando la casella di controllo viene selezionata
-					int index = riarView.getCheckBoxList().indexOf(e.getSource());
-					riarView.getReasonsDropdownList().get(index).setEnabled(true);
-				} else if(e.getStateChange() == ItemEvent.DESELECTED) {
-					// Disabilito la JComboBox corrispondente quando la casella di controllo viene deselezionata
-					int index = riarView.getCheckBoxList().indexOf(e.getSource());
-					riarView.getReasonsDropdownList().get(index).setSelectedItem("Scegli una motivazione");
-					riarView.getReasonsDropdownList().get(index).setEnabled(false);
-				}
-			}
-		};
-		for(int i=0;i<riarView.getCheckBoxList().size();i++) {
-			riarView.getCheckBoxList().get(i).addItemListener(addItemListener);
-		} /*
-
-
-		/*
-		 * Listener for the reasons.
-		 */
-		/*
-		ActionListener comboListener=new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				manageAction(e);
-			}
-			private void manageAction(ActionEvent e) {
-				ArrayList<JComboBox<String>> reasonsDropdownList = riarView.getReasonsDropdownList();
-
-				JComboBox<String> combo = (JComboBox<String>) e.getSource();
-				String selectedReason = (String) combo.getSelectedItem();
-				int index = reasonsDropdownList.indexOf(combo);
-				riarView.getCustomReasonLabelList().get(index).setVisible(selectedReason.equals("Altro"));
-				riarView.getCustomReasonAreaList().get(index).setVisible(selectedReason.equals("Altro"));
-			}
-		};
-		for(int i=0;i<riarView.getReasonsDropdownList().size();i++) {
-			riarView.getReasonsDropdownList().get(i).addActionListener(comboListener);
-		}
-		 */
-		
-		
-		
-		
-		
-		/*
-		 * Listener for the backButton
-		 */
-		/*
-		ActionListener backButtonLister=new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				manageAction();
-			}
-			private void manageAction() {
-				riarView.setVisible(false);
-				returnableOrdersView.setVisible(true);
-			}
-
-		};
-		riarView.getBackButton().addActionListener(backButtonLister);
-		*/
 	}
 }

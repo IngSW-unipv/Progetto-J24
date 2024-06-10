@@ -85,7 +85,7 @@ public class ReturnableOrdersHandler {
 					returnableOrdersView.showErrorMessagge(e.getMessage());
 					return;
 				}
-				new ReturnController(returnService,new ReturnItemsAndReasonsView(returnableOrdersView)); 
+				new ReturnController(returnService,new ReturnItemsAndReasonsView(returnableOrdersView,returnableOrdersView.getShopFrame())); 
 			}
 		};
 		returnableOrdersView.getConfirmButton().addActionListener(confirmButtonLister);

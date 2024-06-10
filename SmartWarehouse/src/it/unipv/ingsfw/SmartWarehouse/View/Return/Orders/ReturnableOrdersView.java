@@ -35,7 +35,6 @@ public class ReturnableOrdersView extends JFrame{
 	private JButton backButton;
 	private ShopFrame shopFrame;
 
-
 	/*
 	 * Init the View
 	 */
@@ -118,6 +117,9 @@ public class ReturnableOrdersView extends JFrame{
 	}
 	public JButton getConfirmButton() {
 		return confirmButton;
+	}
+	public ShopFrame getShopFrame() {
+		return shopFrame;
 	}
 }
 

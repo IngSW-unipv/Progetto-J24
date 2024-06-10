@@ -43,6 +43,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Shop.OrderLine;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.RegisterFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.View.ShopFrame;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.BackButtonListenerForReturnItemsAndReasonView;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.CheckBoxListener;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.ComboBoxListener;
@@ -65,11 +66,13 @@ public class ReturnItemsAndReasonsView extends JFrame{
 	private JButton backButton;
 	private JButton nextButton;
 	private ReturnableOrdersView returnableOrdersView;
+	private ShopFrame shopFrame;
 
 
 
-	public ReturnItemsAndReasonsView(ReturnableOrdersView returnableOrdersView) {
+	public ReturnItemsAndReasonsView(ReturnableOrdersView returnableOrdersView, ShopFrame shopFrame) {
 		super();
+		this.shopFrame=shopFrame;
 		this.returnableOrdersView=returnableOrdersView;
 		
 		setTitle("Items and Reasons");
@@ -207,9 +210,8 @@ public class ReturnItemsAndReasonsView extends JFrame{
 				options,
 				options[0]);
 		if (n == JOptionPane.YES_OPTION) {
-			this.dispose();
+			this.shopFrame.setVisible(true);
 		} else if (n == JOptionPane.NO_OPTION) {
-			// new ShopView ecc.
 		}
 	}
 
