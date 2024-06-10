@@ -17,7 +17,10 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentProcess;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IStdPrimePaymentStrategy;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Shop;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.StdPrimePaymentFactory;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
+import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyManager;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Orders.ReturnableOrdersView;
+import it.unipv.ingsfw.SmartWarehouse.View.inventory.InventoryView;
 import it.unipv.ingsfw.SmartWarehouse.View.ShopFrame;
 
 public class ShopController {
@@ -184,9 +187,11 @@ public class ShopController {
 			public void actionPerformed(ActionEvent e) {
 
 				new ReturnableOrdersHandler(new ReturnableOrdersView(view));
+				view.setVisible(false);
 
 			}
 		};
 		view.getOrders().addActionListener(goToOrderArea);
 	}
 }
+

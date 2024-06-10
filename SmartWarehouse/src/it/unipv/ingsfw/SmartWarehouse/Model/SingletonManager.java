@@ -16,6 +16,7 @@ import it.unipv.ingsfw.SmartWarehouse.Database.SupplyDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.SupplyOrderDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.UserDAO;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.User;
 
 public class SingletonManager {
