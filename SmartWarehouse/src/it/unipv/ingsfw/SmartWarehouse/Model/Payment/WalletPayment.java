@@ -1,16 +1,16 @@
 //
 package it.unipv.ingsfw.SmartWarehouse.Model.Payment;
 
+import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
 import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
 
 public class WalletPayment { 
 	
-		public void makeWalletPayment(double amount,String senderEmail,String receiverEmail) {
-			// Logica per il pagamento tramite PayPal
+		public void makeWalletPayment(double amount,String senderEmail,String receiverEmail) throws PaymentException{
 			Client c=(Client) SingletonManager.getInstance().getLoggedUser();
 			if(c.getWallet()<amount) {
-				System.err.println("GESTIRE L'ECCEZIONE DI PAGAMENTO");
+				throw new PaymentException();
 			}
 			else {
 				c.setWallet(c.getWallet()-amount);
