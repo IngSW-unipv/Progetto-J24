@@ -54,7 +54,6 @@ CREATE TABLE clients (
   name varchar(20) DEFAULT NULL,
   surname varchar(20) DEFAULT NULL,
   email varchar(40) NOT NULL,
-  address varchar(30) DEFAULT NULL,
   password varchar(18) DEFAULT NULL,
   primary key(`email`)
 );
