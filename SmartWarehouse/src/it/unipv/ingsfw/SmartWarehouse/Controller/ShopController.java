@@ -94,6 +94,7 @@ public class ShopController {
 				        mode = PaymentFactory.getWalletPaymentAdapter();
 				        break;
 					}
+					double exW = model.getCl().getWallet();
 					
 					PaymentProcess pay=new PaymentProcess(mode, model.getCl().getEmail(), "warehause");
 					IStdPrimePaymentStrategy stdprimestr = StdPrimePaymentFactory.spedi(model.getCl().getPrime());
@@ -106,7 +107,7 @@ public class ShopController {
 					} catch (PaymentException ex) {
 						view.displayWarn(ex.getMessage());
 					} catch (IllegalArgumentException | EmptyKartExceptio | ItemNotFoundException exx) {
-						model.getCl().setWallet(model.getCl().getWallet() + total);
+						model.getCl().setWallet(exW);
 						view.displayWarn(exx.getMessage());
 					}
 												
