@@ -1,7 +1,6 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.inventory;
 
 import java.util.List;
-
 import it.unipv.ingsfw.SmartWarehouse.Exception.AuthorizationDeniedException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 
@@ -19,6 +18,7 @@ public interface IInventoryItem {
 	public boolean increaseQty() throws ItemNotFoundException, IllegalArgumentException;
 	public boolean decreaseQty() throws ItemNotFoundException, IllegalArgumentException;
 	public List<Object[]> getSuppliersInfo() throws ItemNotFoundException;
+	
 }
 
   
