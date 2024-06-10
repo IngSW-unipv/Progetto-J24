@@ -20,7 +20,8 @@ public class Login {
 		
 	}
 
-	public Client loginClient (String email, String password) throws EmptyFieldException, NullPointerException {
+	public Client loginClient (String email, String password) throws EmptyFieldException, NullPointerException, WrongFieldException {
+		//passwordClCheck(email, password);
 		fieldClCheck(email, password);	
 		User u = SingletonManager.getInstance().getUserDAO().getClientByEmail(email);
 		SingletonManager.getInstance().setLoggedUser(u);
@@ -53,6 +54,7 @@ public class Login {
 		}
 	}
 
+	/*
 	 private void passwordClCheck(String email, String password) throws WrongFieldException {
 		 	User u= SingletonManager.getInstance().getUserDAO().getClientByEmail(email);
 		 	String pw=SingletonManager.getInstance().getUserDAO().selectPassword(u);
@@ -60,5 +62,6 @@ public class Login {
 	            throw new WrongFieldException();
 	        }
 	    }
+	    */
 	
 }

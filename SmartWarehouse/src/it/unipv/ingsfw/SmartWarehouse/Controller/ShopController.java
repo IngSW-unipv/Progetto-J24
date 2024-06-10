@@ -1,5 +1,6 @@
 
 
+
 package it.unipv.ingsfw.SmartWarehouse.Controller;
 
 import java.awt.Color;
@@ -100,10 +101,9 @@ public class ShopController {
 					IStdPrimePaymentStrategy stdprimestr = StdPrimePaymentFactory.spedi(model.getCl().getPrime());
 					double total = stdprimestr.pay( model.getKart().getTotal() );
 					try {
-						if(pay.startPayment(total)) {
-							view.displayInfo("pagamento di "+ total + "euro effettuato");
-							model.makeOrder();
-						}
+						model.makeOrder();
+						pay.startPayment(total);
+						view.displayInfo("pagamento di "+ total + "euro effettuato");
 						view.setInfoLabText(model.getKart().getSkuqty().size());						
 					} catch (PaymentException | IllegalArgumentException | EmptyKartExceptio | ItemNotFoundException ex) {
 						view.displayWarn(ex.getMessage());						
