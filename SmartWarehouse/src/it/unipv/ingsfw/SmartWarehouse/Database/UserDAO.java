@@ -8,10 +8,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import it.unipv.ingsfw.SmartWarehouse.Controller.MainController;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supply;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.User;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.WarehouseOperator;
+import it.unipv.ingsfw.SmartWarehouse.View.MainView;
+
 import java.sql.Connection;
 
 public class UserDAO implements IUserDAO{
@@ -76,14 +80,15 @@ public class UserDAO implements IUserDAO{
 		String email = u.getEmail();
 		String result = new String();
 		conn = DBConnection.startConnection(conn, schema);
-		Statement st1;
+		PreparedStatement st1;
 		ResultSet rs1;
 
 		try {
-			st1 = conn.createStatement();
-			String query = "select password from clients" + "where email= '" + email + "'";
-
-			rs1 = st1.executeQuery(query);
+			
+			String query = "select password from clients where email=?";
+			st1 = conn.prepareStatement(query);
+			st1.setString(1,email);
+			rs1 = st1.executeQuery();
 
 			if (rs1.next()) {
 				result = rs1.getString("Password");
