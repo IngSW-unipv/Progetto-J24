@@ -2,6 +2,7 @@ package it.unipv.ingsfw.SmartWarehouse.View;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -27,14 +29,16 @@ public class ShopFrame extends JFrame{
 	private HashSet<JButton> kartbutts;
 	private JButton kart,shop,pay,orders,prime;
 	private JLabel kartInfoLab, wallet;
+	private JScrollPane scrollShop, scrollKart;
+	private final int Soglia = 5;
 
 	public ShopFrame() {
 		
-		try {
+		/*try {
 			UIManager.setLookAndFeel(new NimbusLookAndFeel());
 		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
-		}
+		}*/
 		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -65,6 +69,9 @@ public class ShopFrame extends JFrame{
 		kartPan=new JPanel();
 		infoPan=new JPanel();
 		
+		shopPan.setLayout(new GridLayout(10, 10));
+		kartPan.setLayout(new GridLayout(10, 10));
+		
 		kartInfoLab=new JLabel();
 		kartInfoLab.setPreferredSize(new Dimension(200,80));
 		kartInfoLab.setText("elementi nel carrello: 0");
@@ -82,21 +89,25 @@ public class ShopFrame extends JFrame{
 		bar.add(orders);
 		bar.add(prime);
 		
+		scrollShop = new JScrollPane(shopPan, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollKart = new JScrollPane(kartPan, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		
 		this.add(bar, BorderLayout.NORTH);
-		this.add(shopPan, BorderLayout.CENTER);
+		this.add(scrollShop, BorderLayout.CENTER);
 		this.add(infoPan, BorderLayout.SOUTH);
 	}
 	
 	public void makeShop(InventoryManager inv) {
 		shopbutts = new ArrayList<JButton>();
 		for(InventoryItem i: inv.getInventory()) {
-			JButton b=new JButton(i.getDescription()+": "+i.getPrice()+"$");
-			
-			b.setFocusable(false);
-			b.setPreferredSize(new Dimension(150,100));
-			b.setActionCommand(i.getSku());
-			shopbutts.add(b);
-			shopPan.add(b);
+			if(i.getQty() > Soglia) {
+				JButton b=new JButton(i.getDescription()+": "+i.getPrice()+"$");
+				b.setFocusable(false);
+				b.setPreferredSize(new Dimension(300,90));
+				b.setActionCommand(i.getSku());
+				shopbutts.add(b);
+				shopPan.add(b);
+			}
 		}
 		
 		shop.setVisible(false);
@@ -127,9 +138,9 @@ public class ShopFrame extends JFrame{
 	}
 	
 	public void showShop() {
-		shopPan.setVisible(true);
-		kartPan.setVisible(false);
-		this.add(shopPan, BorderLayout.CENTER);
+		scrollShop.setVisible(true);
+		scrollKart.setVisible(false);
+		this.add(scrollShop, BorderLayout.CENTER);
 		
 		shop.setVisible(false);
 		kart.setVisible(true);
@@ -138,9 +149,9 @@ public class ShopFrame extends JFrame{
 	}
 	
 	public void showKart() {
-		kartPan.setVisible(true);
-		shopPan.setVisible(false);
-		this.add(kartPan, BorderLayout.CENTER);
+		scrollKart.setVisible(true);
+		scrollShop.setVisible(false);
+		this.add(scrollKart, BorderLayout.CENTER);
 		
 		shop.setVisible(true);
 		kart.setVisible(false);

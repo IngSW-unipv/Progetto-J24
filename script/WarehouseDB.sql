@@ -54,9 +54,10 @@ CREATE TABLE clients (
   name varchar(20) DEFAULT NULL,
   surname varchar(20) DEFAULT NULL,
   email varchar(40) NOT NULL,
-  address varchar(30) DEFAULT NULL,
   password varchar(18) DEFAULT NULL,
-  primary key(`email`)
+  prime boolean,
+  wallet double,
+  primary key(email)
 );
 
 drop table if exists clientorders;
@@ -68,6 +69,7 @@ CREATE TABLE clientorders (
   date datetime DEFAULT NULL,
   picked bool not NULL,
   primary key(id,sku,email),
+  key id (id),
   key sku (sku),
   key email (email),
   foreign key(sku) references inventory (sku),

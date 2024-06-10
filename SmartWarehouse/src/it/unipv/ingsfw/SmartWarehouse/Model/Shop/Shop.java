@@ -32,8 +32,15 @@ public class Shop {
 		kart.remove(inv.findInventoryItem(sku));
 	}
 	
-	public void makeOrder() throws IllegalArgumentException, EmptyKartExceptio, ItemNotFoundException {
+	public void makeOrder() throws IllegalArgumentException, EmptyKartExceptio, ItemNotFoundException, PaymentException {
+		checkMoney();
 		reg.addOrd(kart.PayAndOrder(cl));
+	}
+	
+	private void checkMoney() throws PaymentException{
+		if(cl.getWallet()-kart.getTotal() <= 0) {
+			throw new PaymentException();
+		}
 	}
 	
 	
