@@ -100,16 +100,20 @@ public class ShopController {
 					IStdPrimePaymentStrategy stdprimestr = StdPrimePaymentFactory.spedi(model.getCl().getPrime());
 					double total = stdprimestr.pay( model.getKart().getTotal() );
 					try {
-						model.makeOrder();
 						pay.startPayment(total);
+						model.makeOrder();
 						view.displayInfo("pagamento di "+ total + "euro effettuato");
 						view.setInfoLabText(model.getKart().getSkuqty().size());						
-					} catch (PaymentException | IllegalArgumentException | EmptyKartExceptio | ItemNotFoundException ex) {
-						view.displayWarn(ex.getMessage());						
+					} catch (PaymentException ex) {
+						view.displayWarn(ex.getMessage());
+					} catch (IllegalArgumentException | EmptyKartExceptio | ItemNotFoundException exx) {
+						model.getCl().setWallet(model.getCl().getWallet() + total);
+						view.displayWarn(exx.getMessage());
+					}
+												
 					}
 					view.setWalletLabImp(model.getCl().getWallet());
 				}
-			}
 		};
 		
 		ActionListener gokart=new ActionListener() {
