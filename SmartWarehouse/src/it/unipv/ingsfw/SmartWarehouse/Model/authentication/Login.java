@@ -2,9 +2,6 @@ package it.unipv.ingsfw.SmartWarehouse.Model.authentication;
 
 import javax.swing.JFrame;
 
-
-
-
 import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyFieldException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.WrongFieldException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.WrongOperatorException;
@@ -19,25 +16,28 @@ public class Login {
 	public Login () {
 		
 	}
-
-	public Client loginClient (String email, String password) throws EmptyFieldException, NullPointerException, WrongFieldException {
-		//passwordClCheck(email, password);
-		fieldClCheck(email, password);	
-		User u = SingletonManager.getInstance().getUserDAO().getClientByEmail(email);
-		SingletonManager.getInstance().setLoggedUser(u);
-		if(u==null) {
-			throw new NullPointerException("Client not valid");
-		}
-		return (Client)u;
-		
-	}
-
+	/*
+	 * login method for the client
+	 */
+	public Client loginClient(String email, String password) throws EmptyFieldException, NullPointerException, WrongFieldException {
+        fieldClCheck(email, password);
+        User u = SingletonManager.getInstance().getUserDAO().getClientByEmail(email);
+        if (u == null) {
+            throw new NullPointerException("Client not valid");
+        }
+        passwordClCheck(email, password);
+        SingletonManager.getInstance().setLoggedUser(u);
+        return (Client) u;
+    }
 	private void fieldClCheck(String email, String password) throws EmptyFieldException {
 		if (email.isEmpty() == true || password.isEmpty() == true) {
 			throw new EmptyFieldException();
 		}
 		
 	}
+	/*
+	 * login method for the operator
+	 */
 	
 	public WarehouseOperator loginOp (String id) throws WrongOperatorException,EmptyFieldException{
 		fieldOpCheck(id);	
@@ -53,15 +53,17 @@ public class Login {
 			throw new EmptyFieldException();
 		}
 	}
-
 	/*
-	 private void passwordClCheck(String email, String password) throws WrongFieldException {
-		 	User u= SingletonManager.getInstance().getUserDAO().getClientByEmail(email);
-		 	String pw=SingletonManager.getInstance().getUserDAO().selectPassword(u);
-		 	if (pw!=password) {
-	            throw new WrongFieldException();
-	        }
-	    }
-	    */
+	 * method for check if the password and the email are correct
+	 */
+
+	private void passwordClCheck(String email, String password) throws WrongFieldException {
+        User u = SingletonManager.getInstance().getUserDAO().getClientByEmail(email);
+        String pw= SingletonManager.getInstance().getUserDAO().selectPassword(u);
+
+        if (!pw.equals(password)) {  
+            throw new WrongFieldException();
+        }
+    }
 	
 }
