@@ -12,5 +12,7 @@ public interface IRegisterDAO {
 	public ArrayList<Integer> selectAllIds() ;
 	public ArrayList<OrderLine> showAllOrder();
 	public int selectId(int id);
+	public boolean getPicked(int id);
+	public boolean setPicked(int id);
 }
 
