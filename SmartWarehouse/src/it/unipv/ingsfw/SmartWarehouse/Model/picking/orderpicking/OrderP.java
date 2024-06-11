@@ -72,8 +72,7 @@ public class OrderP extends Order {
 	            if (actualQuantity != qty) {
 	                throw new QuantityMismatchException("Quantity mismatch for item " + sku + ". Actual quantity in order: " + actualQuantity);
 	            }
-	            System.out.println("Item found at position: " + entry.getKey().getPos());
-	            System.out.println("SKU: " + entry.getKey().getSku());
+	        
 	        }
 	    }
 
@@ -81,6 +80,16 @@ public class OrderP extends Order {
 	        throw new ItemNotFoundException("Item not found for SKU: " + sku);
 	    }
 	}
+	 /*
+     * method for stamp the spuLabel
+     */
+	public String getSpuLabel() {
+		String result = "Email: ".concat(this.getEmail()).concat(", ")
+				.concat("ID: ").concat(String.valueOf(this.getId())).concat(", ");
+		    return result;
+	}
+
+	
 	    
 	
 }
