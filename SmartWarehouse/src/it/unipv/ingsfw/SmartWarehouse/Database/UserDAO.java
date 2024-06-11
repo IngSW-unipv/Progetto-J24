@@ -8,14 +8,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
-import it.unipv.ingsfw.SmartWarehouse.Controller.MainController;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supply;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.User;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.WarehouseOperator;
-import it.unipv.ingsfw.SmartWarehouse.View.MainView;
-
 import java.sql.Connection;
 
 public class UserDAO implements IUserDAO{
@@ -53,7 +49,7 @@ public class UserDAO implements IUserDAO{
 	}
 
 	
-	//user valido
+	
 	public boolean insertClient (Client c) {
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;
@@ -77,30 +73,30 @@ public class UserDAO implements IUserDAO{
 	}
 		
 	public String selectPassword(User u) {
-		String email = u.getEmail();
-		String result = new String();
-		conn = DBConnection.startConnection(conn, schema);
-		PreparedStatement st1;
-		ResultSet rs1;
+        String email = u.getEmail();
+        String result = "";
+        conn = DBConnection.startConnection(conn, schema);
+        PreparedStatement st1;
+        ResultSet rs1;
 
-		try {
-			
-			String query = "select password from clients where email=?";
-			st1 = conn.prepareStatement(query);
-			st1.setString(1,email);
-			rs1 = st1.executeQuery();
+        try {
+            String query = "select password from clients where email= ?";
+            st1 = conn.prepareStatement(query);
+            st1.setString(1, email);
+            rs1 = st1.executeQuery(); 
 
-			if (rs1.next()) {
-				result = rs1.getString("Password");
-			}
+            if (rs1.next()) {
+                result = rs1.getString("password"); 
+            }
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBConnection.closeConnection(conn);
+        }
+        return result;
+    }
 
-		DBConnection.closeConnection(conn);
-		return result;
-	}
 
 	public String selectEmail(User u) {
 
@@ -131,7 +127,7 @@ public class UserDAO implements IUserDAO{
 	public User selectUserByEmail(User u) {
 
 		String emails = u.getEmail();
-		String pw=null; //= u.getPassword();
+		String pw=null; 
 		User result = null;
 		conn = DBConnection.startConnection(conn, schema);
 		Statement st1;
@@ -197,7 +193,7 @@ public class UserDAO implements IUserDAO{
 
 	        try {
 	            conn = DBConnection.startConnection(conn, schema);
-	            String query = "select * from user"; // Query per selezionare tutti gli utenti
+	            String query = "select * from user"; 
 	            statement = conn.prepareStatement(query);
 	            resultSet = statement.executeQuery();
 
@@ -237,7 +233,7 @@ public class UserDAO implements IUserDAO{
 		    }
 			return result;
 		}
-	//per inserire gli op
+	
 		public boolean insertOperator(WarehouseOperator op) {
 			conn=DBConnection.startConnection(conn,schema);
 			PreparedStatement st1;
