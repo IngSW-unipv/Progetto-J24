@@ -14,22 +14,24 @@ public class Registration {
 	public Registration(Client c) {
 		this.c=c;
 	}
+	/*
+	 * method for the registration the client
+	 */
 	
-	public boolean registerClient() throws AccountAlreadyExistsException,DatabaseException, EmptyFieldException {
-		fieldCheck();
-		boolean result =false;
-		if(SingletonManager.getInstance().getUserDAO().getClientByEmail(c.getEmail())==null){
-			boolean resultDB= SingletonManager.getInstance().getUserDAO().insertClient(c);
-				result=true;
-				if(resultDB=false) {
-					throw new DatabaseException();
-				}
-				
-		} else {
-			throw new AccountAlreadyExistsException();
-		}
-		return result;
-	}
+	public boolean registerClient() throws AccountAlreadyExistsException, EmptyFieldException {
+        fieldCheck();
+        boolean result = false;
+        if (SingletonManager.getInstance().getUserDAO().getClientByEmail(c.getEmail()) == null) {
+            boolean resultDB = SingletonManager.getInstance().getUserDAO().insertClient(c);
+            result = true;
+        } else {
+            throw new AccountAlreadyExistsException();
+        }
+        return result;
+    }
+	/*
+	 * method for check if there are some empty filed
+	 */
 
 	private void fieldCheck() throws EmptyFieldException {
 		
