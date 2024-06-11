@@ -190,27 +190,47 @@ public class RegisterDAO implements IRegisterDAO {
 	/*
 	 * when i finish packing,then i change the picked column
 	 */
-	public boolean setPicked(int orderId) {
+	public boolean setPicked(int id) {
 	    Connection conn = null;
 	    PreparedStatement st1 = null;
-	    boolean result;
-
+	    boolean result = false; 
 	    try {
 	        conn = DBConnection.startConnection(conn, schema);
-	        String query = "update clientorders set picked = true where id = ?";
+	        String query = "update clientorders set picked = 1 where id = ?";
 	        st1 = conn.prepareStatement(query);
-	        st1.setInt(1, orderId);
-	        
+	        st1.setInt(1, id);
 	        int rowsUpdated = st1.executeUpdate();
-	        return rowsUpdated > 0;
+	        if (rowsUpdated > 0) {
+	            result = true;
+	        }
 	        
 	    } catch (Exception e) {
-		    e.printStackTrace();
-		    result=false;
-		} finally {
-		    DBConnection.closeConnection(conn);
-		}
-		return result;
+	        e.printStackTrace();
+	    } finally {
+	        DBConnection.closeConnection(conn);
+	    }
+	    return result; 
 	}
-	
+	/*
+	 * method for get the picked column 
+	 */
+	public boolean getPicked(int id) {
+	    conn = DBConnection.startConnection(conn, schema);
+	    Statement st1;
+	    try {
+	        st1 = conn.createStatement();
+	        String query = "select picked from clientorders WHERE id = " + id; 
+	        ResultSet rs1;
+	        rs1 = st1.executeQuery(query);
+	        if (rs1.next()) {
+	            return rs1.getBoolean(1);
+	        } else {
+	            return false;
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
 }
