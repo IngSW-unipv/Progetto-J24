@@ -270,4 +270,7 @@ public class PickingView {
             return null;
         }
     }
+    public void showSpuLabel(String spuLabel) {
+        JOptionPane.showMessageDialog(frame, spuLabel, "SPU Label", JOptionPane.INFORMATION_MESSAGE);
+    }
 }
