@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import it.unipv.ingsfw.SmartWarehouse.Exception.AccountAlreadyExistsException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.DatabaseException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyFieldException;
+import it.unipv.ingsfw.SmartWarehouse.Exception.WrongOperatorException;
 import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Shop;
 import it.unipv.ingsfw.SmartWarehouse.Model.authentication.Login;
@@ -100,11 +101,12 @@ public class MainController {
             public void actionPerformed(ActionEvent e) {
                 try {
                     manageAction();
-                } catch (EmptyFieldException | AccountAlreadyExistsException | DatabaseException e1) {
+                } catch (EmptyFieldException | AccountAlreadyExistsException e1) {
                     JOptionPane.showMessageDialog(regView, e1.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }
             }
-            private void manageAction() throws EmptyFieldException, AccountAlreadyExistsException, DatabaseException {
+
+            private void manageAction() throws EmptyFieldException, AccountAlreadyExistsException {
                 Client c = new Client(
                     regView.getNameField().getText(),
                     regView.getSurnameField().getText(),
@@ -116,37 +118,48 @@ public class MainController {
                 regView.setVisible(false);
                 loginView = new LoginClView();
                 okLoginClientButton();
+                loginView.setVisible(true);
             }
         };
         regView.getConfirmButton().addActionListener(okListener);
     }
 	
 	private void okOpButtonInit() {
-		ActionListener okListener=new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				manageAction();
-			}
-			private void manageAction() {
-				Login login = new Login();
-				String idview=String.valueOf(loginOpView.getTextId().getPassword());
-				try {
-					login.loginOp(String.valueOf(loginOpView.getTextId().getPassword()));
-				} catch (Exception e) {
-					JOptionPane.showMessageDialog(loginOpView, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
-				}
-				loginOpView.setVisible(false);
-				if(idview.charAt(0) == 'i' || idview.charAt(0)=='s') { 
-					InventoryView iv=new InventoryView();
-					new InventoryController(new InventoryManager(), iv);
-					new SupplyController(new SupplyManager(), iv.getSupplyPanel());
-				}
-				else{
-					PickingView viewp =new PickingView();
-					new PickingController(viewp);
-				}	
-			}
-		};
-		loginOpView.getConfirmButton().addActionListener(okListener);
+	    ActionListener okListener = new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	            try {
+	                manageAction();
+	            } catch (WrongOperatorException e1) {
+	                e1.printStackTrace();
+	                JOptionPane.showMessageDialog(loginOpView, e1.getMessage(), "Errore Operatore", JOptionPane.ERROR_MESSAGE);
+	            }
+	        }
+	        private void manageAction() throws WrongOperatorException {
+	            Login login = new Login();
+	            String idview = String.valueOf(loginOpView.getTextId().getPassword());
+	            try {
+	                login.loginOp(String.valueOf(loginOpView.getTextId().getPassword()));
+	            } catch (Exception e) {
+	                
+	                JOptionPane.showMessageDialog(loginOpView, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+	                return; 
+	            }
+	            if (idview.charAt(0) == 'i' || idview.charAt(0) == 's') {
+	                loginOpView.setVisible(false);
+	                InventoryView iv = new InventoryView();
+	                new InventoryController(new InventoryManager(), iv);
+	                new SupplyController(new SupplyManager(), iv.getSupplyPanel());
+	            } else if (idview.charAt(0) == 'p') {
+	                loginOpView.setVisible(false);
+	                PickingView viewp = new PickingView();
+	                new PickingController(viewp);
+	            } else {
+	                throw new WrongOperatorException();
+	            }
+	        }
+	    };
+	    loginOpView.getConfirmButton().addActionListener(okListener);
 	}
+
 	
 }
