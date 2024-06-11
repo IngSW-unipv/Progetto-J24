@@ -37,18 +37,34 @@ public class PickingController {
         addItemButtonListener();
         addPackedListener();
     }
-
+    /*
+     * method for select the type of the pack
+     */
     private void addPackageTypeListeners() {
         ActionListener packageTypeListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JButton button = (JButton) e.getSource();
-                if (button.equals(view.getSmall())) {
-                    choosePackageType("Small");
-                } else if (button.equals(view.getMedium())) {
-                    choosePackageType("Medium");
-                } else if (button.equals(view.getLarge())) {
-                    choosePackageType("Large");
+                int id = view.getSelectedOrderId();
+                if (id != -1) {
+                    Order or = RegisterFacade.getIstance().selectOrder(id);
+                    if (or != null) {
+                        JButton button = (JButton) e.getSource();
+                        if (button.equals(view.getSmall())) {
+                            choosePackageType("Small");
+                        } 
+                        else if (button.equals(view.getMedium())) {
+                            choosePackageType("Medium");
+                        } 
+                        else if (button.equals(view.getLarge())) {
+                            choosePackageType("Large");
+                        }
+                    } 
+                    else {
+                        view.showErrorMessage("No order selected.");
+                    }
+                }
+                else {
+                    view.showErrorMessage("you can't select a pack if you don't select an order.");
                 }
             }
         };
@@ -57,7 +73,9 @@ public class PickingController {
         view.getMedium().addActionListener(packageTypeListener);
         view.getLarge().addActionListener(packageTypeListener);
     }
-
+    /*
+     * method for calulate the type of the pack
+     */
     private void addCalculatePackListener() {
         view.getCalculatePack().addActionListener(new ActionListener() {
             @Override
@@ -73,12 +91,14 @@ public class PickingController {
                         throw new ReturnableOrderNullPointerException();
                     }
                 } else {
-                    view.showErrorMessage("Nessun ordine selezionato.");
+                    view.showErrorMessage("No order selected.");
                 }
             }
         });
     }
-
+    /*
+     * method for add the item at the pack
+     */
     private void addItemButtonListener() {
         view.getItemButton().addActionListener(new ActionListener() {
             @Override
@@ -95,7 +115,9 @@ public class PickingController {
             }
         });
     }
-
+    /*
+     * method for packed a pack
+     */
     private void addPackedListener() {
         view.getPacked().addActionListener(new ActionListener() {
             @Override
@@ -105,9 +127,15 @@ public class PickingController {
                     Order or = RegisterFacade.getIstance().selectOrder(id);
                     if (or != null) {
                         try {
-                       
-                            validateItems(sku,qty);
+                            validateItems(sku, qty);
                             confirmPackaging(or);
+                            boolean updated = RegisterDAOFacade.getIstance().setPicked(id);
+                            if (updated) {
+                                String spuLabel = ((OrderP) or).getSpuLabel();
+                                view.showSpuLabel(spuLabel);
+                            } else {
+                                view.showErrorMessage("Failed to mark order as packed.");
+                            }
                         } catch (ItemNotFoundException | QuantityMismatchException ex) {
                             view.showErrorMessage(ex.getMessage());
                         }
@@ -115,11 +143,15 @@ public class PickingController {
                         throw new ReturnableOrderNullPointerException();
                     }
                 } else {
-                    view.showErrorMessage("Nessun ordine selezionato.");
+                    view.showErrorMessage("No order selected.");
                 }
             }
         });
     }
+
+    /*
+     * method for select the type of the pack
+     */
 
     private void displayOrderIds() {
         ArrayList<Integer> idList = RegisterDAOFacade.getIstance().selectAllIds();
@@ -139,14 +171,17 @@ public class PickingController {
         };
 
         for (Integer orderId : idList) {
-            if (!displayedIds.contains(orderId)) {
+        	boolean picked =RegisterDAOFacade.getIstance().getPicked(orderId);
+            if (!picked && !displayedIds.contains(orderId)) {
                 JButton button = view.displayOrderIds(orderId);
                 button.addActionListener(orderButtonListener);
                 displayedIds.add(orderId);
             }
         }
     }
-    
+    /*
+     * method for show the pack
+     */
     
     private void showItems(int id) {
         OrderP or = (OrderP) RegisterFacade.getIstance().selectOrder(id);
@@ -158,6 +193,7 @@ public class PickingController {
              view.displayOrderItems(orderItemsString);
      }
      
+    
     private void confirmPackaging(Order order) {
         view.showConfirmationMessage("Order packed successfully.");
     }
@@ -182,7 +218,7 @@ public class PickingController {
                 throw new ReturnableOrderNullPointerException();
             }
         } else {
-            view.showErrorMessage("Nessun ordine selezionato.");
+            view.showErrorMessage("No order selected.");
         }
     }
 
