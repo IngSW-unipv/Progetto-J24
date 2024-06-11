@@ -42,5 +42,11 @@ public class RegisterDAOFacade{
 	public int selectId(int id) {
 		return regD.selectId(id);
 	}
+	public boolean getPicked(int id) {
+		return regD.getPicked(id);
+	}
+	public boolean setPicked(int id) {
+		return regD.setPicked(id);
+	}
 	
 }
