@@ -10,6 +10,8 @@ import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.QuantityMismatchException;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.Model.picking.packagefactory.PackageStrategyFactory;
+import it.unipv.ingsfw.SmartWarehouse.Model.picking.packagestrategy.IPackageStrategy;
 
 public class OrderP extends Order {
 	private HashMap<InventoryItem, Integer> skuqty;
@@ -87,6 +89,10 @@ public class OrderP extends Order {
 		String result = "Email: ".concat(this.getEmail()).concat(", ")
 				.concat("ID: ").concat(String.valueOf(this.getId())).concat(", ");
 		    return result;
+	}
+	
+	public IPackageStrategy calculatePack() {
+		return new PackageStrategyFactory().getPackageStrategy(this);
 	}
 
 	
