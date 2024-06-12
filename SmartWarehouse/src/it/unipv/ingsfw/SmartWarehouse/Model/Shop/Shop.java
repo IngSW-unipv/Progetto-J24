@@ -14,6 +14,7 @@ public class Shop {
 	private RegisterFacade reg;
 	private Client cl;
 	private final double primeImport=50;
+	private final int Soglia=5;
 	
 	public Shop() {	
 		this.kart = new Kart();
@@ -23,7 +24,10 @@ public class Shop {
 	}
 	
 	public void addToKart(String sku, int qty) throws IllegalArgumentException{
-		kart.add(inv.findInventoryItem(sku), qty);	
+		if(inv.findInventoryItem(sku).getQty() > qty + Soglia) {
+			kart.add(inv.findInventoryItem(sku), qty);
+		}
+		else throw new IllegalArgumentException("not eanugh items");
 	}
 	
 	public void removeFromKart(String sku) {

@@ -159,14 +159,15 @@ public class ShopFrame extends JFrame{
 		this.setTitle("SmartWarehouse/Shop/Kart");
 	}
 	
-	public int displayOption() throws NumberFormatException{
-		int ret=0;
-		ret=Integer.parseInt(JOptionPane.showInputDialog("insert quantity:"));
-		if(ret<=0) {
-			NumberFormatException ex = new NumberFormatException();
-			throw ex;
+	public int displayOption()throws NumberFormatException{
+		String ret;
+		int q = 0;
+		ret=JOptionPane.showInputDialog("insert quantity:");
+		if(ret != null) {
+			q = Integer.parseInt(ret);
 		}
-		return ret;
+		else throw new NumberFormatException();
+		return q;
 	}
 	
 	public void displayInfo(String info) {

@@ -17,10 +17,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentProcess;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IStdPrimePaymentStrategy;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Shop;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.StdPrimePaymentFactory;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
-import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyManager;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Orders.ReturnableOrdersView;
-import it.unipv.ingsfw.SmartWarehouse.View.inventory.InventoryView;
 import it.unipv.ingsfw.SmartWarehouse.View.ShopFrame;
 
 public class ShopController {
@@ -48,19 +45,18 @@ public class ShopController {
 			public void actionPerformed(ActionEvent e) {
 				int q=0;
 				try {
-				q=view.displayOption();
-				
-				}catch(NumberFormatException ex1) {
-					System.err.print("invalid argument please retry");}
-				try {
-				model.addToKart(e.getActionCommand(),q);
-				
-				}catch(IllegalArgumentException ex2) {
-					System.err.print("invalid argument please retry");
+					q=view.displayOption();
+					try {
+						model.addToKart(e.getActionCommand(),q);
+					}catch(IllegalArgumentException ex2) {
+						view.displayWarn(ex2.getMessage());
+					}
+					view.setInfoLabText(model.getKart().getSkuqty().size());
+				} catch (NumberFormatException exx) {
+					//do nothing
 				}
-				view.setInfoLabText(model.getKart().getSkuqty().size());
+				
 			}
-			
 		};
 		for(JButton b: view.getShopButts()){
 			b.addActionListener(addk);
@@ -187,11 +183,9 @@ public class ShopController {
 			public void actionPerformed(ActionEvent e) {
 
 				new ReturnableOrdersHandler(new ReturnableOrdersView(view));
-				view.setVisible(false);
 
 			}
 		};
 		view.getOrders().addActionListener(goToOrderArea);
 	}
 }
-
