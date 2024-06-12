@@ -1,6 +1,7 @@
 package it.unipv.ingsfw.SmartWarehouse.Controller;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
+
 import it.unipv.ingsfw.SmartWarehouse.Exception.QuantityMismatchException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ReturnableOrderNullPointerException;
 import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
@@ -10,7 +11,8 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Shop.RegisterDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.RegisterFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.picking.orderpicking.OrderP;
-import it.unipv.ingsfw.SmartWarehouse.Model.picking.packagestrategy.PackageStrategy;
+import it.unipv.ingsfw.SmartWarehouse.Model.picking.packagefactory.PackageStrategyFactory;
+import it.unipv.ingsfw.SmartWarehouse.Model.picking.packagestrategy.IPackageStrategy;
 import it.unipv.ingsfw.SmartWarehouse.View.PickingView;
 
 import javax.swing.*;
@@ -84,9 +86,10 @@ public class PickingController {
                 if (id != -1) {
                     Order or = RegisterFacade.getIstance().selectOrder(id);
                     if (or != null) {
-                        PackageStrategy ps = new PackageStrategy((OrderP) or);
-                        String packageInfoText = ps.morePack().concat("\n");
-                        view.displayPackageInfo(packageInfoText);
+                    	OrderP o=(OrderP)or;
+                    	IPackageStrategy strategy =  o.calculatePack();
+                	    String packageInfo = strategy.calculatePackages();
+                        view.displayPackageInfo(packageInfo);
                     } else {
                         throw new ReturnableOrderNullPointerException();
                     }
