@@ -2,6 +2,7 @@ package it.unipv.ingsfw.SmartWarehouse.Model.inventory;
 
 import java.util.List;
 
+import it.unipv.ingsfw.SmartWarehouse.Controller.MainController;
 import it.unipv.ingsfw.SmartWarehouse.Exception.AuthorizationDeniedException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
@@ -10,6 +11,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.randomGenerator.RandomGenerator;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supply;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.InventoryOperator;
+import it.unipv.ingsfw.SmartWarehouse.View.MainView;
 
 public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> {
 	private String description;

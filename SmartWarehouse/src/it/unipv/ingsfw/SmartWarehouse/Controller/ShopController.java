@@ -183,7 +183,7 @@ public class ShopController {
 			public void actionPerformed(ActionEvent e) {
 
 				new ReturnableOrdersHandler(new ReturnableOrdersView(view));
-
+				view.setVisible(false);
 			}
 		};
 		view.getOrders().addActionListener(goToOrderArea);

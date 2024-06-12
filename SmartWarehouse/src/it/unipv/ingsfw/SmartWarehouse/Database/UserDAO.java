@@ -8,9 +8,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import it.unipv.ingsfw.SmartWarehouse.Controller.PickingController;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supply;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.User;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.InventoryOperator;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.PickingOperator;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.SupplyOperator;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.WarehouseOperator;
 import java.sql.Connection;
 
@@ -47,8 +52,6 @@ public class UserDAO implements IUserDAO{
 	    }
 		return result;
 	}
-
-	
 	
 	public boolean insertClient (Client c) {
 		conn=DBConnection.startConnection(conn,schema);
@@ -123,40 +126,6 @@ public class UserDAO implements IUserDAO{
 		DBConnection.closeConnection(conn);
 		return result;
 	}
-
-	public User selectUserByEmail(User u) {
-
-		String emails = u.getEmail();
-		String pw=null; 
-		User result = null;
-		conn = DBConnection.startConnection(conn, schema);
-		Statement st1;
-		ResultSet rs1;
-
-		try {
-			st1 = conn.createStatement();
-			String query = "select * from clients where email= '" + emails ;
-
-			rs1 = st1.executeQuery(query);
-
-			if (rs1.next()) {
-
-				String name= rs1.getString("name");
-				String surname = rs1.getString("surname");
-				String email = rs1.getString("email");
-				String password = rs1.getString("password");
-				result = new User(name, surname, email);
-			}else {
-				return u;
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		DBConnection.closeConnection(conn);
-		return result;
-	}
 	
 	public boolean deleteUser(User u) {
 
@@ -183,34 +152,7 @@ public class UserDAO implements IUserDAO{
 		return esito;
 
 	}
-	
-	 public List<User> getUsersFromDatabase() {
-		 
-	        List<User> userList = new ArrayList<>();
-	        Connection conn = null;
-	        PreparedStatement statement = null;
-	        ResultSet resultSet = null;
 
-	        try {
-	            conn = DBConnection.startConnection(conn, schema);
-	            String query = "select * from user"; 
-	            statement = conn.prepareStatement(query);
-	            resultSet = statement.executeQuery();
-
-	            while (resultSet.next()) {
-	                String name = resultSet.getString("name");
-	                String surname = resultSet.getString("surname");
-	                String email = resultSet.getString("email");
-	                User user = new User(name, surname, email);
-	                userList.add(user);
-	            }
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        } 
-	        
-	        DBConnection.closeConnection(conn);
-	        return userList;
-	    }
 	 public User getOpById (String id) {
 			conn=DBConnection.startConnection(conn,schema);
 			PreparedStatement st1;
@@ -222,10 +164,20 @@ public class UserDAO implements IUserDAO{
 				st1=conn.prepareStatement(query);
 				st1.setString(1, id);
 				rs1=st1.executeQuery();
-				if(rs1.next()) {
-					result= new WarehouseOperator(rs1.getString(1),rs1.getString(2), rs1.getString(3),rs1.getString(4));
-				}
 				
+				if(rs1.next()) {
+					switch(id.charAt(0)) {
+						case 'i':
+							result = new InventoryOperator(rs1.getString(1),rs1.getString(2), rs1.getString(3),rs1.getString(4));
+							break;
+						case 's':
+							result = new SupplyOperator(rs1.getString(1),rs1.getString(2), rs1.getString(3),rs1.getString(4));
+							break;
+						case 'p':
+							result = new PickingOperator(rs1.getString(1),rs1.getString(2), rs1.getString(3),rs1.getString(4));
+							break;
+					}
+				}	
 			} catch  (Exception e) { 
 				e.printStackTrace();
 			} finally {

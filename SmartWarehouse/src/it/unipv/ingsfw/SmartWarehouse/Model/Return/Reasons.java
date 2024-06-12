@@ -12,7 +12,7 @@ public class Reasons {
 	private static final String NO_REASON ="MOTIVO1";
 	private static final String REASONS_NOT_INITIALIZED_EXCEPTION_MESSAGE="Reasons not initialized. Call initializeReasons() first.";
 	//properties\\MotivazioniReso
-	private static final String REASONS_FILE_PATH = "/Users/giuliatrespiolli/Documents/GitHub/Progetto-J24/SmartWarehouse/properties/MotivazioniReso";
+	private static final String REASONS_FILE_PATH = "properties/MotivazioniReso";
 	private static Map<String, String> reasons; //la motivazione è una coppia: nome_del_motivo+motivo
 	private Reasons() {
 	}

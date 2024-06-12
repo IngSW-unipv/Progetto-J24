@@ -19,7 +19,7 @@ public class Login {
 	/*
 	 * login method for the client
 	 */
-	public Client loginClient(String email, String password) throws EmptyFieldException, NullPointerException, WrongFieldException {
+	public void loginClient(String email, String password) throws EmptyFieldException, NullPointerException, WrongFieldException {
         fieldClCheck(email, password);
         User u = SingletonManager.getInstance().getUserDAO().getClientByEmail(email);
         if (u == null) {
@@ -27,7 +27,6 @@ public class Login {
         }
         passwordClCheck(email, password);
         SingletonManager.getInstance().setLoggedUser(u);
-        return (Client) u;
     }
 	private void fieldClCheck(String email, String password) throws EmptyFieldException {
 		if (email.isEmpty() == true || password.isEmpty() == true) {
@@ -39,15 +38,15 @@ public class Login {
 	 * login method for the operator
 	 */
 	
-	public WarehouseOperator loginOp (String id) throws WrongOperatorException,EmptyFieldException{
+	public void loginOp (String id) throws WrongOperatorException,EmptyFieldException{
 		fieldOpCheck(id);	
 		User u = SingletonManager.getInstance().getUserDAO().getOpById(id);
-		SingletonManager.getInstance().setLoggedUser(u);
+		SingletonManager.getInstance().setLoggedUser(u); 
 		if(u==null) {
 			throw new WrongOperatorException();
 		} 
-		return (WarehouseOperator)u;
 	}	
+	
 	private void fieldOpCheck(String id) throws EmptyFieldException {
 		if(id.isEmpty()==true) {
 			throw new EmptyFieldException();

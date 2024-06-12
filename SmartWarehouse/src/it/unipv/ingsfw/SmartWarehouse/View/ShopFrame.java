@@ -22,7 +22,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
 
 @SuppressWarnings("serial")
-public class ShopFrame extends JFrame{
+public class ShopFrame extends JFrame {
 
 	private JPanel shopPan,kartPan,infoPan;
 	private ArrayList<JButton> shopbutts;
@@ -33,12 +33,6 @@ public class ShopFrame extends JFrame{
 	private final int Soglia = 5;
 
 	public ShopFrame() {
-		
-		/*try {
-			UIManager.setLookAndFeel(new NimbusLookAndFeel());
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}*/
 		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
