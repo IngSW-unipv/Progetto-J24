@@ -4,7 +4,7 @@ import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.QuantityMismatchException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ReturnableOrderNullPointerException;
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Register;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.RegisterDAOFacade;
@@ -167,7 +167,7 @@ public class PickingController {
                 String command = e.getActionCommand();
                 int id = Integer.parseInt(command);
 
-                SingletonManager.getInstance().getRegisterDAO().selectOrder(id);
+                SingletonUser.getInstance().getRegisterDAO().selectOrder(id);
                 showItems(id);
                 view.setSelectedOrderId(id);
             }

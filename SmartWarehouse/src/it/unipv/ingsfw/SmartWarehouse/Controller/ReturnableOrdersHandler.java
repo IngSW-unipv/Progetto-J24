@@ -11,7 +11,7 @@ import javax.swing.ButtonModel;
 
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.UnableToReturnException;
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnService;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
@@ -38,7 +38,7 @@ public class ReturnableOrdersHandler {
 	 */
 	private void initWithClientOrders() {
 		//ArrayList<Order> allClientOrders = RegisterFacade.getIstance().selectOrderWhereClient("john.doe@example.com"); 
-		ArrayList<Order> allClientOrders = RegisterFacade.getIstance().selectOrderWhereClient(SingletonManager.getInstance().getLoggedUser().getEmail()); 
+		ArrayList<Order> allClientOrders = RegisterFacade.getIstance().selectOrderWhereClient(SingletonUser.getInstance().getLoggedUser().getEmail()); 
 		ArrayList<String> ordersDescriptionsForButton = new ArrayList<>();
 		Integer[] orderIdForActionCommand=new Integer[allClientOrders.size()];
 		int count=0;

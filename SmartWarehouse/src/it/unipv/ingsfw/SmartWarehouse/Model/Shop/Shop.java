@@ -3,7 +3,7 @@ package it.unipv.ingsfw.SmartWarehouse.Model.Shop;
 import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyKartExceptio;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
 
@@ -18,9 +18,9 @@ public class Shop {
 	
 	public Shop() {	
 		this.kart = new Kart();
-		this.inv = SingletonManager.getInstance().getInventoryManager();
+		this.inv = new InventoryManager();
 		this.reg = RegisterFacade.getIstance();
-		this.cl = (Client)SingletonManager.getInstance().getLoggedUser();		
+		this.cl = (Client)SingletonUser.getInstance().getLoggedUser();		
 	}
 	
 	public void addToKart(String sku, int qty) throws IllegalArgumentException{

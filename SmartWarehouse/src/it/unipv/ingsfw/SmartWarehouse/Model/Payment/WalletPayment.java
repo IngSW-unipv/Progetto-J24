@@ -2,13 +2,13 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.Payment;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
 
 public class WalletPayment { 
 	
 		public void makeWalletPayment(double amount,String senderEmail,String receiverEmail) throws PaymentException{
-			Client c=(Client) SingletonManager.getInstance().getLoggedUser();
+			Client c=(Client) SingletonUser.getInstance().getLoggedUser();
 			if(c.getWallet()<amount) {
 				throw new PaymentException();
 			}

@@ -11,7 +11,7 @@ import it.unipv.ingsfw.SmartWarehouse.Exception.AccountAlreadyExistsException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.DatabaseException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyFieldException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.WrongOperatorException;
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Shop;
 import it.unipv.ingsfw.SmartWarehouse.Model.authentication.Login;
 import it.unipv.ingsfw.SmartWarehouse.Model.authentication.Registration;

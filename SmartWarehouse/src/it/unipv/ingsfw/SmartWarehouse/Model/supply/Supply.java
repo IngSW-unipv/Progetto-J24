@@ -9,7 +9,7 @@ import it.unipv.ingsfw.SmartWarehouse.Exception.supplier.SupplierDoesNotExistExc
 import it.unipv.ingsfw.SmartWarehouse.Exception.supply.InvalidSupplyException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.supply.SupplyAlreadyExistsException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.supply.SupplyDoesNotExistException;
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.randomGenerator.*;
@@ -149,7 +149,7 @@ public class Supply {
 	
 	private void checkreplenishAuthorization() throws AuthorizationDeniedException {
 		try {
-			SupplyOperator op= (SupplyOperator)SingletonManager.getInstance().getLoggedUser();
+			SupplyOperator op= (SupplyOperator)SingletonUser.getInstance().getLoggedUser();
 		} catch(ClassCastException e) {
 			throw new AuthorizationDeniedException();
 		}

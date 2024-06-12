@@ -5,7 +5,7 @@ import java.util.List;
 import it.unipv.ingsfw.SmartWarehouse.Controller.MainController;
 import it.unipv.ingsfw.SmartWarehouse.Exception.AuthorizationDeniedException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
 import it.unipv.ingsfw.SmartWarehouse.Model.randomGenerator.IRandomGenerator;
 import it.unipv.ingsfw.SmartWarehouse.Model.randomGenerator.RandomGenerator;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supply;
@@ -118,7 +118,7 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
 	
 	private void checkAuthorization() throws AuthorizationDeniedException {
 		try {
-			InventoryOperator op= (InventoryOperator)SingletonManager.getInstance().getLoggedUser();
+			InventoryOperator op= (InventoryOperator)SingletonUser.getInstance().getLoggedUser();
 		} catch (ClassCastException e) {
 			throw new AuthorizationDeniedException();
 		}
@@ -183,5 +183,6 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
         //descending sort with the difference between stdLevel and quantity
         return Integer.compare(diffOther, diffThis);
 	}
+		
 
 }

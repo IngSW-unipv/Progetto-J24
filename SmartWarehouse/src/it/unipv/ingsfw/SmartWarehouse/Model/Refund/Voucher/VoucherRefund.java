@@ -1,7 +1,7 @@
 //
 package it.unipv.ingsfw.SmartWarehouse.Model.Refund.Voucher;
 
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
 
 public class VoucherRefund {
@@ -13,7 +13,7 @@ public class VoucherRefund {
 		boolean result=true;
 		System.out.println("Emesso un voucher del valore di "+value);
 		try {
-			Client client=(Client) SingletonManager.getInstance().getLoggedUser();
+			Client client=(Client) SingletonUser.getInstance().getLoggedUser();
 			client.setWallet(client.getWallet()+value);
 		}
 		catch(ClassCastException e) {

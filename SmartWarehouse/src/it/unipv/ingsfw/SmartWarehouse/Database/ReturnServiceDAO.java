@@ -14,7 +14,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 
 public class ReturnServiceDAO implements IReturnServiceDAO{
@@ -43,7 +43,7 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 			String query="SELECT * FROM RETURNSERVICE WHERE OrderID=? AND ClientEmail=?";
 			st1 = conn.prepareStatement(query);
 			st1.setInt(1,returnableOrder.getId());
-			st1.setString(2,SingletonManager.getInstance().getLoggedUser().getEmail()); 
+			st1.setString(2,SingletonUser.getInstance().getLoggedUser().getEmail()); 
 			rs1=st1.executeQuery();
 
 			if(rs1.next())
@@ -73,7 +73,7 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 			String query="SELECT ITEM,REASON FROM RETURNSERVICE WHERE ORDERID=? AND ClientEmail=?";
 			st1 = conn.prepareStatement(query);
 			st1.setInt(1,returnableOrder.getId()); 
-			st1.setString(2,SingletonManager.getInstance().getLoggedUser().getEmail()); 
+			st1.setString(2,SingletonUser.getInstance().getLoggedUser().getEmail()); 
 			rs1=st1.executeQuery();
 
 			while(rs1.next())
@@ -100,7 +100,7 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 			String query="SELECT ITEM FROM RETURNSERVICE WHERE ORDERID=? AND ClientEmail=?";
 			st1 = conn.prepareStatement(query);
 			st1.setInt(1,returnableOrder.getId()); 
-			st1.setString(2,SingletonManager.getInstance().getLoggedUser().getEmail()); 
+			st1.setString(2,SingletonUser.getInstance().getLoggedUser().getEmail()); 
 			rs1=st1.executeQuery();
 
 			while(rs1.next())
@@ -127,7 +127,7 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 			String query="SELECT MONEYALREADYRETURNED FROM RETURNSERVICE WHERE ORDERID=? AND ClientEmail=?";
 			st1 = conn.prepareStatement(query);
 			st1.setInt(1,returnableOrder.getId());
-			st1.setString(2,SingletonManager.getInstance().getLoggedUser().getEmail()); 
+			st1.setString(2,SingletonUser.getInstance().getLoggedUser().getEmail()); 
 			rs1=st1.executeQuery();
 
 			while(rs1.next())
@@ -159,7 +159,7 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 				st1.setString(2, entry.getKey().getSku()); 
 				st1.setString(3, entry.getValue()); 
 				st1.setDouble(4, returnService.getMoneyAlreadyReturned());
-				st1.setString(5, SingletonManager.getInstance().getLoggedUser().getEmail());
+				st1.setString(5, SingletonUser.getInstance().getLoggedUser().getEmail());
 				st1.executeUpdate();
 			}
 
@@ -190,7 +190,7 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 			st1.setInt(1, rs.getReturnableOrder().getId()); //evitare chiamate ricorsive
 			st1.setString(2,rm.toString()); 
 			st1.setTimestamp(3,new java.sql.Timestamp(new Date().getTime()));
-			st1.setString(4, SingletonManager.getInstance().getLoggedUser().getEmail());
+			st1.setString(4, SingletonUser.getInstance().getLoggedUser().getEmail());
 			st1.executeUpdate();
 		}catch (Exception e){
 			e.printStackTrace();
@@ -209,7 +209,7 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 			String query = "DELETE FROM RETURNSERVICE WHERE ORDERID = ? AND ClientEmail=?";
 			PreparedStatement st1 = conn.prepareStatement(query);
 			st1.setInt(1, rs.getReturnableOrder().getId());
-			st1.setString(2, SingletonManager.getInstance().getLoggedUser().getEmail());
+			st1.setString(2, SingletonUser.getInstance().getLoggedUser().getEmail());
 			int rowsAffected = st1.executeUpdate();
 			if (rowsAffected <= 0) {
 				success = false;
