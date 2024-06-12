@@ -135,7 +135,6 @@ public class ShopController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				view.showShop();
-				System.out.println(model.getKart().toString());
 			}
 		};
 		
@@ -187,5 +186,38 @@ public class ShopController {
 			}
 		};
 		view.getOrders().addActionListener(goToOrderArea);
+		
+		ActionListener chargeWallet=new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				IPayment mode=null;
+				switch (view.displayPaymentOption()) {
+			    case 0:
+			        mode = PaymentFactory.getPayPalAdapter();
+			        break;
+			    case 1:
+			        mode = PaymentFactory.getWalletPaymentAdapter();
+			        break;
+				}
+				PaymentProcess pay=new PaymentProcess(mode, model.getCl().getEmail(), "magazzo");
+				int q = 0;
+				try {
+					q=view.displayOption();
+				}catch (NumberFormatException ex) {
+					//do nothing?
+				}
+				
+				try {
+					pay.startPayment(q);
+					model.getCl().setWallet(model.getCl().getWallet() + q);
+					view.displayInfo("pagamento di "+q+"euro effettuato");
+				} catch (PaymentException e1) {
+					view.displayWarn(e1.getMessage());
+				}
+				view.setWalletLabImp(model.getCl().getWallet());
+			}
+		};
+		view.getChargeWallet().addActionListener(chargeWallet);
 	}
 }

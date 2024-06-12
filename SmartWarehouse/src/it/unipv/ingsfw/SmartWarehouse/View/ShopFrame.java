@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -27,7 +28,7 @@ public class ShopFrame extends JFrame {
 	private JPanel shopPan,kartPan,infoPan;
 	private ArrayList<JButton> shopbutts;
 	private HashSet<JButton> kartbutts;
-	private JButton kart,shop,pay,orders,prime;
+	private JButton kart,shop,pay,orders,prime, chargeWallet;
 	private JLabel kartInfoLab, wallet;
 	private JScrollPane scrollShop, scrollKart;
 	private final int Soglia = 5;
@@ -45,12 +46,14 @@ public class ShopFrame extends JFrame {
 		pay =new JButton("PAY");
 		orders =new JButton("Orders");
 		prime =new JButton("Get Your Prime");
+		chargeWallet =new JButton("Recharge Wallet");
 		
 		shop.setPreferredSize(new Dimension(90, 40));
 		kart.setPreferredSize(new Dimension(90, 40));
 		pay.setPreferredSize(new Dimension(90, 40));
 		orders.setPreferredSize(new Dimension(110, 40));
 		prime.setPreferredSize(new Dimension(90, 40));
+		chargeWallet.setPreferredSize(new Dimension(90, 40));
 		
 		kart.setFocusable(false);
 		shop.setFocusable(false);
@@ -58,6 +61,7 @@ public class ShopFrame extends JFrame {
 		orders.setFocusable(false);
 		orders.setVisible(true);
 		prime.setVisible(true);
+		chargeWallet.setVisible(true);
 		
 		shopPan=new JPanel();
 		kartPan=new JPanel();
@@ -75,6 +79,7 @@ public class ShopFrame extends JFrame {
 		wallet.setPreferredSize(new Dimension(200,80));
 		wallet.setText("Wallet: 0 euro");
 		infoPan.add(wallet);
+		infoPan.add(chargeWallet);
 		
 		JToolBar bar=new JToolBar();
 		bar.add(kart);
@@ -249,6 +254,10 @@ public class ShopFrame extends JFrame {
 
 	public void setOrders(JButton orders) {
 		this.orders = orders;
+	}
+
+	public JButton getChargeWallet() {
+		return chargeWallet;
 	}
 
 }
