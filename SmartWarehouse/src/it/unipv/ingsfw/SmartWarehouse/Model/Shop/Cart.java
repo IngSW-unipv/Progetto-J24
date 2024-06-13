@@ -5,23 +5,20 @@ import java.util.HashSet;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyKartExceptio;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
-import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
-import it.unipv.ingsfw.SmartWarehouse.Model.Payment.IPayment;
-import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentProcess;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
 
-public class Kart {
+public class Cart {
 	HashMap<InventoryItem,Integer> skuqty;
 	
-	public Kart() {
+	public Cart() {
 		skuqty=new HashMap<InventoryItem, Integer>();
 	}
 	
 	public void add(InventoryItem it, int qty)throws IllegalArgumentException{
 		int i;
 		if(qty <= 0) {
-			IllegalArgumentException e=new IllegalArgumentException();
+			IllegalArgumentException e=new IllegalArgumentException("qty cannot be negative or 0");
 			throw e;
 		}
 		i=skuqty.getOrDefault(it, 0)+qty;
@@ -29,7 +26,7 @@ public class Kart {
 	}
 	
 	public void remove(InventoryItem it) {
-		 skuqty.remove(it);
+		 skuqty.remove(findItemInCart(it));
 	}
 		
 	public Order PayAndOrder(Client cl) throws EmptyKartExceptio, IllegalArgumentException, ItemNotFoundException {
@@ -74,8 +71,21 @@ public class Kart {
 	public String toString() {
 		String out="";
 		for(InventoryItem i: skuqty.keySet()) {
-			out = out+i.toString()+"-"+skuqty.get(i)+"\n";
+			out = out+i.getDescription()+"-"+skuqty.get(i)+"\n";
 		}
 		return out;
+	}
+	
+	
+	
+	private InventoryItem findItemInCart(InventoryItem it) {
+		InventoryItem in = null;
+		for(InventoryItem i: getSet()) {
+			if(it.getSku().equals(i.getSku())) {
+				in = i;
+				break;
+			}
+		}
+		return in;
 	}
 }
