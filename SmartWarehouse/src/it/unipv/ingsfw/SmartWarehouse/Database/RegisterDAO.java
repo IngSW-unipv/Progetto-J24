@@ -60,7 +60,7 @@ public class RegisterDAO implements IRegisterDAO {
 		
 		try {
 			
-			String query1="SELECT * FROM clientorders WHERE email = ? ORDER BY id";
+			String query1="SELECT * FROM clientorders WHERE EMAIL = ? AND PICKED=1 ORDER BY ID,DATE";
 			st1 = conn.prepareStatement(query1);
 			st1.setString(1,email); 
 			rs1=st1.executeQuery();

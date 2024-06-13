@@ -16,7 +16,7 @@ public class Reasons {
 	private static Map<String, String> reasons; //la motivazione è una coppia: nome_del_motivo+motivo
 	private Reasons() {
 	}
-	public static  void initializeReasons() {
+	public static  void init() {
 		reasons = new HashMap<>();
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(REASONS_FILE_PATH));

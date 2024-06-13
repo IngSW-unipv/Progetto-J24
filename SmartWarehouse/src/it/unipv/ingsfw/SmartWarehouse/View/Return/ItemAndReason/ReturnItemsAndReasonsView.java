@@ -1,4 +1,5 @@
 
+
 //
 package it.unipv.ingsfw.SmartWarehouse.View.Return.ItemAndReason;
 
@@ -213,9 +214,9 @@ public class ReturnItemsAndReasonsView extends JFrame{
 			this.shopFrame.setVisible(true);
 		} else if (n == JOptionPane.NO_OPTION) {
 		}
+		this.setVisible(false);
 	}
-
-
+	
 	public static String getVoucherRadioText() {
 		return VOUCHER_RADIO_TEXT;
 	}

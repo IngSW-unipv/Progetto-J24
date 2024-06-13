@@ -1,6 +1,7 @@
 //
 package it.unipv.ingsfw.SmartWarehouse.Model.Refund.Voucher;
 
+import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 
 public class VoucherAdapter implements IRefund{
@@ -13,7 +14,7 @@ public class VoucherAdapter implements IRefund{
 	}
 
 	@Override
-	public boolean issueRefund() {
+	public boolean issueRefund() throws PaymentException {
 		return vr.makeVoucher();
 
 	}

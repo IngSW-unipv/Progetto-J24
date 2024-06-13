@@ -19,6 +19,8 @@ public class ReturnService {
 	private Map<IInventoryItem, String> returnedItems;
 	private double moneyAlreadyReturned;
 	private ReturnServiceDAOFacade returnServiceDAOFacade;
+	private static int NUMBER_OF_DAYS_WITHIN_WHICH_RETURN_CAN_BE_MADE=30;
+	
 	/*
 	 * Constructor and Checking the order date to verify returnability.
 	 */
@@ -63,7 +65,7 @@ public class ReturnService {
 		for(IInventoryItem i:returnServiceDAOFacade.readItem(this.returnableOrder)){
 			try {
 				if(i!=null)
-				i.decreaseQty();
+					i.decreaseQty();
 			} catch (IllegalArgumentException | ItemNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -82,7 +84,7 @@ public class ReturnService {
 		returnServiceDAOFacade.writeReturnService(this);
 		returnServiceDAOFacade.writeRefundMode(this,rm);
 	}
-	
+
 	/*
 	 * toString() Method
 	 */
@@ -126,9 +128,15 @@ public class ReturnService {
 		return getReturnedItems().keySet();
 	}
 	public LocalDateTime getCriticalDate() {
-		return returnableOrder.getDate().plusDays(30);
+		return returnableOrder.getDate().plusDays(NUMBER_OF_DAYS_WITHIN_WHICH_RETURN_CAN_BE_MADE);
 	}
 	public int getQtyYouAreAllowedToReturn(IInventoryItem inventoryItem) {
 		return returnableOrder.getQtyBySku(inventoryItem.getSku());
+	}
+	public String getEmailOfReturnableOrder(){
+		return returnableOrder.getEmail();	
+	}
+	public int getIdOfReturnableOrder() {
+		return returnableOrder.getId();
 	}
 }

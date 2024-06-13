@@ -13,8 +13,7 @@ public class BankTransfer {
 		this.receiverEmail=receiverEmail;
 	}
 	public boolean makeBankTransfer() throws PaymentException {
-		PaymentProcess pp= new PaymentProcess(PaymentFactory.getPayPalAdapter(),senderEmail,receiverEmail);
-		System.out.println("Emissione bonifico in corso.... attendere");
+		PaymentProcess pp= new PaymentProcess(PaymentFactory.getPayPalAdapter(new PayPal()),senderEmail,receiverEmail);
         return pp.startPayment(value);
 	}
 	public double getValue() {

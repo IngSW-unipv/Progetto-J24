@@ -6,6 +6,7 @@ import java.util.HashSet;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 
 public interface IReturnable {
+	public String getEmail();
 	public InventoryItem getItemBySku(String sku);
 	public int getQtyBySku(String sku);
 	public String getDescBySku(String sku);

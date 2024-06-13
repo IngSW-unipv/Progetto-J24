@@ -42,22 +42,14 @@ public class ReturnableOrdersView extends JFrame{
 		super();
 		this.shopFrame=shopFrame;
 		setTitle("Return Service");
-		setSize(400, 200);
+		setSize(1500, 800);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		try {
 			UIManager.setLookAndFeel(new NimbusLookAndFeel());
 		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
-
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		int screenWidth = (int) screenSize.getWidth();
-		int screenHeight = (int) screenSize.getHeight();
-		int windowWidth = (int) (screenWidth*0.9); 
-		int windowHeight = (int) (screenHeight*0.9); 
-		setSize(windowWidth, windowHeight);
-		setLocationRelativeTo(null); // Centro la finestra
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		mainPanel = new JPanel();
 		mainPanel.repaint();

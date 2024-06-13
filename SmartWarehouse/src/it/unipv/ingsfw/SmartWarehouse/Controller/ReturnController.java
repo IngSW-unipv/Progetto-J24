@@ -1,3 +1,4 @@
+
 //
 package it.unipv.ingsfw.SmartWarehouse.Controller;
 import java.awt.event.ActionEvent;
@@ -12,7 +13,6 @@ import javax.swing.JOptionPane;
 import it.unipv.ingsfw.SmartWarehouse.Exception.MissingReasonException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.UnableToReturnException;
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.RefundFactory;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.BankTransfer.BankTransfer;
@@ -57,7 +57,7 @@ public class ReturnController {
 				count++;
 			}
 		}
-		Reasons.initializeReasons();
+		Reasons.init();
 		riarView.initWithItemOfTheOrder(itemsDescriptionsForButton,skuForActionCommand,Reasons.getReasons());
 	}
 
@@ -97,9 +97,9 @@ public class ReturnController {
 						try {
 							returnService.addItemToReturn(inventoryItem, reason);
 						} catch (MissingReasonException | UnableToReturnException e) {
-							removeItemsNotActuallyReturned();
 							riarView.setVisible(true);
 							riarView.showErrorMessagge(e.getMessage());
+							removeItemsNotActuallyReturned();
 							return;
 						}
 					}
@@ -117,32 +117,32 @@ public class ReturnController {
 				StringBuilder message = new StringBuilder(returnService.toString()).append("Metodo di rimborso selezionato:\n");
 				ButtonModel button=riarView.getRefundButtonGroup().getSelection();
 				if(button==null) {
-					removeItemsNotActuallyReturned();
 					riarView.setVisible(true);
 					riarView.showWarningMessagge("Indicare la modalità di rimborso");
-
+					removeItemsNotActuallyReturned();
 					return;
 				}
 				message.append(button.getActionCommand());
 
 				// Recap popup to confirm or cancel the return.
+				riarView.setVisible(true);
 				int recapPopup = riarView.showConfirmPopUp(message.toString());
 				if(recapPopup==JOptionPane.OK_OPTION) {
 					IRefund refundMode;
 					if (button.getActionCommand().equals(ReturnItemsAndReasonsView.getBankTransferRadioText())) {
-						BankTransfer br = new BankTransfer(returnService.getMoneyToBeReturned(),"EMAIL MAGAZZINO DA DEFINIRE",SingletonUser.getInstance().getLoggedUser().getEmail());
+						BankTransfer br = new BankTransfer(returnService.getMoneyToBeReturned(),"EMAIL MAGAZZINO DA DEFINIRE",returnService.getEmailOfReturnableOrder());
 						refundMode=RefundFactory.getBankTransferAdapter(br);
 					}
 					else {
-						VoucherRefund vr = new VoucherRefund(returnService.getMoneyToBeReturned());
+						VoucherRefund vr = new VoucherRefund(returnService.getMoneyToBeReturned(),"EMAIL MAGAZZINO DA DEFINIRE",returnService.getEmailOfReturnableOrder());
 						refundMode=RefundFactory.getVoucherAdapter(vr);
 					}
 					try {
 						returnService.issueRefund(refundMode);
 					} catch (PaymentException e) {
-						removeItemsNotActuallyReturned();
 						riarView.setVisible(true);
 						riarView.showErrorMessagge(e.getMessage());
+						removeItemsNotActuallyReturned();
 						return;
 					}
 					returnService.setMoneyAlreadyReturned(returnService.getMoneyAlreadyReturned()+refundMode.getValue());

@@ -1,6 +1,4 @@
 
-
-
 package it.unipv.ingsfw.SmartWarehouse.Controller;
 
 import java.awt.Color;
@@ -47,11 +45,11 @@ public class ShopController {
 				try {
 					q=view.displayOption();
 					try {
-						model.addToKart(e.getActionCommand(),q);
+						model.addToCart(e.getActionCommand(),q);
 					}catch(IllegalArgumentException ex2) {
 						view.displayWarn(ex2.getMessage());
 					}
-					view.setInfoLabText(model.getKart().getSkuqty().size());
+					view.setInfoLabText(model.getCart().getSkuqty().size());
 				} catch (NumberFormatException exx) {
 					//do nothing
 				}
@@ -67,11 +65,11 @@ public class ShopController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(view.displayConfirm()==0) {
-					model.removeFromKart(e.getActionCommand());
+					model.removeFromCart(e.getActionCommand());
 					for(JButton b: view.getKartButts()) {
 						if(b.getActionCommand().equals(e.getActionCommand())) {
 							b.setVisible(false);	
-							view.setInfoLabText(model.getKart().getSkuqty().size());
+							view.setInfoLabText(model.getCart().getSkuqty().size());
 						}
 					}
 				}
@@ -97,12 +95,12 @@ public class ShopController {
 					
 					PaymentProcess pay=new PaymentProcess(mode, model.getCl().getEmail(), "warehause");
 					IStdPrimePaymentStrategy stdprimestr = StdPrimePaymentFactory.spedi(model.getCl().getPrime());
-					double total = stdprimestr.pay( model.getKart().getTotal() );
+					double total = stdprimestr.pay( model.getCart().getTotal() );
 					try {
 						pay.startPayment(total);
 						model.makeOrder();
-						view.displayInfo("pagamento di "+ total + "euro effettuato");
-						view.setInfoLabText(model.getKart().getSkuqty().size());						
+						view.displayInfo("Payment of: "+ total + "euro succesfully ended");
+						view.setInfoLabText(model.getCart().getSkuqty().size());						
 					} catch (PaymentException ex) {
 						view.displayWarn(ex.getMessage());
 					} catch (IllegalArgumentException | EmptyKartExceptio | ItemNotFoundException exx) {
@@ -119,7 +117,7 @@ public class ShopController {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				view.makeKart(model.getKart().getSet(), model.getKart().getSkuqty());
+				view.makeKart(model.getCart().getSet(), model.getCart().getSkuqty());
 				view.showKart();
 				for(JButton b: view.getKartButts()) {
 					b.addActionListener(rmvk);
@@ -158,7 +156,7 @@ public class ShopController {
 					PaymentProcess pay=new PaymentProcess(mode, model.getCl().getEmail(), "magazzo");
 					try {
 						pay.startPayment(model.getPrimeImport()); 
-						view.displayInfo("pagamento di "+model.getPrimeImport()+"euro effettuato");
+						view.displayInfo("Payment of: "+model.getPrimeImport()+"euro succesfully ended");
 						model.setPrime();
 						view.getPrime().setBackground(Color.green);
 						view.getPrime().setText("You are Prime");
@@ -205,13 +203,13 @@ public class ShopController {
 				try {
 					q=view.displayOption();
 				}catch (NumberFormatException ex) {
-					//do nothing?
+					//do nothing
 				}
 				
 				try {
 					pay.startPayment(q);
 					model.getCl().setWallet(model.getCl().getWallet() + q);
-					view.displayInfo("pagamento di "+q+"euro effettuato");
+					view.displayInfo("Payment of: "+q+"euro succesfully ended");
 				} catch (PaymentException e1) {
 					view.displayWarn(e1.getMessage());
 				}
