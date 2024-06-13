@@ -72,7 +72,7 @@ public class ShopFrame extends JFrame {
 		
 		kartInfoLab=new JLabel();
 		kartInfoLab.setPreferredSize(new Dimension(200,80));
-		kartInfoLab.setText("elementi nel carrello: 0");
+		kartInfoLab.setText("Items in kart: 0");
 		infoPan.add(kartInfoLab);
 		
 		wallet=new JLabel();
@@ -155,13 +155,13 @@ public class ShopFrame extends JFrame {
 		shop.setVisible(true);
 		kart.setVisible(false);
 		pay.setVisible(true);
-		this.setTitle("SmartWarehouse/Shop/Kart");
+		this.setTitle("SmartWarehouse/Kart");
 	}
 	
 	public int displayOption()throws NumberFormatException{
 		String ret;
 		int q = 0;
-		ret=JOptionPane.showInputDialog("insert quantity:");
+		ret=JOptionPane.showInputDialog("insert a quantity:");
 		if(ret != null) {
 			q = Integer.parseInt(ret);
 		}
@@ -174,15 +174,15 @@ public class ShopFrame extends JFrame {
 	}
 	
 	public void displayWarn(String info) {
-		JOptionPane.showMessageDialog(this, info, "PAYMENT INFO",JOptionPane.WARNING_MESSAGE);
+		JOptionPane.showMessageDialog(this, info, "WARNING",JOptionPane.WARNING_MESSAGE);
 	}
 	
 	public int displayPaymentOption() throws NumberFormatException{
 		String[] option = {"PayPall", "Wallet"};
 		int met=JOptionPane.showOptionDialog(
                 this,                               
-                "Scegli il metodo di pagamento:",    
-                "Metodo di Pagamento",               
+                "Chose the payment modality",    
+                "Payment mode",               
                 JOptionPane.DEFAULT_OPTION,          
                 JOptionPane.INFORMATION_MESSAGE,     
                 null,                                
@@ -237,7 +237,7 @@ public class ShopFrame extends JFrame {
 	}
 	
 	public void setInfoLabText(int i) {
-		this.kartInfoLab.setText("elementi nel carrello: "+i);
+		this.kartInfoLab.setText("Items in kart: "+i);
 	}
 	
 	public void setWalletLabImp(double tot) {
