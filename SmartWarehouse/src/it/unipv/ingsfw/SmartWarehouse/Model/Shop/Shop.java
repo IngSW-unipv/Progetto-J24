@@ -22,22 +22,35 @@ public class Shop {
 		this.reg = RegisterFacade.getIstance();
 		this.cl = (Client)SingletonUser.getInstance().getLoggedUser();		
 	}
-	
+	/*
+	 * puts the selected quantity into the cart 
+	 * using the inventoryManager class to get the right item 
+	 * based on the sku parameter
+	 */
 	public void addToCart(String sku, int qty) throws IllegalArgumentException{
 		if(inv.findInventoryItem(sku).getQty() > qty + Soglia) {
 			cart.add(inv.findInventoryItem(sku), qty);
 		}
 		else throw new IllegalArgumentException("not eanugh items");
 	}
-	
+	/*
+	 * removes from the cart a selected item 
+	 * with a similar way as add
+	 */
 	public void removeFromCart(String sku) {
 		cart.remove(inv.findInventoryItem(sku));
 	}
-	
+	/*
+	 * invoke a method from the Cart class that crate
+	 * the an instance of Order then used by the Register Class 
+	 * to add it in the DB
+	 */
 	public void makeOrder() throws IllegalArgumentException, EmptyKartExceptio, ItemNotFoundException, PaymentException {
 		reg.addOrd(cart.PayAndOrder(cl));
 	}
-	
+	/*
+	 * Getters and Setters
+	 */
 	public void setPrime() {
 		cl.setPrime(true);		
 	}

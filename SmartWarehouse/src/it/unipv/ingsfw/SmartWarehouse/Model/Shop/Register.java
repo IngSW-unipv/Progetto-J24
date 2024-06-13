@@ -17,18 +17,24 @@ public class Register {
 		this.inv= new InventoryManager();
 		this.id=this.red.selectLastId() + 1;
 	}
-	
+	/*
+	 * add an order to the DB
+	 */
 	public void addOrd(Order o) {
 		o.setId(id);
 		red.insertOrder(makeLine(o));
 		id++;
 	}
-	
+	/*
+	 * select an order from DB by its id
+	 */
 	public Order selectOrder(int id) {
 		return rebuildOrder(red.selectOrder(id),id);
 	}
-	
-	
+	/*
+	 * select all the order of a client 
+	 * by the email	
+	 */
 	public ArrayList<Order> selectOrderWhereClient(String email){
 		ArrayList< ArrayList<OrderLine> > orderLineList=red.selectOrderWhereClient(email);
 		ArrayList<Order> orders=new ArrayList<Order>();
@@ -37,9 +43,9 @@ public class Register {
 		}
 		return orders;
 	}
-	
-	
-	
+	/*
+	 * create a single order from multiples lines of the DB
+	 */
 	public Order rebuildOrder(ArrayList<OrderLine> o, int id) { 
 		HashMap<InventoryItem, Integer> hs = new HashMap<InventoryItem, Integer>();
 		OrderLine temp=o.get(0);
@@ -48,7 +54,9 @@ public class Register {
 		}
 		return new OrderP(hs, id, temp.getEmail(), temp.getDate());
 	}
-	
+	/*
+	 * create multiples line to put the order in the DB
+	 */
 	private ArrayList<OrderLine> makeLine(Order o) {
 		ArrayList<OrderLine> ord = new ArrayList<OrderLine>();
 		for(InventoryItem i: o.getSet()) {

@@ -14,7 +14,10 @@ public class Cart {
 	public Cart() {
 		skuqty=new HashMap<InventoryItem, Integer>();
 	}
-	
+	/*
+	 * add to the Map structure an item 
+	 * associated to its quantity
+	 */
 	public void add(InventoryItem it, int qty)throws IllegalArgumentException{
 		int i;
 		if(qty <= 0) {
@@ -24,11 +27,17 @@ public class Cart {
 		i=skuqty.getOrDefault(it, 0)+qty;
 		skuqty.put(it, i);
 	}
-	
+	/*
+	 * removes the mapping for the item selected
+	 * from the structure
+	 */
 	public void remove(InventoryItem it) {
 		 skuqty.remove(findItemInCart(it));
 	}
-		
+	/*
+	 * Create an instance of Order to return
+	 * and also updates the quantity in the DB
+	 */
 	public Order PayAndOrder(Client cl) throws EmptyKartExceptio, IllegalArgumentException, ItemNotFoundException {
 		if(skuqty.isEmpty()) {
 			throw(new EmptyKartExceptio());
@@ -38,14 +47,20 @@ public class Cart {
 		skuqty.clear();
 		return o;
 	}
-	
+	/*
+	 * used by PayAndOrder to make sure that quantity is
+	 * correctly upgraded
+	 */
 	private void updateWarehouseQty() throws IllegalArgumentException, ItemNotFoundException{
 		for(InventoryItem i: getSet()) {
 			int nuova = i.getQty() - skuqty.get(i);
 			i.updateQty(nuova);
 		}
 	}
-	
+	/*
+	 * return the total Price of the items
+	 * present in the Map structure
+	 */
 	public double getTotal() {
 		double tot = 0;
 		for(InventoryItem i: getSet()) {
@@ -53,7 +68,9 @@ public class Cart {
 		}
 		return tot;
 	}
-	
+	/*
+	 * Getters and Setters	
+	 */
 	public HashMap<InventoryItem, Integer> getSkuqty() {
 		return skuqty;
 	}

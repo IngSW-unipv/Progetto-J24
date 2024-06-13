@@ -13,13 +13,19 @@ public class Order implements IReturnable{
 	private int id;
 	private String email;
 	private LocalDateTime date;
-	
+	/*
+	 * first constructor to initialize an instance of order with
+	 * essential information and default values
+	 */
 	public Order(HashMap<InventoryItem, Integer> skuqty, String email) {
 		this.skuqty=new HashMap<InventoryItem, Integer>();
 		this.skuqty.putAll(skuqty);
 		this.email=email;
 		date = LocalDateTime.now();
-		
+	/*
+	 * second constructor to create an instance with a complete
+	 * information of the order
+	 */
 	}
 	public Order(HashMap<InventoryItem, Integer> skuqty, int id, String email, LocalDateTime date) {
 		this.skuqty=new HashMap<InventoryItem, Integer>();
@@ -28,7 +34,9 @@ public class Order implements IReturnable{
 		this.email=email;
 		this.date=date;
 	}
-
+	/*
+	 * Getters and Setters
+	 */
 	public int getId() {
 		return id;
 	}
