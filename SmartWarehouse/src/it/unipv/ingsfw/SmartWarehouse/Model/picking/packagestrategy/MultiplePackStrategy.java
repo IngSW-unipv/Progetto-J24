@@ -7,6 +7,9 @@ import it.unipv.ingsfw.SmartWarehouse.Model.picking.orderpicking.OrderP;
 
 public class MultiplePackStrategy implements IPackageStrategy {
     private OrderP o;
+    public int counts=0;
+	public int countm = 0;
+	public int countl = 0;
 
     public MultiplePackStrategy(OrderP o) {
         this.o = o;
@@ -53,10 +56,16 @@ public class MultiplePackStrategy implements IPackageStrategy {
             String packSize;
             if (totalSize <= maxs) {
                 packSize = "small";
+                counts++;
+                System.out.println("small "+counts);
             } else if (totalSize <= maxm) {
                 packSize = "medium";
+                countm++;
+                System.out.println("medium "+countm);
             } else {
                 packSize = "large";
+                countl++;
+                System.out.println("large "+countl);
             }
 
             summary.append("Package ").append(i + 1).append(" is a ").append(packSize).append(" pack");
@@ -86,5 +95,30 @@ public class MultiplePackStrategy implements IPackageStrategy {
         }
         return totalSize;
     }
+    
+    public int getCounts() {
+        return counts;
+    }
+
+    public int getCountm() {
+        return countm;
+    }
+
+    public int getCountl() {
+        return countl;
+    }
+    public boolean isPackageCorrect(String packageType, int quantity) {
+        switch (packageType.toLowerCase()) {
+            case "small":
+                return counts == quantity;
+            case "medium":
+                return countm == quantity;
+            case "large":
+                return countl == quantity;
+            default:
+                return false;
+        }
+    }
+   
 }
 
