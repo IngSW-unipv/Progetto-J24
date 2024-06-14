@@ -10,8 +10,10 @@ import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyKartExceptio;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.IPayment;
+import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PayPal;
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentFactory;
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentProcess;
+import it.unipv.ingsfw.SmartWarehouse.Model.Payment.WalletPayment;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IStdPrimePaymentStrategy;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Shop;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.StdPrimePaymentFactory;
@@ -85,10 +87,10 @@ public class ShopController {
 					IPayment mode=null;
 					switch (view.displayPaymentOption()) {
 				    case 0:
-				        mode = PaymentFactory.getPayPalAdapter();
+				        mode = PaymentFactory.getPayPalAdapter(new PayPal());
 				        break;
 				    case 1:
-				        mode = PaymentFactory.getWalletPaymentAdapter();
+				        mode = PaymentFactory.getWalletPaymentAdapter(new WalletPayment());
 				        break;
 					}
 					double exW = model.getCl().getWallet();
@@ -146,10 +148,10 @@ public class ShopController {
 					IPayment mode=null;
 					switch (view.displayPaymentOption()) {
 				    case 0:
-				        mode = PaymentFactory.getPayPalAdapter();
+				        mode = PaymentFactory.getPayPalAdapter(new PayPal());
 				        break;
 				    case 1:
-				        mode = PaymentFactory.getWalletPaymentAdapter();
+				        mode = PaymentFactory.getWalletPaymentAdapter(new WalletPayment());
 				        break;
 					}
 					
@@ -192,10 +194,10 @@ public class ShopController {
 				IPayment mode=null;
 				switch (view.displayPaymentOption()) {
 			    case 0:
-			        mode = PaymentFactory.getPayPalAdapter();
+			        mode = PaymentFactory.getPayPalAdapter(new PayPal());
 			        break;
 			    case 1:
-			        mode = PaymentFactory.getWalletPaymentAdapter();
+			        mode = PaymentFactory.getWalletPaymentAdapter(new WalletPayment());
 			        break;
 				}
 				PaymentProcess pay=new PaymentProcess(mode, model.getCl().getEmail(), "magazzo");

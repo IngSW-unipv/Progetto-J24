@@ -11,10 +11,10 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentProcess;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
 
-public class Kart {
+public class Cart {
 	HashMap<InventoryItem,Integer> skuqty;
 	
-	public Kart() {
+	public Cart() {
 		skuqty=new HashMap<InventoryItem, Integer>();
 	}
 	

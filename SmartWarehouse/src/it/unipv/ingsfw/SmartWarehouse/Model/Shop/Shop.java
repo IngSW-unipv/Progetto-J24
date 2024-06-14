@@ -10,32 +10,32 @@ import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
 public class Shop {
 	
 	private InventoryManager inv;
-	private Kart kart;
+	private Cart cart;
 	private RegisterFacade reg;
 	private Client cl;
 	private final double primeImport=50;
 	private final int Soglia=5;
 	
 	public Shop() {	
-		this.kart = new Kart();
+		this.cart = new Cart();
 		this.inv = new InventoryManager();
 		this.reg = RegisterFacade.getIstance();
 		this.cl = (Client)SingletonUser.getInstance().getLoggedUser();		
 	}
 	
-	public void addToKart(String sku, int qty) throws IllegalArgumentException{
+	public void addToCart(String sku, int qty) throws IllegalArgumentException{
 		if(inv.findInventoryItem(sku).getQty() > qty + Soglia) {
-			kart.add(inv.findInventoryItem(sku), qty);
+			cart.add(inv.findInventoryItem(sku), qty);
 		}
 		else throw new IllegalArgumentException("not eanugh items");
 	}
 	
-	public void removeFromKart(String sku) {
-		kart.remove(inv.findInventoryItem(sku));
+	public void removeFromCart(String sku) {
+		cart.remove(inv.findInventoryItem(sku));
 	}
 	
 	public void makeOrder() throws IllegalArgumentException, EmptyKartExceptio, ItemNotFoundException, PaymentException {
-		reg.addOrd(kart.PayAndOrder(cl));
+		reg.addOrd(cart.PayAndOrder(cl));
 	}
 	
 	public void setPrime() {
@@ -50,8 +50,8 @@ public class Shop {
 		return inv;
 	}
 
-	public Kart getKart() {
-		return kart;
+	public Cart getCart() {
+		return cart;
 	}
 
 	public RegisterFacade getReg() {
@@ -66,8 +66,8 @@ public class Shop {
 		this.inv = inv;
 	}
 
-	public void setKart(Kart kart) {
-		this.kart = kart;
+	public void setCart(Cart cart) {
+		this.cart = cart;
 	}
 
 	public void setReg(RegisterFacade reg) {
