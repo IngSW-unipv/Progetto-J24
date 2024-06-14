@@ -32,7 +32,7 @@ public class LoginClController {
 				private void manageClAction() {
 					c.setEmail((String.valueOf(view.getEmailField())));
 					c.setPassword((String.valueOf(view.getPasswordField())));
-					Login logger = new Login();
+					new Login();
 					view.dispose();
 
 			}

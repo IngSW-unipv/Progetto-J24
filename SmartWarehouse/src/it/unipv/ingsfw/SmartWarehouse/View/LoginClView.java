@@ -21,14 +21,12 @@ public class LoginClView extends JFrame {
 		}
 
 		setTitle("Login");
-        setSize(400, 150);
+        setSize(400, 300);
         JPanel loginPanel = new JPanel(new BorderLayout());
         loginPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        loginPanel.setBackground(Color.blue);
         add(loginPanel);
 
         JPanel fieldsPanel = new JPanel(new GridLayout(2, 2, 10, 10));
-        fieldsPanel.setBackground(Color.blue);
         loginPanel.add(fieldsPanel, BorderLayout.CENTER);
 
         fieldsPanel.add(new JLabel("email:"));
@@ -45,7 +43,7 @@ public class LoginClView extends JFrame {
 
         setLocationRelativeTo(null);
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         setVisible(true);
     }

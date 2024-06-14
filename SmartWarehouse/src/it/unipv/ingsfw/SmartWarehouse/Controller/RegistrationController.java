@@ -33,8 +33,8 @@ public class RegistrationController {
 				c.setName(String.valueOf(view.getNameField()));
 				c.setSurname(String.valueOf(view.getSurnameField()));
 				c.setEmail(String.valueOf(view.getEmailField()));
-				Registration reg = new Registration(c);
-					view.dispose();
+				new Registration(c);
+				view.dispose();
 
 			}
 

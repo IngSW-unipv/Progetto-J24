@@ -3,7 +3,6 @@ package it.unipv.ingsfw.SmartWarehouse.Controller;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.QuantityMismatchException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ReturnableOrderNullPointerException;
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Register;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.RegisterDAOFacade;
@@ -23,8 +22,6 @@ import java.util.List;
 public class PickingController {
 
     private PickingView view;
-    private String sku;
-    private int qty;
     private HashMap<String, Integer> insertedItems = new HashMap<>();
     private HashMap<Integer, JButton> orderButtons = new HashMap<>();
 
@@ -119,7 +116,6 @@ public class PickingController {
                 String command = e.getActionCommand();
                 int id = Integer.parseInt(command);
 
-                SingletonManager.getInstance().getRegisterDAO().selectOrder(id);
                 showItems(id);
                 view.setSelectedOrderId(id);
                 clearInsertedItems();

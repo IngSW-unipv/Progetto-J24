@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.AccountAlreadyExistsException;
-import it.unipv.ingsfw.SmartWarehouse.Exception.DatabaseException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyFieldException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.WrongOperatorException;
 import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
@@ -48,14 +47,12 @@ public class MainController {
 			}
 			private void manageAction() {
 				int r = mainView.logOrReg();
-				if (r==1) {
-					mainView.setVisible(false);
+				if (r==1) {		
 					loginView = new LoginClView();
 					okLoginClientButton();
-				} else {
+				} else if(r==0) {
 					regView = new RegistrationView();
-					okRegistrationClientButton() ;
-					mainView.setVisible(false);
+					okRegistrationClientButton();
 				}
 			}
 		};
@@ -68,6 +65,7 @@ public class MainController {
 				manageAction();
 			}
 			private void manageAction() {
+				
 				loginOpView = new LoginOpView();
 				okOpButtonInit();
 			}
@@ -147,8 +145,10 @@ public class MainController {
 	            if (idview.charAt(0) == 'i' || idview.charAt(0) == 's') {
 	                loginOpView.setVisible(false);
 	                InventoryView iv = new InventoryView();
+	                mainView.setVisible(false);
 	                new InventoryController(new InventoryManager(), iv);
 	                new SupplyController(new SupplyManager(), iv.getSupplyPanel());
+	                
 	            } else if (idview.charAt(0) == 'p') {
 	                loginOpView.setVisible(false);
 	                PickingView viewp = new PickingView();

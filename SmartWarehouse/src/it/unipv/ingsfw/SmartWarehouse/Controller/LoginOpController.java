@@ -26,7 +26,7 @@ public class LoginOpController {
 			}
 				private void manageClAction() {
 					op.getId();
-					Login logger = new Login();
+					new Login();
 					view.dispose();
 
 				}
