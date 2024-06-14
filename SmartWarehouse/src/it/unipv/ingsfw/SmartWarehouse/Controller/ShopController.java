@@ -155,7 +155,7 @@ public class ShopController {
 				        break;
 					}
 					
-					PaymentProcess pay=new PaymentProcess(mode, model.getCl().getEmail(), "magazzo");
+					PaymentProcess pay=new PaymentProcess(mode, model.getCl().getEmail(), "warehouse");
 					try {
 						pay.startPayment(model.getPrimeImport()); 
 						view.displayInfo("Payment of: "+model.getPrimeImport()+"euro succesfully ended");
@@ -200,7 +200,7 @@ public class ShopController {
 			        mode = PaymentFactory.getWalletPaymentAdapter(new WalletPayment());
 			        break;
 				}
-				PaymentProcess pay=new PaymentProcess(mode, model.getCl().getEmail(), "magazzo");
+				PaymentProcess pay=new PaymentProcess(mode, model.getCl().getEmail(), "warehouse");
 				int q = 0;
 				try {
 					q=view.displayOption();

@@ -17,7 +17,10 @@ public class Cart {
 	public Cart() {
 		skuqty=new HashMap<InventoryItem, Integer>();
 	}
-	
+	/*
+	 * add to the Map skuqty the selected item and its quantity
+	 * if the given quantity is < or = to 0 throws an exception
+	 */
 	public void add(InventoryItem it, int qty)throws IllegalArgumentException{
 		int i;
 		if(qty <= 0) {
@@ -27,11 +30,17 @@ public class Cart {
 		i=skuqty.getOrDefault(it, 0)+qty;
 		skuqty.put(it, i);
 	}
-	
+	/*
+	 * remove the mapping in skuqty for the selected item;
+	 */
 	public void remove(InventoryItem it) {
-		 skuqty.remove(it);
+		 skuqty.remove(findItemInCart(it));
 	}
-		
+	/*
+	 * create an instance of Order using the first constructor
+	 * and make sure to update the right quantity in the DB	
+	 * if the cart is empty throws an exception
+	 */
 	public Order PayAndOrder(Client cl) throws EmptyKartExceptio, IllegalArgumentException, ItemNotFoundException {
 		if(skuqty.isEmpty()) {
 			throw(new EmptyKartExceptio());
@@ -41,14 +50,18 @@ public class Cart {
 		skuqty.clear();
 		return o;
 	}
-	
+	/*
+	 * Update Correctly Warehouse quantities
+	 */
 	private void updateWarehouseQty() throws IllegalArgumentException, ItemNotFoundException{
 		for(InventoryItem i: getSet()) {
 			int nuova = i.getQty() - skuqty.get(i);
 			i.updateQty(nuova);
 		}
 	}
-	
+	/*
+	 * Calculate the total cost of the Cart
+	 */
 	public double getTotal() {
 		double tot = 0;
 		for(InventoryItem i: getSet()) {
@@ -56,7 +69,9 @@ public class Cart {
 		}
 		return tot;
 	}
-	
+	/*
+	 * Getters and Setters
+	 */
 	public HashMap<InventoryItem, Integer> getSkuqty() {
 		return skuqty;
 	}
@@ -77,5 +92,16 @@ public class Cart {
 			out = out+i.toString()+"-"+skuqty.get(i)+"\n";
 		}
 		return out;
+	}
+	
+	private InventoryItem findItemInCart(InventoryItem i) {
+		InventoryItem ret = null;
+		for(InventoryItem it: getSet()) {
+			if(i.getSku().equals(it.getSku())) {
+				ret = it;
+				break;
+			}
+		}
+		return ret;
 	}
 }
