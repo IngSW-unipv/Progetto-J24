@@ -20,13 +20,12 @@ public class Cart {
 	}
 	/*
 	 * add to the Map skuqty the selected item and its quantity
-	 * if the given quantity is < or = to 0 throws an exception
+	 * if the given quantity is < 1 throws an exception
 	 */
 	public void add(InventoryItem it, int qty)throws IllegalArgumentException{
 		int i;
-		if(qty <= 0) {
-			IllegalArgumentException e=new IllegalArgumentException();
-			throw e;
+		if(qty < 1) {
+			throw new IllegalArgumentException("quantity cannot be negative");
 		}
 		i=skuqty.getOrDefault(it, 0)+qty;
 		skuqty.put(it, i);
