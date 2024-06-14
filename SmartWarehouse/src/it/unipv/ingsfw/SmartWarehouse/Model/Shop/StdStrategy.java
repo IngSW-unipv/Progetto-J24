@@ -1,3 +1,4 @@
+
 package it.unipv.ingsfw.SmartWarehouse.Model.Shop;
 
 public class StdStrategy implements IStdPrimePaymentStrategy{

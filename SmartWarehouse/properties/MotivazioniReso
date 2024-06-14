@@ -1,6 +1,5 @@
-MOTIVO1=Scegli una motivazione
-MOTIVO2=Articolo difettoso
-MOTIVO3=Ho cambiato idea
-MOTIVO4=Ho trovato il prodotto ad un prezzo minore
-MOTIVO5=Il prodotto non è come descritto
-MOTIVO6=Altro
+MOTIVO1=Defective item
+MOTIVO2=I changed my mind
+MOTIVO3=I found the product at a lower price
+MOTIVO4=The product is not as described
+MOTIVO5=Other

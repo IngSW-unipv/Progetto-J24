@@ -1,3 +1,4 @@
+
 package it.unipv.ingsfw.SmartWarehouse.Model.Shop;
 
 import java.util.ArrayList;

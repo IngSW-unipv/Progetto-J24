@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import it.unipv.ingsfw.SmartWarehouse.SmartWarehouseInfoPoint;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.MissingReasonException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
@@ -19,7 +20,8 @@ public class ReturnService {
 	private Map<IInventoryItem, String> returnedItems;
 	private double moneyAlreadyReturned;
 	private ReturnServiceDAOFacade returnServiceDAOFacade;
-	private static int NUMBER_OF_DAYS_WITHIN_WHICH_RETURN_CAN_BE_MADE=30;
+	private int DEADLINE_FOR_MAKING_RETURN;
+
 	
 	/*
 	 * Constructor and Checking the order date to verify returnability.
@@ -28,7 +30,8 @@ public class ReturnService {
 		this.returnableOrder = returnableOrder;
 		this.returnedItems = new HashMap<>();
 		this.moneyAlreadyReturned=0;
-		this.returnServiceDAOFacade=ReturnServiceDAOFacade.getIstance();
+		this.returnServiceDAOFacade=ReturnServiceDAOFacade.getIstance(); 
+		DEADLINE_FOR_MAKING_RETURN=SmartWarehouseInfoPoint.getDeadlineForMakingReturn();
 		if(!ReturnValidator.checkReturnability(this)) {
 			throw new UnableToReturnException();
 		}
@@ -61,11 +64,12 @@ public class ReturnService {
 		return rm.issueRefund();
 	}
 	public void updateWarehouseQty(){
+		InventoryDAOFacade idv=InventoryDAOFacade.getInstance();
 		/*decrease item already Returned*/
 		for(IInventoryItem i:returnServiceDAOFacade.readItem(this.returnableOrder)){
 			try {
 				if(i!=null)
-					i.decreaseQty();
+					idv.findInventoryItemBySku(i.getSku()).decreaseQty();
 			} catch (IllegalArgumentException | ItemNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -90,10 +94,11 @@ public class ReturnService {
 	 */
 	public String toString(){
 		StringBuilder s= new StringBuilder();
-		s.append("Reso dell'ordine: ").append(returnableOrder.getId());
-		s.append("\ngli articoli restituiti sono: \n");
+		s.append("Here are the items you have returned to date\n");
+		s.append("Return Service: Order: ").append(returnableOrder.getId());
+		s.append("\n Returned items are: \n");
 		for(IInventoryItem inventoryItem:returnedItems.keySet()) {
-			s.append(inventoryItem.getSku()).append(" ").append(inventoryItem.getDescription()).append(" la cui motivazione è: ").append(returnedItems.get(inventoryItem)).append("\n");
+			s.append(inventoryItem.getDescription()).append(". The reason is: ").append(returnedItems.get(inventoryItem)).append("\n");
 		}
 		return s.toString();
 	} 
@@ -128,7 +133,7 @@ public class ReturnService {
 		return getReturnedItems().keySet();
 	}
 	public LocalDateTime getCriticalDate() {
-		return returnableOrder.getDate().plusDays(NUMBER_OF_DAYS_WITHIN_WHICH_RETURN_CAN_BE_MADE);
+		return returnableOrder.getDate().plusDays(DEADLINE_FOR_MAKING_RETURN);
 	}
 	public int getQtyYouAreAllowedToReturn(IInventoryItem inventoryItem) {
 		return returnableOrder.getQtyBySku(inventoryItem.getSku());

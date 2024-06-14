@@ -71,7 +71,7 @@ public class ReturnableOrdersHandler {
 
 				ButtonModel button=returnableOrdersView.getOrderButtonGroup().getSelection();
 				if(button==null) {
-					returnableOrdersView.showWarningMessagge("Selezionare un ordine per procedere.");
+					returnableOrdersView.showWarningMessagge("Select an order to proceed.");
 					returnableOrdersView.setVisible(true);
 					return;
 				}

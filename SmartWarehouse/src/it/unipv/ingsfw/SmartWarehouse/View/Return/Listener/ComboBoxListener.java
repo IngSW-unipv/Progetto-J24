@@ -24,8 +24,8 @@ public class ComboBoxListener implements ActionListener{
 		JComboBox<String> combo = (JComboBox<String>) e.getSource();
 		String selectedReason = (String) combo.getSelectedItem();
 		int index = reasonsDropdownList.indexOf(combo);
-		riarView.getCustomReasonLabelList().get(index).setVisible(selectedReason.equals("Altro"));
-		riarView.getCustomReasonAreaList().get(index).setVisible(selectedReason.equals("Altro"));
+		riarView.getCustomReasonLabelList().get(index).setVisible(selectedReason.equals("Other"));
+		riarView.getCustomReasonAreaList().get(index).setVisible(selectedReason.equals("Other"));
 
 	}
 

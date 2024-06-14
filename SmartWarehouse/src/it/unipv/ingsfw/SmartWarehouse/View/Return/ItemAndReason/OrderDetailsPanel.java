@@ -1,5 +1,7 @@
 package it.unipv.ingsfw.SmartWarehouse.View.Return.ItemAndReason;
 
+import java.awt.Font;
+
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -8,6 +10,7 @@ import javax.swing.JScrollPane;
 
 public class OrderDetailsPanel extends JPanel{
 	private JLabel selectedOrderLabel;
+
 	private JLabel ItemAndReasonsLabel;
 	private JScrollPane scrollPane;
 
@@ -16,7 +19,10 @@ public class OrderDetailsPanel extends JPanel{
 		this.repaint();
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		selectedOrderLabel = new JLabel();
-		ItemAndReasonsLabel = new JLabel("Scegli cosa restituire");
+		selectedOrderLabel.setFont(new Font(selectedOrderLabel.getFont().getName(), Font.BOLD, selectedOrderLabel.getFont().getSize()));
+		ItemAndReasonsLabel = new JLabel("Choose what to return");
+		ItemAndReasonsLabel.setFont(new Font(ItemAndReasonsLabel.getFont().getName(), Font.BOLD, ItemAndReasonsLabel.getFont().getSize()));
+	
 
 		this.add(selectedOrderLabel);
 		this.add(ItemAndReasonsLabel);
@@ -35,5 +41,8 @@ public class OrderDetailsPanel extends JPanel{
 	}
 	public JLabel getItemAndReasonsLabel() {
 		return ItemAndReasonsLabel;
+	}
+	public void setTextOfSelectedOrderLabel(int selectedOrder) {
+		selectedOrderLabel.setText("Selected Order: "+selectedOrder);
 	}
 }

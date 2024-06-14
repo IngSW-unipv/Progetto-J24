@@ -14,6 +14,7 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 
 import javax.swing.AbstractButton;
@@ -48,6 +49,9 @@ import it.unipv.ingsfw.SmartWarehouse.View.ShopFrame;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.BackButtonListenerForReturnItemsAndReasonView;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.CheckBoxListener;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.ComboBoxListener;
+import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.DeselectAllButtonListener;
+import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.InfoPointButtonListener;
+import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.SelectAllButtonListener;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Orders.ReturnableOrdersView;
 
 public class ReturnItemsAndReasonsView extends JFrame{
@@ -61,13 +65,17 @@ public class ReturnItemsAndReasonsView extends JFrame{
 	private ArrayList< JComboBox<String> > reasonsDropdownList=new ArrayList< JComboBox<String> >();
 	private ArrayList<CustomReasonArea> customReasonAreaList=new ArrayList<CustomReasonArea>();
 	private ArrayList<JLabel> customReasonLabelList=new ArrayList<JLabel>();
-	public static final String VOUCHER_RADIO_TEXT = "VOUCHER (consigliato): ricevi il rimborso all'istante su un voucher senza scadenza spendibile in tutto lo shop.";
-	public static final String BANK_TRANSFER_RADIO_TEXT = "Bonifico Bancario: ricevi un bonifico sulla carta che hai utilizzato per effettuare l'acquisto. Tempi stimati 14 giorni lavorativi.";
-
+	public static final String VOUCHER_RADIO_TEXT = "VOUCHER (recommended): receive an instant refund on a non-expiring voucher that can be spent throughout the shop.";
+	public static final String BANK_TRANSFER_RADIO_TEXT = "Bank Transfer: receive a transfer to the card you used to make the purchase. Estimated time 14 working days.";
+	private static final String MOTIVAZIONE_PERSONALIZZATA="Other";
 	private JButton backButton;
 	private JButton nextButton;
 	private ReturnableOrdersView returnableOrdersView;
 	private ShopFrame shopFrame;
+	private JButton selectAllButton;
+	private JButton deselectAllButton;
+	private JButton infoPointButton;
+	
 
 
 
@@ -77,23 +85,14 @@ public class ReturnItemsAndReasonsView extends JFrame{
 		this.returnableOrdersView=returnableOrdersView;
 		
 		setTitle("Items and Reasons");
-		setSize(600,400);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(1500,800);
 
 		try {
 			UIManager.setLookAndFeel(new NimbusLookAndFeel());
 		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
-
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		int screenWidth = (int) screenSize.getWidth();
-		int screenHeight = (int) screenSize.getHeight();
-		int windowWidth = (int) (screenWidth*0.9); 
-		int windowHeight = (int) (screenHeight*0.9); 
-		setSize(windowWidth, windowHeight);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setLocationRelativeTo(null); // Centra la finestra
-		setResizable(true);
 
 		mainPanel = new JPanel();
 		mainPanel.repaint();
@@ -104,8 +103,7 @@ public class ReturnItemsAndReasonsView extends JFrame{
 		mainPanel.add(orderDetailsPanel.getScrollPane(), BorderLayout.WEST);
 	}
 
-	public void initWithItemOfTheOrder(ArrayList<String> itemsDescriptionsForButton, String[] skuForActionCommand,Map<String, String> map) {
-		// TODO Auto-generated method stub
+	public void initWithItemOfTheOrder(ArrayList<String> itemsDescriptionsForButton, String[] skuForActionCommand,Map<String, String> mapOfReasons) {
 		int count3=0;
 		for (String i : itemsDescriptionsForButton) {
 			itemAndReasonPanel= new ItemAndReasonPanel();
@@ -117,17 +115,21 @@ public class ReturnItemsAndReasonsView extends JFrame{
 			count3++;
 			checkBoxList.add(checkBox);
 			itemAndReasonPanel.add(checkBox,itemAndReasonPanel.getGbc());
-
+			
 			itemAndReasonPanel.constraintsForComboBox();
-			JComboBox<String> reasonsDropdown = new JComboBox<String>(map.values().toArray(new String[0]));
-			reasonsDropdown.setSelectedItem("Scegli una motivazione");
+			JComboBox<String> reasonsDropdown = new JComboBox<String>();
+			reasonsDropdown.addItem("Choose a reason");
+			for (String reason : mapOfReasons.values()) {
+			    reasonsDropdown.addItem(reason);
+			}
+			reasonsDropdown.setSelectedItem("Choose a reason");
 			reasonsDropdown.setEnabled(false);
 			reasonsDropdownList.add(reasonsDropdown);
 			itemAndReasonPanel.add(reasonsDropdown, itemAndReasonPanel.getGbc());
 
 
 			itemAndReasonPanel.constraintsForTextArea();
-			JLabel customReasonLabel=new JLabel("Descrivi il motivo della restituzione");
+			JLabel customReasonLabel=new JLabel("Describe the reason for the return");
 			itemAndReasonPanel.add(customReasonLabel, itemAndReasonPanel.getGbc());
 
 			CustomReasonArea customReasonArea = new CustomReasonArea(); // 2 righe e 10 colonne
@@ -163,7 +165,6 @@ public class ReturnItemsAndReasonsView extends JFrame{
 	}
 
 	private void completeTheView() {
-		// TODO Auto-generated method stub
 		confirmPanel = new JPanel();
 		confirmPanel.repaint();
 		nextButton = new JButton("Next");
@@ -172,8 +173,15 @@ public class ReturnItemsAndReasonsView extends JFrame{
 
 		backPanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); // Layout per posizionare il pulsante a sinistra
 		backPanel.repaint();
-		backButton = new JButton("Back",UIManager.getIcon("FileView.directoryIcon"));
+		backButton = new JButton("< Back");
+		deselectAllButton=new JButton("Deselect All");
+		deselectAllButton.setEnabled(false);
+		selectAllButton=new JButton("Select All");
+		infoPointButton=new JButton("InfoPoint");
 		backPanel.add(backButton);
+		backPanel.add(deselectAllButton);
+		backPanel.add(selectAllButton);
+		backPanel.add(infoPointButton);
 		mainPanel.add(backPanel, BorderLayout.NORTH);
 
 
@@ -184,16 +192,13 @@ public class ReturnItemsAndReasonsView extends JFrame{
 		uselessPanel.add(refundPanel,BorderLayout.SOUTH);
 
 		addBackButtonListener();
+		addDeselectAllButtonListener();
+		addSelectAllButtonListener();
 		setVisible(true);
 	}
-	private void addBackButtonListener() {
-		BackButtonListenerForReturnItemsAndReasonView bb=new BackButtonListenerForReturnItemsAndReasonView(this, this.returnableOrdersView);
-		this.getBackButton().addActionListener(bb);
-	}
 
-	public int showConfirmPopUp(String recap) {
-		return JOptionPane.showConfirmDialog(this, recap, "Conferma restituzione", JOptionPane.OK_CANCEL_OPTION);
-
+	public int showConfirmPanel(String recap) {
+		return JOptionPane.showConfirmDialog(this, recap, "Confirm Panel", JOptionPane.OK_CANCEL_OPTION);
 	}
 	public void showWarningMessagge(String message) {
 		JOptionPane.showMessageDialog(this, message, "Alert", JOptionPane.WARNING_MESSAGE);
@@ -202,9 +207,9 @@ public class ReturnItemsAndReasonsView extends JFrame{
 		JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
 	}
 	public void showSuccessDialog(String message) {
-		String[] options = {"Continua a navigare nello shop", "chiudi"};
+		String[] options = {"Continue browsing the shop", "close"};
 		int n = JOptionPane.showOptionDialog(this,message,
-				"Operazione di Reso completata con successo",
+				"Return operation completed successfully",
 				JOptionPane.YES_NO_OPTION,
 				JOptionPane.INFORMATION_MESSAGE,
 				null,
@@ -216,7 +221,26 @@ public class ReturnItemsAndReasonsView extends JFrame{
 		}
 		this.setVisible(false);
 	}
-	
+	private void addSelectAllButtonListener() {
+		SelectAllButtonListener sabl=new SelectAllButtonListener(this);
+		this.selectAllButton.addActionListener(sabl);
+		
+	}
+	private void addDeselectAllButtonListener() {
+		DeselectAllButtonListener dabl=new DeselectAllButtonListener(this);
+		this.deselectAllButton.addActionListener(dabl);
+	}
+
+	private void addBackButtonListener() {
+		BackButtonListenerForReturnItemsAndReasonView bb=new BackButtonListenerForReturnItemsAndReasonView(this, this.returnableOrdersView);
+		this.getBackButton().addActionListener(bb);
+	}
+	public void addInfoPointButtonListener(String returnServiceRecap) {
+		InfoPointButtonListener ipbl=new InfoPointButtonListener(this,returnServiceRecap);
+		this.getInfoPointButton().addActionListener(ipbl);		
+	}
+
+
 	public static String getVoucherRadioText() {
 		return VOUCHER_RADIO_TEXT;
 	}
@@ -258,6 +282,47 @@ public class ReturnItemsAndReasonsView extends JFrame{
 
 	public JLabel getSelectedOrderLabel() {
 		return orderDetailsPanel.getSelectedOrderLabel();
+	}
+
+	public void setTextOfSelectedOrderLabel(int selectedOrderId) {
+		orderDetailsPanel.setTextOfSelectedOrderLabel(selectedOrderId);
+	}
+	public JButton getSelectAllButton() {
+		return selectAllButton;
+	}
+
+	public JButton getDeselectAllButton() {
+		return deselectAllButton;
+	}
+
+	public JButton getInfoPointButton() {
+		return infoPointButton;
+	}
+
+	public void InfoPointButtonManageAction(String string) {
+	
+	}
+
+	public StringBuilder getRecapMessage() {
+		StringBuilder message = new StringBuilder("The items you are about to return are:");
+		for (int i = 0; i < checkBoxList.size(); i++) {
+			JCheckBox checkBox = checkBoxList.get(i);
+			JComboBox<String> comboBox = reasonsDropdownList.get(i);
+			if(checkBox.isSelected()) {
+				message.append("\n").append(checkBox.getText());
+				
+				String reason = comboBox.getSelectedItem().toString();
+				if(reason.equals(MOTIVAZIONE_PERSONALIZZATA)) {
+					reason = this.getCustomReasonAreaList().get(i).getText();
+					message.append(". The Reason is: ").append(reason);
+				}
+				else {
+					message.append(". The Reason is: ").append(reason);
+				}
+				
+			}
+		}
+		return message;
 	}
 
 

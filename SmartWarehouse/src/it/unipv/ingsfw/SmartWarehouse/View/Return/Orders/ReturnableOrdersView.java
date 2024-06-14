@@ -76,7 +76,7 @@ public class ReturnableOrdersView extends JFrame{
 		// TODO Auto-generated method stub
 		confirmPanel = new JPanel();
 		confirmPanel.repaint();
-		confirmButton = new JButton("Conferma Scelta");
+		confirmButton = new JButton("Confirm >");
 		confirmPanel.add(confirmButton);
 		mainPanel.add(confirmPanel, BorderLayout.SOUTH);
 
