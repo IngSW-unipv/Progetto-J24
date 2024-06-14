@@ -1,107 +1,91 @@
-package it.unipv.ingsfw.SmartWarehouse.Model.Shop;
 
-import java.util.HashMap;
-import java.util.HashSet;
+package it.unipv.ingsfw.SmartWarehouse.Model.Shop;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyKartExceptio;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
-import it.unipv.ingsfw.SmartWarehouse.Model.Payment.IPayment;
-import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentProcess;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
 
-public class Cart {
-	HashMap<InventoryItem,Integer> skuqty;
+public class Shop {
 	
-	public Cart() {
-		skuqty=new HashMap<InventoryItem, Integer>();
+	private InventoryManager inv;
+	private Cart cart;
+	private RegisterFacade reg;
+	private Client cl;
+	private final double primeImport=50;
+	private final int Soglia=5;
+	
+	public Shop() {	
+		this.cart = new Cart();
+		this.inv = new InventoryManager();
+		this.reg = RegisterFacade.getIstance();
+		this.cl = (Client)SingletonUser.getInstance().getLoggedUser();		
 	}
 	/*
-	 * add to the Map skuqty the selected item and its quantity
-	 * if the given quantity is < or = to 0 throws an exception
+	 * add a selected quantity of item to the Cart
+	 * if the quantity in the warehouse goes under Soglia 
+	 * produce an exception
 	 */
-	public void add(InventoryItem it, int qty)throws IllegalArgumentException{
-		int i;
-		if(qty <= 0) {
-			IllegalArgumentException e=new IllegalArgumentException();
-			throw e;
+	public void addToCart(String sku, int qty) throws IllegalArgumentException{
+		if(inv.findInventoryItem(sku).getQty() > qty + Soglia) {
+			cart.add(inv.findInventoryItem(sku), qty);
 		}
-		i=skuqty.getOrDefault(it, 0)+qty;
-		skuqty.put(it, i);
+		else throw new IllegalArgumentException("not eanugh items");
 	}
 	/*
-	 * remove the mapping in skuqty for the selected item;
+	 * remove a selected item from the Cart class
 	 */
-	public void remove(InventoryItem it) {
-		 skuqty.remove(findItemInCart(it));
+	public void removeFromCart(String sku) {
+		cart.remove(inv.findInventoryItem(sku));
 	}
 	/*
-	 * create an instance of Order using the first constructor
-	 * and make sure to update the right quantity in the DB	
-	 * if the cart is empty throws an exception
+	 * add, using the Register, the Order created by the Cart
 	 */
-	public Order PayAndOrder(Client cl) throws EmptyKartExceptio, IllegalArgumentException, ItemNotFoundException {
-		if(skuqty.isEmpty()) {
-			throw(new EmptyKartExceptio());
-		}		
-		Order o=new Order(skuqty, cl.getEmail());
-		updateWarehouseQty();
-		skuqty.clear();
-		return o;
-	}
-	/*
-	 * Update Correctly Warehouse quantities
-	 */
-	private void updateWarehouseQty() throws IllegalArgumentException, ItemNotFoundException{
-		for(InventoryItem i: getSet()) {
-			int nuova = i.getQty() - skuqty.get(i);
-			i.updateQty(nuova);
-		}
-	}
-	/*
-	 * Calculate the total cost of the Cart
-	 */
-	public double getTotal() {
-		double tot = 0;
-		for(InventoryItem i: getSet()) {
-			tot += i.getPrice()*skuqty.get(i); //item value times its quantity
-		}
-		return tot;
+	public void makeOrder() throws IllegalArgumentException, EmptyKartExceptio, ItemNotFoundException, PaymentException {
+		reg.addOrd(cart.PayAndOrder(cl));
 	}
 	/*
 	 * Getters and Setters
 	 */
-	public HashMap<InventoryItem, Integer> getSkuqty() {
-		return skuqty;
-	}
-
-	public void setSkuqty(HashMap<InventoryItem, Integer> skuqty) {
-		this.skuqty = skuqty;
+	public void setPrime() {
+		cl.setPrime(true);		
 	}
 	
-	public HashSet<InventoryItem> getSet(){
-		HashSet<InventoryItem> sq = new HashSet<InventoryItem>();
-		skuqty.forEach((t, u) -> sq.add(t)); 
-		return sq;
+	public double getPrimeImport() {
+		return primeImport;
 	}
 
-	public String toString() {
-		String out="";
-		for(InventoryItem i: skuqty.keySet()) {
-			out = out+i.toString()+"-"+skuqty.get(i)+"\n";
-		}
-		return out;
+	public InventoryManager getInv() {
+		return inv;
 	}
-	
-	private InventoryItem findItemInCart(InventoryItem i) {
-		InventoryItem ret = null;
-		for(InventoryItem it: getSet()) {
-			if(i.getSku().equals(it.getSku())) {
-				ret = it;
-				break;
-			}
-		}
-		return ret;
+
+	public Cart getCart() {
+		return cart;
+	}
+
+	public RegisterFacade getReg() {
+		return reg;
+	}
+
+	public Client getCl() {
+		return cl;
+	}
+
+	public void setInv(InventoryManager inv) {
+		this.inv = inv;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
+
+	public void setReg(RegisterFacade reg) {
+		this.reg = reg;
+	}
+
+	public void setCl(Client cl) {
+		this.cl = cl;
 	}
 }
