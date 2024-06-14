@@ -6,9 +6,6 @@ import java.util.HashMap;
 
 public class PickingView {
     private JFrame frame;
-    private JButton small;
-    private JButton medium;
-    private JButton large;
     private JButton calculatePack;
     private JButton packed;
     private JButton itemButton;
@@ -18,17 +15,16 @@ public class PickingView {
     private JPanel orderItemsPanel;
     private JTextArea selected;
     private int selectedOrderId = -1;
+    private JTextArea packageInfoArea;
 
     public PickingView() {
         frame = new JFrame("Order");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
 
-        small = new JButton("Small");
-        medium = new JButton("Medium");
-        large = new JButton("Large");
         itemButton = new JButton("Item");
-        
+    
+
         calculatePack = new JButton("Calculate Package");
         packed = new JButton("Packed");
 
@@ -39,6 +35,7 @@ public class PickingView {
         packageSummaryTextArea = new JTextArea();
         packageSummaryTextArea.setEditable(false);
         JScrollPane summaryScrollPane = new JScrollPane(packageSummaryTextArea);
+        packageInfoArea = new JTextArea();
 
         selected = new JTextArea();
         selected.setEditable(false);
@@ -47,18 +44,18 @@ public class PickingView {
         ListId = new JPanel();
         ListId.setLayout(new BoxLayout(ListId, BoxLayout.Y_AXIS));
         ListId.add(new JLabel("Order IDs"));
+   
 
         JPanel leftPanel = new JPanel(new BorderLayout());
         leftPanel.add(ListId, BorderLayout.CENTER);
 
         JPanel packPanel = new JPanel();
         packPanel.setLayout(new BoxLayout(packPanel, BoxLayout.Y_AXIS));
-        packPanel.add(small);
-        packPanel.add(medium);
-        packPanel.add(large);
+       
         packPanel.add(itemButton);
         packPanel.add(calculatePack);
         packPanel.add(packed);
+        
 
         JPanel orderDetailsPanel = new JPanel(new BorderLayout());
         orderDetailsPanel.add(new JLabel("Selected Order Details:"), BorderLayout.NORTH);
@@ -128,30 +125,6 @@ public class PickingView {
 
     public void setFrame(JFrame frame) {
         this.frame = frame;
-    }
-
-    public JButton getSmall() {
-        return small;
-    }
-
-    public void setSmall(JButton small) {
-        this.small = small;
-    }
-
-    public JButton getMedium() {
-        return medium;
-    }
-
-    public void setMedium(JButton medium) {
-        this.medium = medium;
-    }
-
-    public JButton getLarge() {
-        return large;
-    }
-
-    public void setLarge(JButton large) {
-        this.large = large;
     }
 
     public JButton getCalculatePack() {
@@ -262,15 +235,59 @@ public class PickingView {
         panel.add(quantityLabel);
         panel.add(quantityField);
         int result = JOptionPane.showConfirmDialog(null, panel, "Enter Item Details", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
         if (result == JOptionPane.OK_OPTION) {
-            HashMap<String, Integer> itemDetails = new HashMap<>();
-            itemDetails.put(itemField.getText(), Integer.parseInt(quantityField.getText()));
-            return itemDetails;
+            String itemText = itemField.getText().trim();
+            String quantityText = quantityField.getText().trim();
+
+            if (itemText.isEmpty() || quantityText.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "there are some empty filed.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+            try {
+                int quantity = Integer.parseInt(quantityText);
+                HashMap<String, Integer> itemDetails = new HashMap<>();
+                itemDetails.put(itemText, quantity);
+                return itemDetails;
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Quantity must be a valid integer.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
         } else {
             return null;
         }
     }
-    public void showSpuLabel(String spuLabel) {
-        JOptionPane.showMessageDialog(frame, spuLabel, "SPU Label", JOptionPane.INFORMATION_MESSAGE);
+
+   
+   
+    public void clearInsertedItemsDisplay() {
+        text.setText("");
     }
+    
+    public String getInsertedPackageInfo() {
+        String packageInfo = selected.getText().trim(); 
+        String[] lines = packageInfo.split("\n");
+        StringBuilder insertedPackages = new StringBuilder();
+        for (String line : lines) {
+            if (line.contains("Selected package type") || line.contains("Quantity")) {
+                insertedPackages.append(line.trim()).append("\n");
+            }
+        }
+        return insertedPackages.toString().trim();
+    }
+
+
+    public void setPackageInfo(String packageInfo) {
+        selected.setText(packageInfo); 
+    }
+    
+    public void clearPackageSummary() {
+        packageSummaryTextArea.setText(""); 
+    }
+
+    public void clearMessages() {
+        selected.setText(""); 
+    }
+    
+
 }
