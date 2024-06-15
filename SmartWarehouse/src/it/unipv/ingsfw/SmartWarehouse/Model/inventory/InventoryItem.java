@@ -10,7 +10,9 @@ import it.unipv.ingsfw.SmartWarehouse.Model.randomGenerator.IRandomGenerator;
 import it.unipv.ingsfw.SmartWarehouse.Model.randomGenerator.RandomGenerator;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supply;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyDAOFacade;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.User;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.InventoryOperator;
+import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.WarehouseOperator;
 import it.unipv.ingsfw.SmartWarehouse.View.MainView;
 
 public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> {
@@ -182,6 +184,13 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
         int diffOther = o.getStdLevel()-o.getQty();
         //descending sort with the difference between stdLevel and quantity
         return Integer.compare(diffOther, diffThis);
+	}
+	
+	public static void main(String[] args) {
+		WarehouseOperator op = new WarehouseOperator(null, null, null, null);
+		User u = op;
+		System.out.println(u);
+		System.out.println(op);
 	}
 		
 

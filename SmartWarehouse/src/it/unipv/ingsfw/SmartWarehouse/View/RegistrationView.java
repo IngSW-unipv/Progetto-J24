@@ -22,8 +22,6 @@ public class RegistrationView extends JFrame {
 		
 
 		registrationPanel = new JPanel(new GridLayout(9, 2, 10, 10));
-		registrationPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		registrationPanel.setBackground(new Color(214, 255, 255));
 		add(registrationPanel);
 		
 		registrationPanel.add(new JLabel("Name:"));
@@ -50,7 +48,7 @@ public class RegistrationView extends JFrame {
 
 		setLocationRelativeTo(null);
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		setVisible(true);
 		

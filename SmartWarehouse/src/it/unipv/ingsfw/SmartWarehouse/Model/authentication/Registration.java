@@ -2,7 +2,6 @@ package it.unipv.ingsfw.SmartWarehouse.Model.authentication;
 
 import javax.swing.JFrame;
 import it.unipv.ingsfw.SmartWarehouse.Exception.AccountAlreadyExistsException;
-import it.unipv.ingsfw.SmartWarehouse.Exception.DatabaseException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyFieldException;
 import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
@@ -22,7 +21,6 @@ public class Registration {
         fieldCheck();
         boolean result = false;
         if (SingletonUser.getInstance().getUserDAO().getClientByEmail(c.getEmail()) == null) {
-            boolean resultDB = SingletonUser.getInstance().getUserDAO().insertClient(c);
             result = true;
         } else {
             throw new AccountAlreadyExistsException();
