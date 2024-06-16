@@ -236,7 +236,7 @@ public class ReturnItemsAndReasonsView extends JFrame{
 		this.getBackButton().addActionListener(bb);
 	}
 	public void addInfoPointButtonListener(String returnServiceRecap) {
-		InfoPointButtonListener ipbl=new InfoPointButtonListener(this,returnServiceRecap);
+		InfoPointButtonListener ipbl=new InfoPointButtonListener(returnServiceRecap);
 		this.getInfoPointButton().addActionListener(ipbl);		
 	}
 

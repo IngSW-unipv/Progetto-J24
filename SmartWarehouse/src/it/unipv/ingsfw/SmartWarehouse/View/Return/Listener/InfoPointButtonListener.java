@@ -1,30 +1,25 @@
 package it.unipv.ingsfw.SmartWarehouse.View.Return.Listener;
 
-import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 
-import it.unipv.ingsfw.SmartWarehouse.View.Return.ItemAndReason.ReturnItemsAndReasonsView;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 public class InfoPointButtonListener implements ActionListener{
-	private ReturnItemsAndReasonsView riarView;
 	private String returnServiceRecap;
-	public InfoPointButtonListener(ReturnItemsAndReasonsView returnItemsAndReasonsView,String returnServiceRecap) {
+	public InfoPointButtonListener(String returnServiceRecap) {
 		super();
-		this.riarView=returnItemsAndReasonsView;
 		this.returnServiceRecap=returnServiceRecap;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String inputFilePath = "properties/SmartWarehouseCustomerInfo";
-		String outputFilePath = "outputFile.txt";
 		StringBuilder fileContent = new StringBuilder();
 
 		try (BufferedReader reader = new BufferedReader(new FileReader(inputFilePath))) {
@@ -35,24 +30,12 @@ public class InfoPointButtonListener implements ActionListener{
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilePath))) {
-			writer.write(fileContent.toString());
-			writer.newLine();
-			writer.write(returnServiceRecap);
-			writer.newLine();
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-		try {
-			File outputFile = new File(outputFilePath);
-			if (Desktop.isDesktopSupported()) {
-				Desktop.getDesktop().open(outputFile);
-			} else {
-				System.err.println("Desktop is not supported. Cannot open the file.");
-			}
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
+        fileContent.append(returnServiceRecap);
+        JTextArea textArea = new JTextArea(fileContent.toString());
+        textArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setPreferredSize(new java.awt.Dimension(700, 500));
+        JOptionPane.showMessageDialog(null, scrollPane, "InfoPoint", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 }
