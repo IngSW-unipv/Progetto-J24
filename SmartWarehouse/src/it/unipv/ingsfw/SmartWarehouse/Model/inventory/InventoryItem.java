@@ -11,9 +11,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.randomGenerator.IRandomGenerator;
 import it.unipv.ingsfw.SmartWarehouse.Model.randomGenerator.RandomGenerator;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supply;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyDAOFacade;
-import it.unipv.ingsfw.SmartWarehouse.Model.user.User;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.InventoryOperator;
-import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.WarehouseOperator;
 
 public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> {
 	private String description;
@@ -195,13 +193,18 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
 	} 
 	
 	/**
-	 * increase the quantity by 1
+	 * increase the quantity by 1 compared to the quantity currently present in the database.
 	 */
 	public boolean increaseQty() throws ItemNotFoundException, IllegalArgumentException {
-		int newQty=qty+1;
-		return this.updateQty(newQty);
+		if(InventoryDAOFacade.getInstance().findInventoryItemBySku(sku)!=null) { 
+			int newQty = InventoryDAOFacade.getInstance().getInventoryItemQty(this) + 1;
+			this.setQty(newQty);
+			return InventoryDAOFacade.getInstance().updateInventoryItemQty(sku, qty);
+		} else { 
+	        throw new ItemNotFoundException();  
+		}		
 	} 
-	
+	//?????
 	public boolean decreaseQty() throws ItemNotFoundException, IllegalArgumentException {
 		int newQty=qty-1;
 		return this.updateQty(newQty);

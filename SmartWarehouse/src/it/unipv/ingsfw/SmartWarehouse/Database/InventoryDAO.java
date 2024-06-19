@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Category;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.ItemDetails;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Position;
@@ -220,6 +221,30 @@ public class InventoryDAO implements IInventoryDAO {
 		} finally {
 	        DBConnection.closeConnection(conn); 
 	    }
+		return result;
+	}
+	
+	public int getItemQty(IInventoryItem i) {
+		conn=DBConnection.startConnection(conn,schema);
+		PreparedStatement st1;
+		ResultSet rs1;
+		int result = -1;
+		 
+	    try { 
+			String query ="select qty from inventory WHERE sku = ?";
+			st1 = conn.prepareStatement(query);
+			st1.setString(1, i.getSku());
+			rs1 = st1.executeQuery();
+			 
+			if(rs1.next()) {
+				result = rs1.getInt(1);
+			}					
+	    }catch (Exception e){
+			e.printStackTrace();
+			return result; 
+	    } finally {
+		    DBConnection.closeConnection(conn);
+		}
 		return result;
 	}
 	

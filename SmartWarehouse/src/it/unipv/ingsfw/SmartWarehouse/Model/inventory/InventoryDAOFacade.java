@@ -53,4 +53,7 @@ public class InventoryDAOFacade {
 		return inventoryDAO.getSuppliersInfo(i);
 	}
 	
+	public int getInventoryItemQty(IInventoryItem i) {
+		return inventoryDAO.getItemQty(i);
+	}
 }
