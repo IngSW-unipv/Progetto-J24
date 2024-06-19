@@ -1,13 +1,17 @@
 package it.unipv.ingsfw.SmartWarehouse;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Properties;
 
 public class SmartWarehouseInfoPoint {
 	private static final String DEADLINE_FOR_MAKING_RETURN="DEADLINE_FOR_MAKING_RETURN"; 
 	private static final String SMARTWAREHOUSE_EMAIL="SMARTWAREHOUSE_EMAIL";
+	private static final String MINSTANDARDLEVEL = "MINSTANDARD_LEVEL";
 	private static int deadline;
 	private static String email;
+	private static int min_std_level;
+	private static int MIN_STD_LEVEL_DEFAULT = 30;
 	
 	private SmartWarehouseInfoPoint() {
 	}
@@ -33,5 +37,27 @@ public class SmartWarehouseInfoPoint {
 			e.printStackTrace();
 		}
 		return email;
+	}
+	
+	public static int getMin_Std_Level() {
+		FileInputStream f = null;
+		try {
+			Properties p = new Properties(System.getProperties());
+			f = new FileInputStream("properties/SmartWarehouseInfoPoint");
+			p.load(f);
+			min_std_level = Integer.parseInt(p.getProperty(MINSTANDARDLEVEL));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return MIN_STD_LEVEL_DEFAULT;
+		} finally {
+			if (f != null) {
+				try {
+					f.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}	
+		}
+		return min_std_level;
 	}
 }

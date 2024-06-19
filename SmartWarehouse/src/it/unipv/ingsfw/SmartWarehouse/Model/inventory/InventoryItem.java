@@ -2,7 +2,7 @@ package it.unipv.ingsfw.SmartWarehouse.Model.inventory;
 
 import java.util.List;
 
-import it.unipv.ingsfw.SmartWarehouse.Controller.MainController;
+import it.unipv.ingsfw.SmartWarehouse.SmartWarehouseInfoPoint;
 import it.unipv.ingsfw.SmartWarehouse.Exception.AuthorizationDeniedException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
@@ -13,7 +13,6 @@ import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.User;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.InventoryOperator;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.WarehouseOperator;
-import it.unipv.ingsfw.SmartWarehouse.View.MainView;
 
 public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> {
 	private String description;
@@ -24,7 +23,9 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
 	private int stdLevel; 
 	private Position pos; 
 
-	//used by DAO classes
+	/**
+	 * Constructor used to create an object InventoryItem already present in the warehouse (in fact it already has the sku)
+	 */
 	public InventoryItem(String description, ItemDetails details, String sku, double price, int qty, int stdLevel,
 			Position pos) {
 		super();
@@ -37,7 +38,9 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
 		this.pos=pos;
 	}
 
-	//used to create new InventoryItem
+	/**
+	 * Constructor used to create an object InventoryItem which does not yet exists in the warehouse, 
+	 */
 	public InventoryItem(String description, ItemDetails details, double price, int stdLevel, Position pos) throws IllegalArgumentException {
 		super();
 		this.description = description;
@@ -49,6 +52,14 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
 		this.setPos(pos);
 	}
 	
+	public String getDescription() {
+		return description;
+	}
+
+	public ItemDetails getDetails() {
+		return details;
+	}
+	
 	public String getSku() {
 		return sku;
 	}
@@ -57,17 +68,35 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
 		return price;
 	}
 
+	public int getQty() {
+		return qty;
+	}
+	
+	public int getStdLevel() {
+		return stdLevel;
+	}
+	
+	public Position getPos() {
+		return pos;
+	}
+	
+	/**
+	 * Sets the price only if it is positive
+	 * @param price
+	 * @throws IllegalArgumentException
+	 */
 	public void setPrice(double price) throws IllegalArgumentException {
-		if (price < 0) {
-			throw new IllegalArgumentException("Price cannot be negative");
+		if (price <= 0) {
+			throw new IllegalArgumentException("Price cannot be negative, item: " + sku);
 		}
 		this.price = price;
 	}
 
-	public int getQty() {
-		return qty;
-	}
-
+	/**
+	 * Sets the quantity only if it is not negative
+	 * @param qty
+	 * @throws IllegalArgumentException
+	 */
 	public void setQty(int qty) throws IllegalArgumentException {
 		if (qty < 0) {
 			throw new IllegalArgumentException("Quantity cannot be negative, item: " + sku);
@@ -75,21 +104,23 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
 		this.qty=qty;
 	}
 
-	public int getStdLevel() {
-		return stdLevel;
-	}
-
+	/**
+	 * Sets stdLevel, there is a minimum level that is read from files in the class SmartWarehouseInfoPoint
+	 * @param stdLevel
+	 * @throws IllegalArgumentException
+	 */
 	public void setStdLevel(int stdLevel) throws IllegalArgumentException {
-		if (stdLevel < 20) {
-			throw new IllegalArgumentException("StdLevel must be almost 20");
+		if (stdLevel < SmartWarehouseInfoPoint.getMin_Std_Level()) {
+			throw new IllegalArgumentException("StdLevel must be almost: "+SmartWarehouseInfoPoint.getMin_Std_Level());
 		}
 		this.stdLevel = stdLevel;
 	}
 
-	public Position getPos() {
-		return pos;
-	}
-	
+	/**
+	 * Sets the position of the InventoryItem
+	 * @param pos
+	 * @throws IllegalArgumentException
+	 */
 	public void setPos(Position pos) throws IllegalArgumentException {
 		if(pos==null) {
 			throw new IllegalArgumentException("Position null");
@@ -99,20 +130,15 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
 		}
 		this.pos = pos;
 	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public ItemDetails getDetails() {
-		return details;
-	}
 	
+	/**
+	 * Returns the sku created checking that it does not already exists
+	 */
 	private String createSku() {
 		InventoryManager im=new InventoryManager();
 		IRandomGenerator rg=new RandomGenerator();
 		String sku= rg.generateRandomString(10);
-		while(im.findInventoryItem(sku)!=null) {
+		while(InventoryDAOFacade.getInstance().findInventoryItemBySku(sku)!=null) {
 	    	sku=rg.generateRandomString(10);
 	    }
 		return sku;
