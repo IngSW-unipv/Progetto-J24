@@ -4,6 +4,7 @@ import java.util.List;
 
 import it.unipv.ingsfw.SmartWarehouse.SmartWarehouseInfoPoint;
 import it.unipv.ingsfw.SmartWarehouse.Exception.AuthorizationDeniedException;
+import it.unipv.ingsfw.SmartWarehouse.Exception.ItemAlreadyPresentException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
 import it.unipv.ingsfw.SmartWarehouse.Model.randomGenerator.IRandomGenerator;
@@ -22,6 +23,7 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
 	private int qty; 
 	private int stdLevel; 
 	private Position pos; 
+	IRandomGenerator rg;
 
 	/**
 	 * Constructor used to create an object InventoryItem already present in the warehouse (in fact it already has the sku)
@@ -45,7 +47,7 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
 		super();
 		this.description = description;
 		this.details = details;
-		this.sku = createSku();
+		this.sku = createSku(new RandomGenerator());
 		this.setPrice(price);
 		this.qty=0;
 		this.setStdLevel(stdLevel);
@@ -132,14 +134,14 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
 	}
 	
 	/**
-	 * Returns the sku created checking that it does not already exists
+	 * Returns the sku created checking that it does not already exists.
+	 * Sku length is read from file in SmartWarehouseInfoPoint class.
 	 */
-	private String createSku() {
-		InventoryManager im=new InventoryManager();
-		IRandomGenerator rg=new RandomGenerator();
-		String sku= rg.generateRandomString(10);
+	private String createSku(IRandomGenerator rg) {
+		int skusize = SmartWarehouseInfoPoint.getSkuSize();
+		String sku= rg.generateRandomString(skusize);
 		while(InventoryDAOFacade.getInstance().findInventoryItemBySku(sku)!=null) {
-	    	sku=rg.generateRandomString(10);
+	    	sku=rg.generateRandomString(skusize);
 	    }
 		return sku;
 	}
@@ -151,17 +153,25 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
 			throw new AuthorizationDeniedException();
 		}
 	}
-	 
-	//check that the operator is an InventoryOperator, only him can do this operation
-	//method called on an inventoryItem created with the 2° constructor
-	public IInventoryItem addToInventory() throws AuthorizationDeniedException {  
+	
+	/**
+	 * Checks that the operator is an InventoryOperator.
+	 * Adds the item to the Inventory if it is not already present.
+	 */
+	public IInventoryItem addToInventory() throws AuthorizationDeniedException, ItemAlreadyPresentException{  
 		checkAuthorization();
+		if(InventoryDAOFacade.getInstance().findInventoryItemBySku(sku)!=null) {
+			throw new ItemAlreadyPresentException();
+		}
 		InventoryDAOFacade.getInstance().insertItem(this);
 		return this; 		
 	} 
 	 
-	//check that the operator is an InventoryOperator
-	//delete also the supply and supplyOrders associated
+	/**
+	 * Checks that the operator is an InventoryOperator.
+	 * Delete the item from the Inventory after checking the presence, 
+	 * delete also supply and supplyOrders associated so as not to violate the integrity constraint.
+	 */
 	public void delete() throws ItemNotFoundException, AuthorizationDeniedException { 
 		checkAuthorization();
 		if(InventoryDAOFacade.getInstance().findInventoryItemBySku(sku)!=null) { 
@@ -184,7 +194,9 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
 		}	  
 	} 
 	
-	//increase the quantity by 1
+	/**
+	 * increase the quantity by 1
+	 */
 	public boolean increaseQty() throws ItemNotFoundException, IllegalArgumentException {
 		int newQty=qty+1;
 		return this.updateQty(newQty);
@@ -194,8 +206,10 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
 		int newQty=qty-1;
 		return this.updateQty(newQty);
 	}
-	 
-	//returns the suppliers with prices and maxQty, sorted by price 
+	
+	/**
+	 * returns the InventoryItem suppliers with prices and maxQty, sorted by price
+	 */
 	public List<Object[]> getSuppliersInfo() throws ItemNotFoundException {
 		if(InventoryDAOFacade.getInstance().findInventoryItemBySku(sku)!=null) {
 			return InventoryDAOFacade.getInstance().getSuppliersInfo(this);
@@ -212,12 +226,4 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
         return Integer.compare(diffOther, diffThis);
 	}
 	
-	public static void main(String[] args) {
-		WarehouseOperator op = new WarehouseOperator(null, null, null, null);
-		User u = op;
-		System.out.println(u);
-		System.out.println(op);
-	}
-		
-
 }
