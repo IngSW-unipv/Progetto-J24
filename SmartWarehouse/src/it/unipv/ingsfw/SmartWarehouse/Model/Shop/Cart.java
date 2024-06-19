@@ -27,6 +27,7 @@ public class Cart {
 		if(qty < 1) {
 			throw new IllegalArgumentException("quantity cannot be negative");
 		}
+		it = findItemInCart(it);
 		i=skuqty.getOrDefault(it, 0)+qty;
 		skuqty.put(it, i);
 	}
