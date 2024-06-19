@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.AuthorizationDeniedException;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.replenishmentStrategy.IReplenishmentStrategy;
 
@@ -37,7 +38,7 @@ public class SupplyManager {
 		return supplyDAOFacade.findSupplyBySkuAndIds(sku, ids);
 	}
 	
-	public Supply getCheaperSupplyByInventoryItem(InventoryItem i) {
+	public Supply getCheaperSupplyByInventoryItem(IInventoryItem i) {
 		return supplyDAOFacade.getCheaperSupplyByInventoryItem(i);
 	} 
 	
@@ -45,7 +46,7 @@ public class SupplyManager {
 		this.replenishmentStrategy=strategy;
     }
 	
-	public void replenishAll(List<InventoryItem> items) throws AuthorizationDeniedException {
+	public void replenishAll(List<IInventoryItem> items) throws AuthorizationDeniedException {
 		if (replenishmentStrategy != null) {
             replenishmentStrategy.replenish(items);
         }

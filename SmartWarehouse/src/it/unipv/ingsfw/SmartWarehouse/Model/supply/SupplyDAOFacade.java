@@ -8,7 +8,7 @@ import it.unipv.ingsfw.SmartWarehouse.Database.ISupplyOrderDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.SupplierDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.SupplyDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.SupplyOrderDAO;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 
 public class SupplyDAOFacade {
 	private static SupplyDAOFacade instance;
@@ -75,7 +75,7 @@ public class SupplyDAOFacade {
 		return supplyDAO.deleteSupply(s); 
 	} 
 	
-	public Supply getCheaperSupplyByInventoryItem(InventoryItem i) {
+	public Supply getCheaperSupplyByInventoryItem(IInventoryItem i) {
 		return supplyDAO.getCheaperSupplyByInventoryItem(i);
 	}
  

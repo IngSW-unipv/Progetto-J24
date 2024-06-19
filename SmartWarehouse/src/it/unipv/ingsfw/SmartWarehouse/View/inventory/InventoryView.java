@@ -52,6 +52,7 @@ public class InventoryView extends JFrame {
 	    tableModel.addColumn("Category");
 	    table = new JTable(tableModel);
 	    JScrollPane scrollPane = new JScrollPane(table);
+	    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);////???
 	     
 	    JPanel filterPanel = new JPanel();
 	    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));

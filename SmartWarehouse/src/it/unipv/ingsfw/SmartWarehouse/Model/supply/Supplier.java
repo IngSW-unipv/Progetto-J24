@@ -51,7 +51,7 @@ public class Supplier {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	 
+	
 	public void add() throws InvalidSupplierException, AuthorizationDeniedException {
 		this.checkSupplierAuthorization(); 
 		if(supplyDAOFacade.findSupplier(IDS)==null) {
@@ -64,7 +64,7 @@ public class Supplier {
 	public boolean delete() throws InvalidSupplierException, AuthorizationDeniedException, InvalidSupplyException { 
 		this.checkSupplierAuthorization(); 
 		if(supplyDAOFacade.findSupplier(IDS)!=null) {
-			//delete also the supplies associated with this supplier, and the orders of the supply deleted
+			//deleting also supplies associated with this supplier, and the orders of the supplies deleted
 			for(Supply supply:supplyDAOFacade.findSupplyBySupplier(IDS)) {
 				supply.delete(); 
 			}
@@ -74,10 +74,9 @@ public class Supplier {
 		} 
 	} 
 	
-	private boolean checkSupplierAuthorization() throws AuthorizationDeniedException {
+	private void checkSupplierAuthorization() throws AuthorizationDeniedException {
 		try {
 			SupplyOperator op= (SupplyOperator)SingletonUser.getInstance().getLoggedUser();
-			return true;
 		} catch(ClassCastException e) {
 			throw new AuthorizationDeniedException();
 		}

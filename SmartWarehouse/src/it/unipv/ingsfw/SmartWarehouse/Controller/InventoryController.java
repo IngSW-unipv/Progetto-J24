@@ -269,7 +269,7 @@ public class InventoryController {
 				try {
 					int choice = JOptionPane.showConfirmDialog(iv.getFirstDialog(), "are you sure you want to delete this item?", "confirm delete", JOptionPane.YES_NO_OPTION);
 					if (choice==JOptionPane.YES_OPTION) {
-						iv.getFirstDialog().setVisible(false);
+						iv.getFirstDialog().dispose();
 						w.findInventoryItem(iv.getFirstDialog().getSku()).delete();
 						updateInventory(w.getInventory()); 
 					}	
@@ -314,7 +314,8 @@ public class InventoryController {
 				try {
 					int qty=Integer.parseInt(iv.getFirstDialog().getSecondDialog().getQty().getText());
 					SupplyDAOFacade.getInstance().findSupplyBySkuAndIds(iv.getFirstDialog().getSku(), iv.getFirstDialog().getSecondDialog().getIds()).buy(qty);
-					JOptionPane.showMessageDialog(iv.getFirstDialog().getSecondDialog(), "successfull order", "Order", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(iv.getFirstDialog(), "successfull order", "Order", JOptionPane.INFORMATION_MESSAGE);
+					iv.getFirstDialog().getSecondDialog().dispose(); 
 				} catch(Exception e) {
 					JOptionPane.showMessageDialog(iv.getFirstDialog().getSecondDialog(), e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
 				}			

@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supply;
 
 public class SupplyDAO implements ISupplyDAO {
@@ -177,7 +177,7 @@ public class SupplyDAO implements ISupplyDAO {
 		return result;
 	}
 	
-	public Supply getCheaperSupplyByInventoryItem(InventoryItem i) {
+	public Supply getCheaperSupplyByInventoryItem(IInventoryItem i) {
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;
 		ResultSet rs1;

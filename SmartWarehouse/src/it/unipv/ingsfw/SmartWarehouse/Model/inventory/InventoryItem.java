@@ -21,7 +21,7 @@ public class InventoryItem implements IInventoryItem {
 	private int qty; 
 	private int stdLevel; 
 	private Position pos; 
-	IRandomGenerator rg;
+	private InventoryDAOFacade inventoryDAOFacade;
 
 	/**
 	 * Constructor used to create an object InventoryItem already present in the warehouse (in fact it already has the sku)
@@ -36,6 +36,7 @@ public class InventoryItem implements IInventoryItem {
 		this.qty=qty;
 		this.stdLevel=stdLevel;
 		this.pos=pos;
+		inventoryDAOFacade=InventoryDAOFacade.getInstance();
 	}
 
 	/**
@@ -50,6 +51,7 @@ public class InventoryItem implements IInventoryItem {
 		this.qty=0;
 		this.setStdLevel(stdLevel);
 		this.setPos(pos);
+		inventoryDAOFacade=InventoryDAOFacade.getInstance();
 	}
 	
 	public String getDescription() {
@@ -138,7 +140,7 @@ public class InventoryItem implements IInventoryItem {
 	private String createSku(IRandomGenerator rg) {
 		int skusize = SmartWarehouseInfoPoint.getSkuSize();
 		String sku= rg.generateRandomString(skusize);
-		while(InventoryDAOFacade.getInstance().findInventoryItemBySku(sku)!=null) {
+		while(inventoryDAOFacade.findInventoryItemBySku(sku)!=null) {
 	    	sku=rg.generateRandomString(skusize);
 	    }
 		return sku;
@@ -158,10 +160,10 @@ public class InventoryItem implements IInventoryItem {
 	 */
 	public IInventoryItem addToInventory() throws AuthorizationDeniedException, ItemAlreadyPresentException{  
 		checkAuthorization();
-		if(InventoryDAOFacade.getInstance().findInventoryItemBySku(sku)!=null) {
+		if(inventoryDAOFacade.findInventoryItemBySku(sku)!=null) {
 			throw new ItemAlreadyPresentException();
 		}
-		InventoryDAOFacade.getInstance().insertItem(this);
+		inventoryDAOFacade.insertItem(this);
 		return this; 		
 	} 
 	 
@@ -172,12 +174,12 @@ public class InventoryItem implements IInventoryItem {
 	 */
 	public void delete() throws ItemNotFoundException, AuthorizationDeniedException { 
 		checkAuthorization();
-		if(InventoryDAOFacade.getInstance().findInventoryItemBySku(sku)!=null) { 
+		if(inventoryDAOFacade.findInventoryItemBySku(sku)!=null) { 
 			for(Supply supply: SupplyDAOFacade.getInstance().findSupplyBySku(sku)) {
 				SupplyDAOFacade.getInstance().deleteSupplyOrder(supply);
 				SupplyDAOFacade.getInstance().deleteSupply(supply);
 			}
-			InventoryDAOFacade.getInstance().deleteItem(sku);
+			inventoryDAOFacade.deleteItem(sku);
 		} else {
 			throw new ItemNotFoundException(); 
 		}	
@@ -185,8 +187,8 @@ public class InventoryItem implements IInventoryItem {
 	
 	public boolean updateQty(int qty) throws ItemNotFoundException, IllegalArgumentException {
 		this.setQty(qty);
-		if(InventoryDAOFacade.getInstance().findInventoryItemBySku(sku)!=null) { 
-			return InventoryDAOFacade.getInstance().updateInventoryItemQty(sku, qty);
+		if(inventoryDAOFacade.findInventoryItemBySku(sku)!=null) { 
+			return inventoryDAOFacade.updateInventoryItemQty(sku, qty);
 		} else { 
 	        throw new ItemNotFoundException();  
 		}	  
@@ -196,10 +198,10 @@ public class InventoryItem implements IInventoryItem {
 	 * increase the quantity by 1 compared to the quantity currently present in the database.
 	 */
 	public boolean increaseQty() throws ItemNotFoundException, IllegalArgumentException {
-		if(InventoryDAOFacade.getInstance().findInventoryItemBySku(sku)!=null) { 
-			int newQty = InventoryDAOFacade.getInstance().getInventoryItemQty(this) + 1;
+		if(inventoryDAOFacade.findInventoryItemBySku(sku)!=null) { 
+			int newQty = inventoryDAOFacade.getInventoryItemQty(this) + 1;
 			this.setQty(newQty);
-			return InventoryDAOFacade.getInstance().updateInventoryItemQty(sku, qty);
+			return inventoryDAOFacade.updateInventoryItemQty(sku, qty);
 		} else { 
 	        throw new ItemNotFoundException();  
 		}		
@@ -209,10 +211,10 @@ public class InventoryItem implements IInventoryItem {
 	 * decrease the quantity by 1 compared to the quantity currently present in the database.
 	 */
 	public boolean decreaseQty() throws ItemNotFoundException, IllegalArgumentException {
-		if(InventoryDAOFacade.getInstance().findInventoryItemBySku(sku)!=null) { 
-			int newQty = InventoryDAOFacade.getInstance().getInventoryItemQty(this) - 1;
+		if(inventoryDAOFacade.findInventoryItemBySku(sku)!=null) { 
+			int newQty = inventoryDAOFacade.getInventoryItemQty(this) - 1;
 			this.setQty(newQty);
-			return InventoryDAOFacade.getInstance().updateInventoryItemQty(sku, qty);
+			return inventoryDAOFacade.updateInventoryItemQty(sku, qty);
 		} else { 
 	        throw new ItemNotFoundException();  
 		}	
@@ -222,8 +224,8 @@ public class InventoryItem implements IInventoryItem {
 	 * returns the InventoryItem suppliers with prices and maxQty, sorted by price
 	 */
 	public List<Object[]> getSuppliersInfo() throws ItemNotFoundException {
-		if(InventoryDAOFacade.getInstance().findInventoryItemBySku(sku)!=null) {
-			return InventoryDAOFacade.getInstance().getSuppliersInfo(this);
+		if(inventoryDAOFacade.findInventoryItemBySku(sku)!=null) {
+			return inventoryDAOFacade.getSuppliersInfo(this);
 		} else {
 			throw new ItemNotFoundException();
 		} 

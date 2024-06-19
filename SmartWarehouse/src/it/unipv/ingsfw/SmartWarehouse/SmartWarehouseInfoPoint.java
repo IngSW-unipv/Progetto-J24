@@ -9,12 +9,15 @@ public class SmartWarehouseInfoPoint {
 	private static final String SMARTWAREHOUSE_EMAIL="SMARTWAREHOUSE_EMAIL";
 	private static final String MINSTANDARDLEVEL = "MINSTANDARD_LEVEL";
 	private static final String SKUSIZE = "SKUSIZE";
+	private static final String IDSUPPLYSIZE = "IDSUPPLY_SIZE";
 	private static int deadline;
 	private static String email;
 	private static int min_std_level;
 	private static int MIN_STD_LEVEL_DEFAULT = 30;
 	private static int skuSize;
 	private static int skuSizeDefault = 5;
+	private static int idSupplySize;
+	private static int idSupplySizeDefault = 5;
 	public static final double PrimeImport = 50;
 	public static final double Soglia = 5;
 	
@@ -87,5 +90,27 @@ public class SmartWarehouseInfoPoint {
 			}	
 		}
 		return skuSize;
+	}
+	
+	public static int getIdSupplySize() {
+		FileInputStream f = null;
+		try {
+			Properties p = new Properties(System.getProperties());
+			f = new FileInputStream("properties/SmartWarehouseInfoPoint");
+			p.load(f);
+			idSupplySize = Integer.parseInt(p.getProperty(IDSUPPLYSIZE));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return idSupplySizeDefault;
+		} finally {
+			if (f != null) {
+				try {
+					f.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}	
+		}
+		return idSupplySize;
 	}
 }

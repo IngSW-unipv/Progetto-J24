@@ -3,7 +3,9 @@ package it.unipv.ingsfw.SmartWarehouse.Model.supply;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-//only one type of supply for the order
+/**
+ * only one type of supply per order
+ */
 public class SupplyOrder implements Comparable<SupplyOrder> {   
 	private int n_order;
 	private Supply supply;
