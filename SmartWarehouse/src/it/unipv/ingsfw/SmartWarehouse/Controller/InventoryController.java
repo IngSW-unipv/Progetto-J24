@@ -122,7 +122,13 @@ public class InventoryController {
 			}
 			
 			private void manageAction() {
-				Object[] input=iv.showInsertDialog();
+				Object[] input=null;
+				try {
+					input=iv.showInsertDialog();
+				} catch(NumberFormatException e) {
+		            JOptionPane.showMessageDialog(iv, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+
+				}	
 				if (input!=null) {   
 					try {   
 						IInventoryItem i = new InventoryItem((String)input[0], new ItemDetails((int)input[1], (int)input[2], (Category)input[3]), 
@@ -178,6 +184,7 @@ public class InventoryController {
 		updateSupplier();
 		plus();
 		minus();
+		changeQty();
 		delete();
 		rowOrderSelection();
 	}
@@ -232,6 +239,26 @@ public class InventoryController {
 		iv.getFirstDialog().getMinus().addActionListener(minusListener);
 	}
 	
+	private void changeQty() {
+		ActionListener qtyListener=new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				manageAction(); 
+			}
+
+			private void manageAction() {
+				try {
+					int qty = Integer.parseInt(iv.getFirstDialog().getEditQtyField().getText());
+					iv.getFirstDialog().getEditQtyField().setText("");
+					w.findInventoryItem(iv.getFirstDialog().getSku()).updateQty(qty);
+					updateInventory(w.getInventory()); 
+				}catch(Exception e) {
+					JOptionPane.showMessageDialog(iv.getFirstDialog(), e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+				}		
+			}
+		};
+		iv.getFirstDialog().getEditQtyField().addActionListener(qtyListener);
+	}
+	
 	private void delete() {
 		ActionListener deleteListener=new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -242,6 +269,7 @@ public class InventoryController {
 				try {
 					int choice = JOptionPane.showConfirmDialog(iv.getFirstDialog(), "are you sure you want to delete this item?", "confirm delete", JOptionPane.YES_NO_OPTION);
 					if (choice==JOptionPane.YES_OPTION) {
+						iv.getFirstDialog().setVisible(false);
 						w.findInventoryItem(iv.getFirstDialog().getSku()).delete();
 						updateInventory(w.getInventory()); 
 					}	

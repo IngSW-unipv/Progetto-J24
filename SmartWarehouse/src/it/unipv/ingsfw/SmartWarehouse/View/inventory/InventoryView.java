@@ -85,7 +85,7 @@ public class InventoryView extends JFrame {
 	    setVisible(true);    
 	} 
 	
-	public Object[] showInsertDialog() {
+	public Object[] showInsertDialog() throws NumberFormatException {
         //String descr, double price, int std_level, pos
        
         JTextField descriptionField = new JTextField(50);

@@ -4,9 +4,11 @@ import java.awt.BorderLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -16,6 +18,7 @@ public class FirstDialog extends JDialog {
 	private JButton plus;
 	private JButton minus;
 	private JButton delete;
+	private JTextField editQtyField;
 	private JTable table;
 	private DefaultTableModel tableModel;
 	private SecondDialog secondDialog;
@@ -31,6 +34,10 @@ public class FirstDialog extends JDialog {
 		editPanel.add(plus);
 		minus=new JButton("-");
 		editPanel.add(minus);
+		JLabel qtyLabel = new JLabel("Qty:");
+		editPanel.add(qtyLabel);
+		setEditQtyField(new JTextField(5));
+		editPanel.add(editQtyField);
         delete=new JButton("Delete Item");
         editPanel.add(delete);
 		
@@ -108,5 +115,13 @@ public class FirstDialog extends JDialog {
 
 	public void setSecondDialog(SecondDialog secondDialog) {
 		this.secondDialog = secondDialog;
+	}
+
+	public JTextField getEditQtyField() {
+		return editQtyField;
+	}
+
+	public void setEditQtyField(JTextField editQtyField) {
+		this.editQtyField = editQtyField;
 	}
 }
