@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+
+import it.unipv.ingsfw.SmartWarehouse.SmartWarehouseInfoPoint;
 import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyKartExceptio;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
@@ -158,8 +160,8 @@ public class ShopController {
 					
 					PaymentProcess pay=new PaymentProcess(mode, model.getCl().getEmail(), "warehouse");
 					try {
-						pay.startPayment(model.getPrimeImport()); 
-						view.displayInfo("Payment of: "+model.getPrimeImport()+"euro succesfully ended");
+						pay.startPayment(SmartWarehouseInfoPoint.PrimeImport); 
+						view.displayInfo("Payment of: "+SmartWarehouseInfoPoint.PrimeImport+"euro succesfully ended");
 						model.setPrime();
 						view.getPrime().setBackground(Color.green);
 						view.getPrime().setText("You are Prime");

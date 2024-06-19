@@ -20,6 +20,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
+import it.unipv.ingsfw.SmartWarehouse.SmartWarehouseInfoPoint;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
 
@@ -100,7 +101,7 @@ public class ShopFrame extends JFrame {
 	public void makeShop(InventoryManager inv) {
 		shopbutts = new ArrayList<JButton>();
 		for(InventoryItem i: inv.getInventory()) {
-			if(i.getQty() > Soglia) {
+			if(i.getQty() > SmartWarehouseInfoPoint.Soglia) {
 				JButton b=new JButton(i.getDescription()+": "+i.getPrice()+"$");
 				b.setFocusable(false);
 				b.setPreferredSize(new Dimension(300,90));

@@ -1,6 +1,7 @@
 
 package it.unipv.ingsfw.SmartWarehouse.Model.Shop;
 
+import it.unipv.ingsfw.SmartWarehouse.SmartWarehouseInfoPoint;
 import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyKartExceptio;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
@@ -14,8 +15,6 @@ public class Shop {
 	private Cart cart;
 	private RegisterFacade reg;
 	private Client cl;
-	private final double primeImport=50;
-	private final int Soglia=5;
 	
 	public Shop() {	
 		this.cart = new Cart();
@@ -29,7 +28,7 @@ public class Shop {
 	 * produce an exception
 	 */
 	public void addToCart(String sku, int qty) throws IllegalArgumentException{
-		if(inv.findInventoryItem(sku).getQty() > qty + Soglia) {
+		if(inv.findInventoryItem(sku).getQty() > qty + SmartWarehouseInfoPoint.Soglia) {
 			cart.add(inv.findInventoryItem(sku), qty);
 		}
 		else throw new IllegalArgumentException("not eanugh items");
@@ -51,10 +50,6 @@ public class Shop {
 	 */
 	public void setPrime() {
 		cl.setPrime(true);		
-	}
-	
-	public double getPrimeImport() {
-		return primeImport;
 	}
 
 	public InventoryManager getInv() {

@@ -15,9 +15,12 @@ public class SmartWarehouseInfoPoint {
 	private static int MIN_STD_LEVEL_DEFAULT = 30;
 	private static int skuSize;
 	private static int skuSizeDefault = 5;
+	public static final double PrimeImport = 50;
+	public static final double Soglia = 5;
 	
 	private SmartWarehouseInfoPoint() {
 	}
+	
 	public static int getDeadlineForMakingReturn() {
 		try {
 			Properties p = new Properties(System.getProperties());
