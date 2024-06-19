@@ -1,58 +1,82 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.picking.packagestrategy;
 
-import java.util.ArrayList;
 import java.util.List;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.picking.orderpicking.OrderP;
 
 public class SinglePackStrategy implements IPackageStrategy {
-	private OrderP o;
-	public  int counts=0;
-	public  int countm = 0;
-	public int countl = 0;
-	
+    private OrderP o;
+    private int counts = 0;
+    private int countm = 0;
+    private int countl = 0;
+    private int countfrs = 0;
+    private int countfrm = 0;
+    private int countfrl = 0;
+   
+
     public SinglePackStrategy(OrderP o) {
-       this.o=o;
-      
+        this.o = o;
     }
-    /*
-     * method for checking if a list of items contain a fragility one 
-     */
-    private boolean isPackageFragile(List<InventoryItem> pack) {
+
+    public boolean isPackageFragile(List<InventoryItem> pack) {
         for (InventoryItem item : pack) {
-            if (item.getDetails().getFragility() > N) {
-                return true; 
+            if (item.getDetails().getFragility() > IPackageStrategy.N) {
+                return true;
             }
         }
         return false;
     }
-    /*
-     * with this i calculate the packages
-     */
-    public String calculatePackages() {
-        int totalsize = o.calculateTotalSize();
-        List<InventoryItem> itemList = o.getSkuqtyAsList();
-        boolean isFragile = isPackageFragile(itemList);
 
+    public String calculatePackages() {
+        List<InventoryItem> itemList = o.getSkuqtyAsList();
+        int totalSize = o.calculateTotalSize();
+        boolean isFragile = isPackageFragile(itemList);
         String packageInfo = "";
-        if (totalsize <= maxs) {
-            packageInfo = packageInfo.concat("small 1");
+
+        if (totalSize <= IPackageStrategy.maxs) {
             counts++;
-            System.out.println("small " + counts);
-        } else if (totalsize <= maxm) {
-            packageInfo = packageInfo.concat("medium 1");
+            packageInfo = "small";
+            if (isFragile) {
+                countfrs++;
+                packageInfo += " and requires fragile packaging.";
+            }
+        } else if (totalSize <= IPackageStrategy.maxm) {
             countm++;
-            System.out.println("medium " + countm);
-        } else if (totalsize <= maxl) {
-            packageInfo = packageInfo.concat("large 1");
+            packageInfo = "medium";
+            if (isFragile) {
+                countfrm++;
+                packageInfo += " and requires fragile packaging.";
+            }
+        } else if (totalSize <= IPackageStrategy.maxl) {
             countl++;
-            System.out.println("large " + countl);
+            packageInfo = "large";
+            if (isFragile) {
+                countfrl++;
+                packageInfo += " and requires fragile packaging.";
+            }
         }
-        if (isFragile) {
-            packageInfo = packageInfo.concat(" and requires fragile packaging.");
+        return "Package 1 is a " + packageInfo + " pack.";
+    }
+
+    public boolean isPackageCorrect(String packageType, int quantity, int fr) {
+        switch (packageType) {
+            case "small":
+                return fr == countfrs && quantity == counts;
+
+            case "medium":
+                return quantity == countm && fr == countfrm;
+
+            case "large":
+                return fr == countfrl && quantity == countl;
+
+            default:
+                return false;
         }
-        
-        return packageInfo;
+    }
+
+    public int getCountPack() {
+    	
+        return 1;
     }
 
     public int getCounts() {
@@ -67,18 +91,15 @@ public class SinglePackStrategy implements IPackageStrategy {
         return countl;
     }
 
-    public boolean isPackageCorrect(String packageType, int quantity) {
-        switch (packageType.toLowerCase()) {
-            case "small":
-                return counts == quantity;
-            case "medium":
-                return countm == quantity;
-            case "large":
-                return countl == quantity;
-            default:
-                return false;
-        }
+    public int getCountfrs() {
+        return countfrs;
     }
 
-    
+    public int getCountfrm() {
+        return countfrm;
+    }
+
+    public int getCountfrl() {
+        return countfrl;
+    }
 }
