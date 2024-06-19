@@ -96,7 +96,7 @@ public class Cart {
 	}
 	
 	private InventoryItem findItemInCart(InventoryItem i) {
-		InventoryItem ret = null;
+		InventoryItem ret = i;
 		for(InventoryItem it: getSet()) {
 			if(i.getSku().equals(it.getSku())) {
 				ret = it;
