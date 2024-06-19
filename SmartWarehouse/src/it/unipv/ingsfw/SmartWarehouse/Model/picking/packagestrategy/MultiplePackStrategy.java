@@ -2,6 +2,8 @@ package it.unipv.ingsfw.SmartWarehouse.Model.picking.packagestrategy;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.picking.orderpicking.OrderP;
 
@@ -23,12 +25,12 @@ public class MultiplePackStrategy implements IPackageStrategy {
     
     public String calculatePackages() {
         int packCount = getCountPack(); // Chiamiamo il metodo totpack() per ottenere il numero totale di pacchi
-        List<List<InventoryItem>> packs = new ArrayList<>();
-        List<InventoryItem> itemList = o.getSkuqtyAsList();
-        List<InventoryItem> currentPack = new ArrayList<>();
+        List<List<IInventoryItem>> packs = new ArrayList<>();
+        List<IInventoryItem> itemList = o.getSkuqtyAsList();
+        List<IInventoryItem> currentPack = new ArrayList<>();
         int currentPackSize = 0;
 
-        for (InventoryItem item : itemList) {
+        for (IInventoryItem item : itemList) {
             int itemSize = item.getDetails().getDimension();
             if (currentPackSize + itemSize > maxl) {
                 packs.add(new ArrayList<>(currentPack));
@@ -45,13 +47,13 @@ public class MultiplePackStrategy implements IPackageStrategy {
         return printSummary(packs);
     }
     public int getCountPack() {
-        List<InventoryItem> itemList = o.getSkuqtyAsList();
-        List<List<InventoryItem>> packs = new ArrayList<>();
-        List<InventoryItem> currentPack = new ArrayList<>();
+        List<IInventoryItem> itemList = o.getSkuqtyAsList();
+        List<List<IInventoryItem>> packs = new ArrayList<>();
+        List<IInventoryItem> currentPack = new ArrayList<>();
         int currentPackSize = 0;
         int packCount = 0;
 
-        for (InventoryItem item : itemList) {
+        for (IInventoryItem item : itemList) {
             int itemSize = item.getDetails().getDimension();
             if (currentPackSize + itemSize > maxl) {
                 packs.add(new ArrayList<>(currentPack));
@@ -71,8 +73,8 @@ public class MultiplePackStrategy implements IPackageStrategy {
         return packCount;
     }
 
-    public boolean isPackageFragile(List<InventoryItem> pack) {
-        for (InventoryItem item : pack) {
+    public boolean isPackageFragile(List<IInventoryItem> pack) {
+        for (IInventoryItem item : pack) {
             if (item.getDetails().getFragility() > N) {
                 return true;
             }
@@ -80,10 +82,10 @@ public class MultiplePackStrategy implements IPackageStrategy {
         return false;
     }
 
-    private String printSummary(List<List<InventoryItem>> packages) {
+    private String printSummary(List<List<IInventoryItem>> packages) {
         String summary = "";
         for (int i = 0; i < packages.size(); i++) {
-            List<InventoryItem> pack = packages.get(i);
+            List<IInventoryItem> pack = packages.get(i);
             int totalSize = calculateTotalSize(pack);
             String packSize;
             boolean isFragile = isPackageFragile(pack);
@@ -122,9 +124,9 @@ public class MultiplePackStrategy implements IPackageStrategy {
         return summary;
     }
     
-    private int calculateTotalSize(List<InventoryItem> items) {
+    private int calculateTotalSize(List<IInventoryItem> pack) {
         int totalSize = 0;
-        for (InventoryItem item : items) {
+        for (IInventoryItem item : pack) {
             totalSize += item.getDetails().getDimension();
         }
         return totalSize;

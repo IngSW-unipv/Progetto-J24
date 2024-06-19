@@ -1,7 +1,8 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.picking.packagestrategy;
 
 import java.util.List;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
+
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.picking.orderpicking.OrderP;
 
 public class SinglePackStrategy implements IPackageStrategy {
@@ -18,8 +19,8 @@ public class SinglePackStrategy implements IPackageStrategy {
         this.o = o;
     }
 
-    public boolean isPackageFragile(List<InventoryItem> pack) {
-        for (InventoryItem item : pack) {
+    public boolean isPackageFragile(List<IInventoryItem> pack) {
+        for (IInventoryItem item : pack) {
             if (item.getDetails().getFragility() > IPackageStrategy.N) {
                 return true;
             }
@@ -28,7 +29,7 @@ public class SinglePackStrategy implements IPackageStrategy {
     }
 
     public String calculatePackages() {
-        List<InventoryItem> itemList = o.getSkuqtyAsList();
+        List<IInventoryItem> itemList = o.getSkuqtyAsList();
         int totalSize = o.calculateTotalSize();
         boolean isFragile = isPackageFragile(itemList);
         String packageInfo = "";
