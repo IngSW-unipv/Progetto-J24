@@ -6,24 +6,24 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 
 
 public class Order implements IReturnable{
-	private HashMap<InventoryItem, Integer> skuqty;
+	private HashMap<IInventoryItem, Integer> skuqty;
 	private int id;
 	private String email;
 	private LocalDateTime date;
 	
-	public Order(HashMap<InventoryItem, Integer> skuqty, String email) {
-		this.skuqty=new HashMap<InventoryItem, Integer>();
+	public Order(HashMap<IInventoryItem, Integer> skuqty, String email) {
+		this.skuqty=new HashMap<IInventoryItem, Integer>();
 		this.skuqty.putAll(skuqty);
 		this.email=email;
 		date = LocalDateTime.now();
 		
 	}
-	public Order(HashMap<InventoryItem, Integer> skuqty, int id, String email, LocalDateTime date) {
-		this.skuqty=new HashMap<InventoryItem, Integer>();
+	public Order(HashMap<IInventoryItem, Integer> skuqty, int id, String email, LocalDateTime date) {
+		this.skuqty=new HashMap<IInventoryItem, Integer>();
 		this.skuqty.putAll(skuqty);
 		this.id=id;
 		this.email=email;
@@ -34,11 +34,11 @@ public class Order implements IReturnable{
 		return id;
 	}
 
-	public HashMap<InventoryItem, Integer> getSkuqty() {
+	public HashMap<IInventoryItem, Integer> getSkuqty() {
 		return skuqty;
 	}
 	
-	public void setSkuqty(HashMap<InventoryItem, Integer> skuqty) {
+	public void setSkuqty(HashMap<IInventoryItem, Integer> skuqty) {
 		this.skuqty = skuqty;
 	}
 	
@@ -62,32 +62,32 @@ public class Order implements IReturnable{
 		return email;
 	}
 	
-	public HashMap<InventoryItem, Integer> getMap(){
+	public HashMap<IInventoryItem, Integer> getMap(){
 		return skuqty;
 	}
 	
 	public double getTotal() {
 		double tot=0;
-		for(InventoryItem i: getSet()) {
+		for(IInventoryItem i: getSet()) {
 			tot+=i.getPrice()*skuqty.get(i);
 		}
 		return tot;
 	}
 	
-	public int getQtyOfItem(InventoryItem i) {
+	public int getQtyOfItem(IInventoryItem i) {
 		return skuqty.get(i);
 	}
 	
-	public HashSet<InventoryItem> getSet(){
-		HashSet<InventoryItem> sq = new HashSet<InventoryItem>();
+	public HashSet<IInventoryItem> getSet(){
+		HashSet<IInventoryItem> sq = new HashSet<IInventoryItem>();
 		skuqty.forEach((t, u) -> sq.add(t)); 
 		return sq;
 	}
 	
 	@Override
-	public InventoryItem getItemBySku(String sku) {
-		InventoryItem ret = null;
-		for(InventoryItem i: getSet()) {
+	public IInventoryItem getItemBySku(String sku) {
+		IInventoryItem ret = null;
+		for(IInventoryItem i: getSet()) {
 			if(i.getSku().equals(sku)) {
 				ret=i;
 				break;
@@ -109,7 +109,7 @@ public class Order implements IReturnable{
 	@Override
 	public String toString() {
 		String s="";
-		for(InventoryItem i: getSet()) {
+		for(IInventoryItem i: getSet()) {
 			s+=getQtyBySku(i.getSku())+" "+i.getDescription()+", ";
 		}
 		s+=getDate();

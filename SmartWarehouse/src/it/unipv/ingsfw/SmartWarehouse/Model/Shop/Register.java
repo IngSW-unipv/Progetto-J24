@@ -4,7 +4,7 @@ package it.unipv.ingsfw.SmartWarehouse.Model.Shop;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.picking.orderpicking.OrderP;
 
@@ -42,7 +42,7 @@ public class Register {
 	
 	
 	public Order rebuildOrder(ArrayList<OrderLine> o, int id) { 
-		HashMap<InventoryItem, Integer> hs = new HashMap<InventoryItem, Integer>();
+		HashMap<IInventoryItem, Integer> hs = new HashMap<IInventoryItem, Integer>();
 		OrderLine temp=o.get(0);
 		for(OrderLine ord: o) {
 			hs.put(inv.findInventoryItem(ord.getSku()), ord.getQty());
@@ -52,7 +52,7 @@ public class Register {
 	
 	private ArrayList<OrderLine> makeLine(Order o) {
 		ArrayList<OrderLine> ord = new ArrayList<OrderLine>();
-		for(InventoryItem i: o.getSet()) {
+		for(IInventoryItem i: o.getSet()) {
 			ord.add(new OrderLine(o.getId(), i.getSku(), o.getQtyOfItem(i),
 					o.getEmail(), o.getDate(), false));
 		}

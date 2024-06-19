@@ -9,20 +9,20 @@ import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.IPayment;
 import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentProcess;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
 
 public class Cart {
-	HashMap<InventoryItem,Integer> skuqty;
+	HashMap<IInventoryItem,Integer> skuqty;
 	
 	public Cart() {
-		skuqty=new HashMap<InventoryItem, Integer>();
+		skuqty=new HashMap<IInventoryItem, Integer>();
 	}
 	/*
 	 * add to the Map skuqty the selected item and its quantity
 	 * if the given quantity is < 1 throws an exception
 	 */
-	public void add(InventoryItem it, int qty)throws IllegalArgumentException{
+	public void add(IInventoryItem it, int qty)throws IllegalArgumentException{
 		int i;
 		if(qty < 1) {
 			throw new IllegalArgumentException("quantity cannot be negative");
@@ -34,7 +34,7 @@ public class Cart {
 	/*
 	 * remove the mapping in skuqty for the selected item;
 	 */
-	public void remove(InventoryItem it) {
+	public void remove(IInventoryItem it) {
 		 skuqty.remove(findItemInCart(it));
 	}
 	/*
@@ -55,7 +55,7 @@ public class Cart {
 	 * Update Correctly Warehouse quantities
 	 */
 	private void updateWarehouseQty() throws IllegalArgumentException, ItemNotFoundException{
-		for(InventoryItem i: getSet()) {
+		for(IInventoryItem i: getSet()) {
 			int nuova = i.getQty() - skuqty.get(i);
 			i.updateQty(nuova);
 		}
@@ -65,7 +65,7 @@ public class Cart {
 	 */
 	public double getTotal() {
 		double tot = 0;
-		for(InventoryItem i: getSet()) {
+		for(IInventoryItem i: getSet()) {
 			tot += i.getPrice()*skuqty.get(i); //item value times its quantity
 		}
 		return tot;
@@ -73,31 +73,31 @@ public class Cart {
 	/*
 	 * Getters and Setters
 	 */
-	public HashMap<InventoryItem, Integer> getSkuqty() {
+	public HashMap<IInventoryItem, Integer> getSkuqty() {
 		return skuqty;
 	}
 
-	public void setSkuqty(HashMap<InventoryItem, Integer> skuqty) {
+	public void setSkuqty(HashMap<IInventoryItem, Integer> skuqty) {
 		this.skuqty = skuqty;
 	}
 	
-	public HashSet<InventoryItem> getSet(){
-		HashSet<InventoryItem> sq = new HashSet<InventoryItem>();
+	public HashSet<IInventoryItem> getSet(){
+		HashSet<IInventoryItem> sq = new HashSet<IInventoryItem>();
 		skuqty.forEach((t, u) -> sq.add(t)); 
 		return sq;
 	}
 
 	public String toString() {
 		String out="";
-		for(InventoryItem i: skuqty.keySet()) {
+		for(IInventoryItem i: skuqty.keySet()) {
 			out = out+i.toString()+"-"+skuqty.get(i)+"\n";
 		}
 		return out;
 	}
 	
-	private InventoryItem findItemInCart(InventoryItem i) {
-		InventoryItem ret = i;
-		for(InventoryItem it: getSet()) {
+	private IInventoryItem findItemInCart(IInventoryItem i) {
+		IInventoryItem ret = i;
+		for(IInventoryItem it: getSet()) {
 			if(i.getSku().equals(it.getSku())) {
 				ret = it;
 				break;
