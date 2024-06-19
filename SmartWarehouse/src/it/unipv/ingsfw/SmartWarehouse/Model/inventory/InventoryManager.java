@@ -10,23 +10,27 @@ public class InventoryManager {
 		this.invFacade = InventoryDAOFacade.getInstance();
 	}
 	 
-	public List<InventoryItem> getInventory() {
+	public List<IInventoryItem> getInventory() {
 		return invFacade.viewInventory();
 	}  
 	
-	public InventoryItem findInventoryItem(String sku) {
+	public IInventoryItem findInventoryItem(String sku) {
 		return invFacade.findInventoryItemBySku(sku);
 	}  
 	
-	public InventoryItem findInventoryItemByPosition(Position pos) {
+	public IInventoryItem findInventoryItemByPosition(Position pos) {
 		return invFacade.checkIfPositionAlreadyUsed(pos);
 	}
 
-	public void orderInventoryItems(List<InventoryItem> items){
+	/**
+	 * Descending sort with the difference between stdLevel and quantity
+	 * @param items
+	 */
+	public void orderInventoryItems(List<IInventoryItem> items){
 		Collections.sort(items);
 	}
 	
-	public List<InventoryItem> getInventoryItemsUnderStdLevel(){
+	public List<IInventoryItem> getInventoryItemsUnderStdLevel(){
 		return invFacade.getInventoryItemsUnderStdLevel();
 	}
 	

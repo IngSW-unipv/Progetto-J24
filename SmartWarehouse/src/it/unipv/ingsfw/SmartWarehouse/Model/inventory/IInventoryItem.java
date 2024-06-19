@@ -5,7 +5,7 @@ import it.unipv.ingsfw.SmartWarehouse.Exception.AuthorizationDeniedException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemAlreadyPresentException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 
-public interface IInventoryItem {
+public interface IInventoryItem extends Comparable<IInventoryItem> {
 	public String getSku();
 	public String getDescription();
 	public double getPrice();
@@ -19,6 +19,7 @@ public interface IInventoryItem {
 	public boolean increaseQty() throws ItemNotFoundException, IllegalArgumentException;
 	public boolean decreaseQty() throws ItemNotFoundException, IllegalArgumentException;
 	public List<Object[]> getSuppliersInfo() throws ItemNotFoundException;
+	public int compareTo(IInventoryItem o);
 	
 }
 

@@ -5,13 +5,15 @@ import java.util.List;
 import it.unipv.ingsfw.SmartWarehouse.Database.IInventoryDAO;
 import it.unipv.ingsfw.SmartWarehouse.Database.InventoryDAO;
 
-//contains all the DAO methods about inventory
+/**
+ * Contains all the DAO methods about inventory
+ */
 public class InventoryDAOFacade {
 	private static InventoryDAOFacade instance;
 	private IInventoryDAO inventoryDAO;
 	 
 	private InventoryDAOFacade() {
-		inventoryDAO=new InventoryDAO(); 
+		inventoryDAO = new InventoryDAO(); 
 	}
 	
 	public static synchronized InventoryDAOFacade getInstance() {
@@ -21,15 +23,15 @@ public class InventoryDAOFacade {
 		return instance;
 	}
 	  
-	public List<InventoryItem> viewInventory(){ 
+	public List<IInventoryItem> viewInventory(){ 
 		return inventoryDAO.selectAllInventory();
 	}
 	
-	public InventoryItem findInventoryItemBySku(String sku) {
+	public IInventoryItem findInventoryItemBySku(String sku) {
 		return inventoryDAO.getInventoryItemBySku(sku);
 	}  
 	
-	public boolean insertItem(InventoryItem i){ 
+	public boolean insertItem(IInventoryItem i){ 
 		return inventoryDAO.insertItemToInventory(i);
 	}
 	
@@ -37,7 +39,7 @@ public class InventoryDAOFacade {
 		return inventoryDAO.deleteItem(sku);
 	}
 	
-	public InventoryItem checkIfPositionAlreadyUsed(Position pos) {
+	public IInventoryItem checkIfPositionAlreadyUsed(Position pos) {
 		return inventoryDAO.getInventoryItemByPosition(pos);
 	} 
 	 
@@ -45,11 +47,11 @@ public class InventoryDAOFacade {
 		return inventoryDAO.updateInventoryItemQty(sku, qty);
 	}
 	
-	public List<InventoryItem> getInventoryItemsUnderStdLevel(){
+	public List<IInventoryItem> getInventoryItemsUnderStdLevel(){
 		return inventoryDAO.viewItemsUnderStdLevel();
 	} 
 
-	public List<Object[]> getSuppliersInfo(InventoryItem i){
+	public List<Object[]> getSuppliersInfo(IInventoryItem i){
 		return inventoryDAO.getSuppliersInfo(i);
 	}
 	
