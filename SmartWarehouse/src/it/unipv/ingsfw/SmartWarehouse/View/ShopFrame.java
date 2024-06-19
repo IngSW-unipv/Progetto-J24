@@ -21,7 +21,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 import it.unipv.ingsfw.SmartWarehouse.SmartWarehouseInfoPoint;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
 
 @SuppressWarnings("serial")
@@ -100,7 +100,7 @@ public class ShopFrame extends JFrame {
 	
 	public void makeShop(InventoryManager inv) {
 		shopbutts = new ArrayList<JButton>();
-		for(InventoryItem i: inv.getInventory()) {
+		for(IInventoryItem i: inv.getInventory()) {
 			if(i.getQty() > SmartWarehouseInfoPoint.Soglia) {
 				JButton b=new JButton(i.getDescription()+": "+i.getPrice()+"$");
 				b.setFocusable(false);
@@ -116,11 +116,11 @@ public class ShopFrame extends JFrame {
 		pay.setVisible(false);
 	}
 	
-	public void makeKart(HashSet<InventoryItem> i, HashMap<InventoryItem, Integer> sq) {
+	public void makeKart(HashSet<IInventoryItem> i, HashMap<IInventoryItem, Integer> sq) {
 		kartbutts = new HashSet<JButton>();
 		kartPan.removeAll();
 		
-		for(InventoryItem it: i) {
+		for(IInventoryItem it: i) {
 			JButton b=new JButton(it.getDescription()+"-"+sq.get(it)+": "+it.getPrice()+"$");
 			
 			b.setFocusable(false);
