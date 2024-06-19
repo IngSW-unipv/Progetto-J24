@@ -1,14 +1,17 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.inventory;
 
 public enum Category {
-	ELECTRONICS("Elettronica"),
-    GROCERIES("Alimentari"),
-    CLOTHING("Abbigliamento"),
-    TOYS("Giochi");
+	ELECTRONICS("Electronics"),
+    GROCERIES("Groceries"),
+    CLOTHING("Clothing"),
+    TOYS("Toys");
 	
 	private final String label;
-
-	//private constructor
+	
+	/**
+	 * Private constructor
+	 * @param label
+	 */
     Category(String label) {
 		this.label=label;
 	}
@@ -16,15 +19,18 @@ public enum Category {
 	public String getLabel() {
 		return label;
 	}
-
-	public static Category fromString(String text) {
+	
+	/**
+	 * Static method to obtain the Category corresponding to a given label
+	 */
+	public static Category fromString(String label) {
 		for(Category cat : Category.values()) {
-			if(cat.getLabel().equals(text)) {
+			if(cat.getLabel().equals(label)) {
 				return cat;
 			}
 		}
 		return null;
-	} 
+	}
 
 }
  

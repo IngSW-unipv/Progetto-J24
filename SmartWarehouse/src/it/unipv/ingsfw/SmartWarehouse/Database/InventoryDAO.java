@@ -23,8 +23,8 @@ public class InventoryDAO implements IInventoryDAO {
 		this.schema="warehouse";
 	}  
 
-	public List<InventoryItem> selectAllInventory(){  
-		List<InventoryItem> inventory=new ArrayList<InventoryItem>();
+	public List<IInventoryItem> selectAllInventory(){  
+		List<IInventoryItem> inventory=new ArrayList<IInventoryItem>();
 		conn=DBConnection.startConnection(conn,schema);
 		Statement st1; 
 		ResultSet rs1;
@@ -37,7 +37,7 @@ public class InventoryDAO implements IInventoryDAO {
 
 			while(rs1.next())
 			{
-				InventoryItem l=new InventoryItem(rs1.getString(2), new ItemDetails(rs1.getInt(9), rs1.getInt(10), Category.fromString(rs1.getString(11))), 
+				IInventoryItem l=new InventoryItem(rs1.getString(2), new ItemDetails(rs1.getInt(9), rs1.getInt(10), Category.fromString(rs1.getString(11))), 
 						rs1.getString(1), rs1.getDouble(3), rs1.getInt(4), rs1.getInt(5), new Position(rs1.getString(6), rs1.getString(7),rs1.getString(8)));
 				inventory.add(l);
 			}
@@ -49,9 +49,11 @@ public class InventoryDAO implements IInventoryDAO {
 		return inventory;  
 	}
 	
-	//return null if the item is not present
-	public InventoryItem getInventoryItemBySku(String sku) {
-		InventoryItem result=null; 
+	/**
+	 * It returns null if the InventoryItem (identified by sku) is not present in the inventory.
+	 */
+	public IInventoryItem getInventoryItemBySku(String sku) {
+		IInventoryItem result=null; 
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;
 		ResultSet rs1 = null;
@@ -74,8 +76,7 @@ public class InventoryDAO implements IInventoryDAO {
 		return result; 
 	} 
 	
-	//every field cannot be empty
-	public boolean insertItemToInventory(InventoryItem i) { 
+	public boolean insertItemToInventory(IInventoryItem i) { 
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;
 		boolean result=true;
@@ -106,11 +107,11 @@ public class InventoryDAO implements IInventoryDAO {
 		return result;
 	} 
 	 
-	public InventoryItem getInventoryItemByPosition(Position pos) { 
+	public IInventoryItem getInventoryItemByPosition(Position pos) { 
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;
 		ResultSet rs1;
-		InventoryItem result=null; 
+		IInventoryItem result=null; 
 		 
 	    try { 
 			String query ="select * from inventory WHERE line = ? AND pod = ? AND bin = ?";
@@ -173,8 +174,8 @@ public class InventoryDAO implements IInventoryDAO {
 		return rowsUpdated>0;
 	}
 	
-	public List<InventoryItem> viewItemsUnderStdLevel(){
-		List<InventoryItem> result=new ArrayList<InventoryItem>();
+	public List<IInventoryItem> viewItemsUnderStdLevel(){
+		List<IInventoryItem> result=new ArrayList<IInventoryItem>();
 		conn=DBConnection.startConnection(conn,schema);
 		Statement st1;
 		ResultSet rs1; 
@@ -197,7 +198,7 @@ public class InventoryDAO implements IInventoryDAO {
 		return result;
 	}
 	 
-	public List<Object[]> getSuppliersInfo(InventoryItem i) { 
+	public List<Object[]> getSuppliersInfo(IInventoryItem i) { 
 		List<Object[]> result=new ArrayList<Object[]>();
 		conn=DBConnection.startConnection(conn,schema);
 		PreparedStatement st1;

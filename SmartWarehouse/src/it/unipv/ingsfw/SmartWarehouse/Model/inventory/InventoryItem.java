@@ -13,7 +13,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supply;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.InventoryOperator;
 
-public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> {
+public class InventoryItem implements IInventoryItem {
 	private String description;
 	private ItemDetails details;
 	private String sku;
@@ -204,10 +204,18 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
 	        throw new ItemNotFoundException();  
 		}		
 	} 
-	//?????
+
+	/**
+	 * decrease the quantity by 1 compared to the quantity currently present in the database.
+	 */
 	public boolean decreaseQty() throws ItemNotFoundException, IllegalArgumentException {
-		int newQty=qty-1;
-		return this.updateQty(newQty);
+		if(InventoryDAOFacade.getInstance().findInventoryItemBySku(sku)!=null) { 
+			int newQty = InventoryDAOFacade.getInstance().getInventoryItemQty(this) - 1;
+			this.setQty(newQty);
+			return InventoryDAOFacade.getInstance().updateInventoryItemQty(sku, qty);
+		} else { 
+	        throw new ItemNotFoundException();  
+		}	
 	}
 	
 	/**
@@ -222,10 +230,9 @@ public class InventoryItem implements IInventoryItem, Comparable<InventoryItem> 
 	}
 	  
 	@Override
-	public int compareTo(InventoryItem o) {
+	public int compareTo(IInventoryItem o) {
 		int diffThis = this.stdLevel-this.qty;
         int diffOther = o.getStdLevel()-o.getQty();
-        //descending sort with the difference between stdLevel and quantity
         return Integer.compare(diffOther, diffThis);
 	}
 	
