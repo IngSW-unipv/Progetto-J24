@@ -37,7 +37,6 @@ public class PickingController {
         addPackageTypeListeners();
         disablePackageTypeButtons();
     }
-
     private void addPackageTypeListeners() {
         view.getSmallButton().addActionListener(new ActionListener() {
             @Override
@@ -80,7 +79,6 @@ public class PickingController {
             }
         });
     }
-    
     private void displayOrderIds() {
         ArrayList<Integer> idList = RegisterDAOFacade.getIstance().selectAllIds();
         ArrayList<Integer> displayedIds = new ArrayList<>();
@@ -139,7 +137,6 @@ public class PickingController {
             }
         });
     }
-
     private void addPackedListener() {
         view.getPacked().addActionListener(new ActionListener() {
             @Override
@@ -182,7 +179,6 @@ public class PickingController {
             }
         });
     }
-
     private void validateItems() throws ItemNotFoundException {
         int id = view.getSelectedOrderId();
         if (id != -1) {
@@ -199,23 +195,17 @@ public class PickingController {
             throw new ReturnableOrderNullPointerException();
         }
     }
-
     private void showItems(int id) {
         OrderP or = (OrderP) RegisterFacade.getIstance().selectOrder(id);
         List<String> itemDetailsList = or.getItemDetails();
         view.displayOrderItems(itemDetailsList);
     }
-
-    
-
     private void confirmPackaging(Order order) {
         view.showConfirmationMessage("Order packed successfully.");
         view.clearPackageSummary();
         view.clearMessages();
         view.clearInsertedItemsDisplay();
     }
-
-
     private void choosePackageType(String packageType) {
         int id = view.getSelectedOrderId();
         if (id == -1) {
@@ -224,9 +214,11 @@ public class PickingController {
         }
         OrderP or = (OrderP) RegisterFacade.getIstance().selectOrder(id);
         int[] packageDetails = view.getPackageDetails();
+        if (packageDetails == null) {
+            return; 
+        }
         int quantityToAdd = packageDetails[0];
         int fragility = packageDetails[1];
-        
         try {
             if (or.addAndComparePackageSize(packageType, quantityToAdd, fragility)) {
                 enablePackageTypeButtons();
@@ -238,47 +230,37 @@ public class PickingController {
             view.showErrorMessage("Wrong package size or fragility: " + e.getMessage());
         }
     }
-
-
-private void disablePackageTypeButtons() {
-    view.getSmallButton().setEnabled(false);
-    view.getMediumButton().setEnabled(false);
-    view.getLargeButton().setEnabled(false);
-}
-
-private void enablePackageTypeButtons() {
-    view.getSmallButton().setEnabled(true);
-    view.getMediumButton().setEnabled(true);
-    view.getLargeButton().setEnabled(true);
-}
-
-private void updateInsertedItemsDisplay() {
-    view.getInsertItem().setText("");
-    for (String sku : insertedItems.keySet()) {
-        int qty = insertedItems.get(sku);
-        view.getInsertItem().append("Item: " + sku + ", Total Quantity: " + qty + "\n");
+    private void disablePackageTypeButtons() {
+    	view.getSmallButton().setEnabled(false);
+    	view.getMediumButton().setEnabled(false);
+    	view.getLargeButton().setEnabled(false);
     }
-}
-private void clearInsertedItems() {
-    insertedItems.clear();  
-}
-public static int sumQuantities(String text) {
-    int sum = 0;
-    String[] lines = text.split("\n");
-
-    for (String line : lines) {
-        if (line.startsWith("Quantity:")) {
-            int startIndex = line.indexOf(':') + 1;
-            String quantityStr = line.substring(startIndex).trim();
-            int quantity = Integer.parseInt(quantityStr);
-            sum += quantity;
-        }
+    private void enablePackageTypeButtons() {
+    	view.getSmallButton().setEnabled(true);
+    	view.getMediumButton().setEnabled(true);
+    	view.getLargeButton().setEnabled(true);
     }
-
-    return sum;
-}
-
-
-
-
+    private void updateInsertedItemsDisplay() {
+    	view.getInsertItem().setText("");
+    	for (String sku : insertedItems.keySet()) {
+    		int qty = insertedItems.get(sku);
+    		view.getInsertItem().append("Item: " + sku + ", Total Quantity: " + qty + "\n");
+    	}
+    }
+    private void clearInsertedItems() {
+    	insertedItems.clear();  
+    }
+    public static int sumQuantities(String text) {
+    	int sum = 0;
+    	String[] lines = text.split("\n");
+    	for (String line : lines) {
+    		if (line.startsWith("Quantity:")) {
+    			int startIndex = line.indexOf(':') + 1;
+    			String quantityStr = line.substring(startIndex).trim();
+    			int quantity = Integer.parseInt(quantityStr);
+    			sum += quantity;
+    		}
+    	}
+    	return sum;
+    }
 }
