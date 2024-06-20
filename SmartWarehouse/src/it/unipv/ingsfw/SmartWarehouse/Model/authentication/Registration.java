@@ -14,13 +14,14 @@ public class Registration {
 		this.c=c;
 	}
 	/*
-	 * method for the registration the client
+	 * method for the registration of the client
 	 */
 	
 	public boolean registerClient() throws AccountAlreadyExistsException, EmptyFieldException {
         fieldCheck();
         boolean result = false;
         if (SingletonUser.getInstance().getUserDAO().getClientByEmail(c.getEmail()) == null) {
+        	SingletonUser.getInstance().getUserDAO().insertClient(c);
             result = true;
         } else {
             throw new AccountAlreadyExistsException();
@@ -28,7 +29,7 @@ public class Registration {
         return result;
     }
 	/*
-	 * method for check if there are some empty filed
+	 * method to check if there are some empty filed
 	 */
 
 	private void fieldCheck() throws EmptyFieldException {

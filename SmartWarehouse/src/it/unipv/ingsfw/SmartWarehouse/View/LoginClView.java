@@ -13,12 +13,6 @@ public class LoginClView extends JFrame {
 	private JButton confirmButton;
 	
 	public LoginClView() {
-		
-		try {
-			UIManager.setLookAndFeel(new NimbusLookAndFeel());
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}
 
 		setTitle("Login");
         setSize(400, 300);

@@ -41,10 +41,10 @@ public class Login {
 	public void loginOp (String id) throws WrongOperatorException,EmptyFieldException{
 		fieldOpCheck(id);	
 		User u = SingletonUser.getInstance().getUserDAO().getOpById(id);
-		SingletonUser.getInstance().setLoggedUser(u); 
 		if(u==null) {
 			throw new WrongOperatorException();
 		} 
+		SingletonUser.getInstance().setLoggedUser(u);
 	}	
 	
 	private void fieldOpCheck(String id) throws EmptyFieldException {

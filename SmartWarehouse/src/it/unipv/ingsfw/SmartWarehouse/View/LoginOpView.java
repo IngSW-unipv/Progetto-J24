@@ -20,13 +20,14 @@ public class LoginOpView extends JFrame {
 		setTitle("Login");
 		setVisible(true);
         setSize(400, 150);
+        setLocationRelativeTo(null);
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(2, 1));
+        //panel.setLayout(new GridLayout(2, 1));
         add(panel);
         
         
         panel.add(new JLabel("ID:"));
-        textId = new JPasswordField();
+        textId = new JPasswordField(10);
         panel.add(textId);
         
         

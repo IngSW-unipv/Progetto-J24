@@ -16,6 +16,5 @@ public class WalletPayment {
 				c.setWallet(c.getWallet()-amount);
 			}
 			
-			System.out.println("Pagamento di euro " + amount + " effettuato tramite Wallet.");
 		}
 }

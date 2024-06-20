@@ -46,12 +46,6 @@ public class ReturnableOrdersView extends JFrame{
 		setSize(1500, 800);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-		try {
-			UIManager.setLookAndFeel(new NimbusLookAndFeel());
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}
-
 		mainPanel = new JPanel();
 		mainPanel.repaint();
 		mainPanel.setLayout(new BorderLayout());

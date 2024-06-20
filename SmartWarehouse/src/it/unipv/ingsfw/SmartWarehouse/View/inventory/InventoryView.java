@@ -35,7 +35,7 @@ public class InventoryView extends JFrame {
 	
 	public InventoryView() {
 		setTitle("Inventory");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setSize(1500, 800); 
 		
 	    tableModel = new DefaultTableModel();

@@ -33,7 +33,6 @@ public class ShopFrame extends JFrame {
 	private JButton kart,shop,pay,orders,prime, chargeWallet;
 	private JLabel kartInfoLab, wallet;
 	private JScrollPane scrollShop, scrollKart;
-	private final int Soglia = 5;
 
 	public ShopFrame() {
 		

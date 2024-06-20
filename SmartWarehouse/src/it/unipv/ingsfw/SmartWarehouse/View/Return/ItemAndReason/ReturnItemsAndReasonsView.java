@@ -90,12 +90,6 @@ public class ReturnItemsAndReasonsView extends JFrame{
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setSize(1500,800);
 
-		try {
-			UIManager.setLookAndFeel(new NimbusLookAndFeel());
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}
-
 		mainPanel = new JPanel();
 		mainPanel.repaint();
 		mainPanel.setLayout(new BorderLayout());

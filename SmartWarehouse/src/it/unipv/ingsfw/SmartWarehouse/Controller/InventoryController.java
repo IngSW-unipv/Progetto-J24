@@ -2,6 +2,8 @@ package it.unipv.ingsfw.SmartWarehouse.Controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
@@ -15,6 +17,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.inventory.ItemDetails;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Position;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.Supplier;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyDAOFacade;
+import it.unipv.ingsfw.SmartWarehouse.View.MainView;
 import it.unipv.ingsfw.SmartWarehouse.View.inventory.FirstDialog;
 import it.unipv.ingsfw.SmartWarehouse.View.inventory.InventoryView;
 import it.unipv.ingsfw.SmartWarehouse.View.inventory.SecondDialog;
@@ -33,7 +36,8 @@ public class InventoryController {
         back();
         insert();
         order();
-        rowSelection();      
+        rowSelection();  
+        close();
     }
 	
 	private void updateInventory(List<IInventoryItem> items) {
@@ -322,6 +326,42 @@ public class InventoryController {
 			}
 		};
 		iv.getFirstDialog().getSecondDialog().getOrder().addActionListener(buyListener);
+	}
+	
+	private void close() {
+		WindowListener closeListener = new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent e) {			
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent e) {				
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent e) {	
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent e) {	
+				iv.dispose();
+				new MainController(new MainView());				
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent e) {
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent e) {
+			}
+		};
+		iv.addWindowListener(closeListener);
 	}
 } 
 

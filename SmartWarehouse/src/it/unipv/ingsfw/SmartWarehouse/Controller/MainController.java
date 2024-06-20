@@ -11,15 +11,12 @@ import javax.swing.JOptionPane;
 import it.unipv.ingsfw.SmartWarehouse.Exception.AccountAlreadyExistsException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyFieldException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.WrongOperatorException;
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Shop;
 import it.unipv.ingsfw.SmartWarehouse.Model.authentication.Login;
 import it.unipv.ingsfw.SmartWarehouse.Model.authentication.Registration;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.supply.SupplyManager;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
-import it.unipv.ingsfw.SmartWarehouse.Model.user.User;
-import it.unipv.ingsfw.SmartWarehouse.Model.user.operator.WarehouseOperator;
 import it.unipv.ingsfw.SmartWarehouse.View.LoginOpView;
 import it.unipv.ingsfw.SmartWarehouse.View.LoginClView;
 import it.unipv.ingsfw.SmartWarehouse.View.MainView;
@@ -84,9 +81,8 @@ public class MainController {
 					
 					login.loginClient(loginView.getEmailField().getText(), String.valueOf(loginView.getPasswordField().getPassword()));
 					loginView.setVisible(false);
-					new ShopController(new Shop(), new ShopFrame()); 
-					
-					
+					mainView.setVisible(false);
+					new ShopController(new Shop(), new ShopFrame()); 		
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(loginView, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
 				}
@@ -100,8 +96,8 @@ public class MainController {
             public void actionPerformed(ActionEvent e) {
                 try {
                     manageAction();
-                } catch (EmptyFieldException | AccountAlreadyExistsException e1) {
-                    JOptionPane.showMessageDialog(regView, e1.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception e1) {
+                    JOptionPane.showMessageDialog(regView, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
 
@@ -128,18 +124,17 @@ public class MainController {
 	        public void actionPerformed(ActionEvent e) {
 	            try {
 	                manageAction();
-	            } catch (WrongOperatorException e1) {
+	            } catch (Exception e1) {
 	                e1.printStackTrace();
 	                JOptionPane.showMessageDialog(loginOpView, e1.getMessage(), "Errore Operatore", JOptionPane.ERROR_MESSAGE);
 	            }
-	        }
+	        } 
 	        private void manageAction() throws WrongOperatorException {
 	            Login login = new Login();
 	            String idview = String.valueOf(loginOpView.getTextId().getPassword());
 	            try {
 	                login.loginOp(String.valueOf(loginOpView.getTextId().getPassword()));
 	            } catch (Exception e) {
-	                
 	                JOptionPane.showMessageDialog(loginOpView, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
 	                return; 
 	            }
