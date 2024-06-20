@@ -1,4 +1,4 @@
-//
+
 package it.unipv.ingsfw.SmartWarehouse.Model.Return;
 
 import java.io.*;
