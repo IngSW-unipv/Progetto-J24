@@ -150,9 +150,8 @@ public class PickingView {
                 return null;
             }
         } else if (result == JOptionPane.CLOSED_OPTION) {
-            return null; 
+        	//do nothing
         }
-        
         return null;
     }
 
@@ -184,7 +183,7 @@ public class PickingView {
                 return null;
             }
         } else if (result == JOptionPane.CLOSED_OPTION) {
-            return null;
+        	
         }
         return null;
     }
