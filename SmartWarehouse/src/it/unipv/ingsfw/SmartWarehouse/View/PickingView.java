@@ -17,6 +17,7 @@ public class PickingView {
     private JTextArea packageSummaryTextArea;
     private JPanel ListId;
     private JTextArea selected;
+    private JTextArea insertedItemsTextArea; 
     private int selectedOrderId = -1;
 
     public PickingView() {
@@ -43,6 +44,10 @@ public class PickingView {
         selected.setEditable(false);
         JScrollPane selectedScrollPane = new JScrollPane(selected);
 
+        insertedItemsTextArea = new JTextArea(); 
+        insertedItemsTextArea.setEditable(false);
+        JScrollPane insertedScrollPane = new JScrollPane(insertedItemsTextArea);
+
         ListId = new JPanel();
         ListId.setLayout(new BoxLayout(ListId, BoxLayout.Y_AXIS));
         ListId.add(new JLabel("Order IDs"));
@@ -68,18 +73,24 @@ public class PickingView {
         packageSummaryPanel.add(summaryScrollPane, BorderLayout.CENTER);
 
         JPanel messagePanel = new JPanel(new BorderLayout());
-        messagePanel.add(new JLabel("Messages:"), BorderLayout.NORTH);
+        messagePanel.add(new JLabel("Inserted package:"), BorderLayout.NORTH);
         messagePanel.add(selectedScrollPane, BorderLayout.CENTER);
+
+        JPanel insertedItemsPanel = new JPanel(new BorderLayout());
+        insertedItemsPanel.add(new JLabel("Inserted Items:"), BorderLayout.NORTH);
+        insertedItemsPanel.add(insertedScrollPane, BorderLayout.CENTER);
 
         Dimension panelSize = new Dimension(250, 200);
         orderDetailsPanel.setPreferredSize(panelSize);
         packageSummaryPanel.setPreferredSize(panelSize);
         messagePanel.setPreferredSize(panelSize);
+        insertedItemsPanel.setPreferredSize(panelSize);
 
-        JPanel centerPanel = new JPanel(new GridLayout(3, 1));
+        JPanel centerPanel = new JPanel(new GridLayout(4, 1)); 
         centerPanel.add(orderDetailsPanel);
         centerPanel.add(packageSummaryPanel);
         centerPanel.add(messagePanel);
+        centerPanel.add(insertedItemsPanel); 
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(leftPanel, BorderLayout.WEST);
@@ -103,10 +114,83 @@ public class PickingView {
     public void displayOrderItems(List<String> itemDetailsList) {
         orderdetails.setText("");
         for (String itemDetails : itemDetailsList) {
-            orderdetails.append(itemDetails );
+            orderdetails.append(itemDetails + "\n");
         }
     }
+    public String getInsertedPackageInfo() {
+        String packageInfo = selected.getText().trim();
+        String[] lines = packageInfo.split("\n");
+        String insertedPackages = "";
+        for (String line : lines) {
+            if (line.contains("Selected package type") || line.contains("Quantity")) {
+                insertedPackages = insertedPackages.concat(line.trim()).concat("\n");
+            }
+        }
+        return insertedPackages.trim();
+    }
 
+    public int[] getPackageDetails() {
+        JPanel panel = new JPanel(new GridLayout(2, 2));
+        JLabel quantityLabel = new JLabel("Quantity:");
+        JTextField quantityField = new JTextField();
+        JLabel fragilityLabel = new JLabel("Fragility:");
+        JTextField fragilityField = new JTextField();
+        panel.add(quantityLabel);
+        panel.add(quantityField);
+        panel.add(fragilityLabel);
+        panel.add(fragilityField);
+        int result = JOptionPane.showConfirmDialog(null, panel, "Enter Package Details", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);     
+        if (result == JOptionPane.OK_OPTION) {
+            try {
+                int quantity = Integer.parseInt(quantityField.getText());
+                int fragility = Integer.parseInt(fragilityField.getText());
+                return new int[]{quantity, fragility};
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Please enter valid numbers for quantity and fragility.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+        } else if (result == JOptionPane.CLOSED_OPTION) {
+            return null; 
+        }
+        
+        return null;
+    }
+
+    public HashMap<String, Integer> getItemDetails() {
+        JPanel panel = new JPanel(new GridLayout(2, 2));
+        JLabel itemLabel = new JLabel("Item:");
+        JTextField itemField = new JTextField();
+        JLabel quantityLabel = new JLabel("Quantity:");
+        JTextField quantityField = new JTextField();
+        panel.add(itemLabel);
+        panel.add(itemField);
+        panel.add(quantityLabel);
+        panel.add(quantityField);
+        int result = JOptionPane.showConfirmDialog(null, panel, "Enter Item Details", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            String itemText = itemField.getText().trim();
+            String quantityText = quantityField.getText().trim();
+            if (itemText.isEmpty() || quantityText.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "There are some empty fields.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+            try {
+                int quantity = Integer.parseInt(quantityText);
+                HashMap<String, Integer> itemDetails = new HashMap<>();
+                itemDetails.put(itemText, quantity);
+                return itemDetails;
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Quantity must be a valid integer.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+        } else if (result == JOptionPane.CLOSED_OPTION) {
+            return null;
+        }
+        return null;
+    }
+    public void displayInsertedItem(String itemDetails) {
+        insertedItemsTextArea.append(itemDetails + "\n");
+    }
 
     public int getSelectedOrderId() {
         return selectedOrderId;
@@ -204,85 +288,12 @@ public class PickingView {
         JOptionPane.showMessageDialog(frame, message, "Success", JOptionPane.INFORMATION_MESSAGE);
     }
     
-    
-    public String getInsertedPackageInfo() {
-        String packageInfo = selected.getText().trim();
-        String[] lines = packageInfo.split("\n");
-        String insertedPackages = "";
-        for (String line : lines) {
-            if (line.contains("Selected package type") || line.contains("Quantity")) {
-                insertedPackages = insertedPackages.concat(line.trim()).concat("\n");
-            }
-        }
-        return insertedPackages.trim();
-    }
-
-    public int[] getPackageDetails() {
-        JPanel panel = new JPanel(new GridLayout(2, 2));
-        JLabel quantityLabel = new JLabel("Quantity:");
-        JTextField quantityField = new JTextField();
-        JLabel fragilityLabel = new JLabel("Fragility:");
-        JTextField fragilityField = new JTextField();
-        panel.add(quantityLabel);
-        panel.add(quantityField);
-        panel.add(fragilityLabel);
-        panel.add(fragilityField);
-        int result = JOptionPane.showConfirmDialog(null, panel, "Enter Package Details", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-        if (result == JOptionPane.OK_OPTION) {
-            try {
-                int quantity = Integer.parseInt(quantityField.getText());
-                int fragility = Integer.parseInt(fragilityField.getText());
-                return new int[]{quantity, fragility};
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Please enter valid numbers for quantity and fragility.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
-
-
-    public HashMap<String, Integer> getItemDetails() {
-        JPanel panel = new JPanel(new GridLayout(2, 2));
-        JLabel itemLabel = new JLabel("Item:");
-        JTextField itemField = new JTextField();
-        JLabel quantityLabel = new JLabel("Quantity:");
-        JTextField quantityField = new JTextField();
-        panel.add(itemLabel);
-        panel.add(itemField);
-        panel.add(quantityLabel);
-        panel.add(quantityField);
-        int result = JOptionPane.showConfirmDialog(null, panel, "Enter Item Details", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-        if (result == JOptionPane.OK_OPTION) {
-            String itemText = itemField.getText().trim();
-            String quantityText = quantityField.getText().trim();
-            if (itemText.isEmpty() || quantityText.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "There are some empty fields.", "Input Error", JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
-            try {
-                int quantity = Integer.parseInt(quantityText);
-                HashMap<String, Integer> itemDetails = new HashMap<>();
-                itemDetails.put(itemText, quantity);
-                return itemDetails;
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Quantity must be a valid integer.", "Input Error", JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
-        } 
-        else if (result==JOptionPane.CLOSED_OPTION) {
-        	 //do nothing
-        	return null;
-            
-        }
-        return null;
-    }
-
     public void clearInsertedItemsDisplay() {
-        orderdetails.setText("");
+    	insertedItemsTextArea.setText("");
     }
-
+    public void displayItemInfo(String packageInfo) {
+    	insertedItemsTextArea.setText(packageInfo);
+    }
     
     public void setPackageInfo(String packageInfo) {
         selected.setText(packageInfo);
@@ -295,11 +306,9 @@ public class PickingView {
     public void clearMessages() {
         selected.setText(""); 
     }
-    
-    public void displayPackageSummary(int countpack) {
- 
+    public JTextArea getInsertItem() {
+        return insertedItemsTextArea;
     }
 
-  
-
 }
+
