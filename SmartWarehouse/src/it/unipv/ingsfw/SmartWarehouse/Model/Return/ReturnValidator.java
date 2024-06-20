@@ -1,5 +1,6 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.Return;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
@@ -8,8 +9,8 @@ public class ReturnValidator {
 	private ReturnValidator() {
 	}
 	public static boolean checkReturnability(ReturnService returnService){
-		LocalDateTime criticalDate=returnService.getCriticalDate();
-		if (LocalDateTime.now().isAfter(criticalDate)) {
+		LocalDate criticalDate=returnService.getCriticalDate();
+		if (LocalDate.now().isAfter(criticalDate)) {
 			return false;
 		}
 		return true;

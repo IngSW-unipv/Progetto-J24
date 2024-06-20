@@ -23,6 +23,7 @@ import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 import it.unipv.ingsfw.SmartWarehouse.View.ShopFrame;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.BackButtonListenerForReturnableOrdersView;
+import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.WindowClosingListenerReturnableOrderView;
 
 public class ReturnableOrdersView extends JFrame{
 
@@ -43,7 +44,7 @@ public class ReturnableOrdersView extends JFrame{
 		this.shopFrame=shopFrame;
 		setTitle("Return Service");
 		setSize(1500, 800);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		try {
 			UIManager.setLookAndFeel(new NimbusLookAndFeel());
@@ -87,6 +88,7 @@ public class ReturnableOrdersView extends JFrame{
 		mainPanel.add(backPanel, BorderLayout.NORTH);
 		
 		addBackButtonListener();
+		addWindowClosingListener();
 		
 		setVisible(true);
 
@@ -94,6 +96,11 @@ public class ReturnableOrdersView extends JFrame{
 	private void addBackButtonListener() {
 		BackButtonListenerForReturnableOrdersView bb=new BackButtonListenerForReturnableOrdersView(this,this.shopFrame);
 		this.backButton.addActionListener(bb);
+		
+	}
+	private void addWindowClosingListener() {
+		WindowClosingListenerReturnableOrderView wcl=new WindowClosingListenerReturnableOrderView(this);
+		 this.addWindowListener(wcl);
 		
 	}
 	public void showWarningMessagge(String message) {

@@ -56,7 +56,7 @@ public class ReturnController {
 		ArrayList<String> itemsDescriptionsForButton= new ArrayList<>();
 		int count=0;
 		for(IInventoryItem i:inventoryItem_keyOfOrderMap) {
-			for(int count2=0;count2<order.getQtyOfItem((InventoryItem) i);count2++) {
+			for(int count2=0;count2<order.getQtyOfItem(i);count2++) {
 				itemsDescriptionsForButton.add(i.getDescription());
 				skuForActionCommand[count]=i.getSku();
 				count++;

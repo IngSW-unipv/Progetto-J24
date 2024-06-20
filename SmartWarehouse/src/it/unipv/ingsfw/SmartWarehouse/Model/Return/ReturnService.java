@@ -1,5 +1,6 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.Return;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +21,7 @@ public class ReturnService {
 	private Map<IInventoryItem, String> returnedItems;
 	private double moneyAlreadyReturned;
 	private ReturnServiceDAOFacade returnServiceDAOFacade;
-	private int DEADLINE_FOR_MAKING_RETURN;
+	private int deadlineForMakingReturn;
 
 	
 	/*
@@ -31,7 +32,7 @@ public class ReturnService {
 		this.returnedItems = new HashMap<>();
 		this.moneyAlreadyReturned=0;
 		this.returnServiceDAOFacade=ReturnServiceDAOFacade.getIstance(); 
-		DEADLINE_FOR_MAKING_RETURN=SmartWarehouseInfoPoint.getDeadlineForMakingReturn();
+		deadlineForMakingReturn=SmartWarehouseInfoPoint.getDeadlineForMakingReturn();
 		if(!ReturnValidator.checkReturnability(this)) {
 			throw new UnableToReturnException();
 		}
@@ -132,8 +133,8 @@ public class ReturnService {
 	public Set<IInventoryItem> getReturnedItemsKeySet() {
 		return getReturnedItems().keySet();
 	}
-	public LocalDateTime getCriticalDate() {
-		return returnableOrder.getDate().plusDays(DEADLINE_FOR_MAKING_RETURN);
+	public LocalDate getCriticalDate() {
+		return returnableOrder.getDate().toLocalDate().plusDays(deadlineForMakingReturn);
 	}
 	public int getQtyYouAreAllowedToReturn(IInventoryItem inventoryItem) {
 		return returnableOrder.getQtyBySku(inventoryItem.getSku());

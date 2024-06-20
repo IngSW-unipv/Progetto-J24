@@ -9,9 +9,8 @@ import it.unipv.ingsfw.SmartWarehouse.Exception.MissingReasonException;
 public class Reasons {
 	private static final String NO_PERSONALIZED_REASONS_ENTERED_EXCEPTION_MESSAGE ="Missing personalized reason";
 	private static final String REASONS_NOT_INITIALIZED_EXCEPTION_MESSAGE="Reasons not initialized. Call initializeReasons() first.";
-	//properties\\MotivazioniReso
 	private static final String REASONS_FILE_PATH = "properties/MotivazioniReso";
-	private static Map<String, String> reasons; //la motivazione è una coppia: nome_del_motivo+motivo
+	private static Map<String, String> reasons; 
 	private Reasons() {
 	}
 	public static  void init() {
