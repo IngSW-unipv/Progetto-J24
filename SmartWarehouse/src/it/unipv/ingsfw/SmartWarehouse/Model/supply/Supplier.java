@@ -61,14 +61,14 @@ public class Supplier {
 		}	 
 	}
 	
-	public boolean delete() throws InvalidSupplierException, AuthorizationDeniedException, InvalidSupplyException { 
+	public void delete() throws InvalidSupplierException, AuthorizationDeniedException, InvalidSupplyException { 
 		this.checkSupplierAuthorization(); 
 		if(supplyDAOFacade.findSupplier(IDS)!=null) {
 			//deleting also supplies associated with this supplier, and the orders of the supplies deleted
 			for(Supply supply:supplyDAOFacade.findSupplyBySupplier(IDS)) {
 				supply.delete(); 
 			}
-			return supplyDAOFacade.deleteSupplier(this);
+			supplyDAOFacade.deleteSupplier(this);
 		} else {
 			throw new SupplierDoesNotExistException();
 		} 

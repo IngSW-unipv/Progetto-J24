@@ -162,7 +162,8 @@ public class Supply {
 	} 
 	  
 	/**
-	 * The method create a SupplyOrder after checking the authorization
+	 * The method create a SupplyOrder after checking the authorization. 
+	 * It does not check qty, used in the Strategy classes. 
 	 * @return SupplyOrder
 	 */
 	public SupplyOrder replenishSupply(int qty) throws AuthorizationDeniedException {
