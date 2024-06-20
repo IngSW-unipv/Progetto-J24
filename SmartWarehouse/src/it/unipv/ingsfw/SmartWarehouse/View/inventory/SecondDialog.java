@@ -16,10 +16,10 @@ public class SecondDialog extends JDialog{
 	
 	public SecondDialog(String sku, String ids) {
 		setIds(ids);
-		setSize(700, 500);
+		setSize(200, 100);
 		setResizable(true);
+		setLocationRelativeTo(null);
 		setTitle("Sku: "+sku+", IdS: "+ids);
-		setSize(200, 400);
 		
 		panel = new JPanel();
 		JLabel qtyLabel=new JLabel("qty: ");

@@ -26,8 +26,9 @@ public class FirstDialog extends JDialog {
 	public FirstDialog(String sku) {
 		this.setSku(sku);
 		this.setTitle(sku);
-		setSize(700, 500);
+		setSize(700, 400);
 		setResizable(true);
+		setLocationRelativeTo(null);
 		 
 		JPanel editPanel= new JPanel();
 		plus=new JButton("+");
@@ -51,6 +52,7 @@ public class FirstDialog extends JDialog {
 		
 		table =new JTable(tableModel);
 		JScrollPane scrollPane=new JScrollPane(table);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
 		this.setLayout(new BorderLayout());
 		this.add(editPanel, BorderLayout.NORTH);

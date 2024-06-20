@@ -29,6 +29,7 @@ public class InventoryItem implements IInventoryItem {
 	public InventoryItem(String description, ItemDetails details, String sku, double price, int qty, int stdLevel,
 			Position pos) {
 		super();
+		inventoryDAOFacade=InventoryDAOFacade.getInstance();
 		this.description = description;
 		this.details = details;
 		this.sku = sku;
@@ -36,7 +37,6 @@ public class InventoryItem implements IInventoryItem {
 		this.qty=qty;
 		this.stdLevel=stdLevel;
 		this.pos=pos;
-		inventoryDAOFacade=InventoryDAOFacade.getInstance();
 	}
 
 	/**
@@ -44,6 +44,7 @@ public class InventoryItem implements IInventoryItem {
 	 */
 	public InventoryItem(String description, ItemDetails details, double price, int stdLevel, Position pos) throws IllegalArgumentException {
 		super();
+		inventoryDAOFacade=InventoryDAOFacade.getInstance();
 		this.description = description;
 		this.details = details;
 		this.sku = createSku(new RandomGenerator());
@@ -51,7 +52,6 @@ public class InventoryItem implements IInventoryItem {
 		this.qty=0;
 		this.setStdLevel(stdLevel);
 		this.setPos(pos);
-		inventoryDAOFacade=InventoryDAOFacade.getInstance();
 	}
 	
 	public String getDescription() {
@@ -127,7 +127,7 @@ public class InventoryItem implements IInventoryItem {
 		if(pos==null) {
 			throw new IllegalArgumentException("Position null");
 		}
-		if(InventoryDAOFacade.getInstance().checkIfPositionAlreadyUsed(pos)!=null) {
+		if(inventoryDAOFacade.checkIfPositionAlreadyUsed(pos)!=null) {
 			throw new IllegalArgumentException("Position already used");
 		}
 		this.pos = pos;

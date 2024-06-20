@@ -27,7 +27,7 @@ public class ThresholdStrategy implements IReplenishmentStrategy {
 			if (s!=null) {
 				while (q < i.getStdLevel()) { 
 					orderQty = Math.min(s.getMaxqty(), i.getStdLevel()-q);
-					s.replenishSupply(orderQty);	
+					s.replenishSupply(orderQty);
 					q += orderQty;
 				}
 			}

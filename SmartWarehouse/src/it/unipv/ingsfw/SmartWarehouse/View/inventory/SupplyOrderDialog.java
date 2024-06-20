@@ -1,6 +1,7 @@
 package it.unipv.ingsfw.SmartWarehouse.View.inventory;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.time.LocalDateTime;
 
 import javax.swing.JButton;
@@ -17,8 +18,9 @@ public class SupplyOrderDialog extends JDialog {
 	private JButton order; 
 	
 	public SupplyOrderDialog() {
-		setSize(800,500);
+		setSize(700,400);
 		setResizable(true);
+		setLocationRelativeTo(null);
 		tableModel=new DefaultTableModel();
 		tableModel.addColumn("n_order");
 		tableModel.addColumn("idSupply");
@@ -27,13 +29,14 @@ public class SupplyOrderDialog extends JDialog {
 		tableModel.addColumn("date");
 		table=new JTable(tableModel);
 		JScrollPane scrollpane=new JScrollPane(table);
+		scrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
-		JPanel panel=new JPanel();
+	    JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER)); 
 		order=new JButton("Newest Before");
 		panel.add(order);
 		
 		this.setLayout(new BorderLayout());
-		add(scrollpane, BorderLayout.NORTH);
+		add(scrollpane, BorderLayout.CENTER);
 		add(panel, BorderLayout.SOUTH);
 	}
 

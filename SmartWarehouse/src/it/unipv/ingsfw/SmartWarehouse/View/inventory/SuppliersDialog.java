@@ -11,8 +11,9 @@ public class SuppliersDialog extends JDialog {
 	private JTable table;
 
 	public SuppliersDialog() {
-		setSize(800,500);
+		setSize(700,400);
 		setResizable(true);
+		setLocationRelativeTo(null);
 		tableModel=new DefaultTableModel();
 		tableModel.addColumn("ids");
 		tableModel.addColumn("fullname");
@@ -20,6 +21,7 @@ public class SuppliersDialog extends JDialog {
 		tableModel.addColumn("address");
 		table=new JTable(tableModel);
 		JScrollPane scrollpane=new JScrollPane(table);
+		scrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		add(scrollpane);
 	}
 	

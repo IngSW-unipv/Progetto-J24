@@ -261,6 +261,9 @@ public class SupplyController {
 					}
 					case "Category Strategy": {
 						Category cat=supplyPanel.askCategory(); 
+						if (cat==null) {
+							return;
+						}
 						supplyManager.setReplenishmentStrategy(new CategoryStrategy(cat));
 						break;
 					}
