@@ -52,6 +52,8 @@ import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.ComboBoxListener;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.DeselectAllButtonListener;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.InfoPointButtonListener;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.SelectAllButtonListener;
+import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.WindowClosingListenerReturnableOrderView;
+import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.WindowClosingListenerRiarView;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Orders.ReturnableOrdersView;
 
 public class ReturnItemsAndReasonsView extends JFrame{
@@ -75,7 +77,7 @@ public class ReturnItemsAndReasonsView extends JFrame{
 	private JButton selectAllButton;
 	private JButton deselectAllButton;
 	private JButton infoPointButton;
-	
+
 
 
 
@@ -83,9 +85,9 @@ public class ReturnItemsAndReasonsView extends JFrame{
 		super();
 		this.shopFrame=shopFrame;
 		this.returnableOrdersView=returnableOrdersView;
-		
+
 		setTitle("Items and Reasons");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setSize(1500,800);
 
 		try {
@@ -101,6 +103,12 @@ public class ReturnItemsAndReasonsView extends JFrame{
 
 		orderDetailsPanel=new OrderDetailsPanel();
 		mainPanel.add(orderDetailsPanel.getScrollPane(), BorderLayout.WEST);
+		addWindowClosingListener();
+	}
+
+	private void addWindowClosingListener() {
+		WindowClosingListenerRiarView wcl=new WindowClosingListenerRiarView(this);
+		this.addWindowListener(wcl);
 	}
 
 	public void initWithItemOfTheOrder(ArrayList<String> itemsDescriptionsForButton, String[] skuForActionCommand,Map<String, String> mapOfReasons) {
@@ -115,12 +123,12 @@ public class ReturnItemsAndReasonsView extends JFrame{
 			count3++;
 			checkBoxList.add(checkBox);
 			itemAndReasonPanel.add(checkBox,itemAndReasonPanel.getGbc());
-			
+
 			itemAndReasonPanel.constraintsForComboBox();
 			JComboBox<String> reasonsDropdown = new JComboBox<String>();
 			reasonsDropdown.addItem("Choose a reason");
 			for (String reason : mapOfReasons.values()) {
-			    reasonsDropdown.addItem(reason);
+				reasonsDropdown.addItem(reason);
 			}
 			reasonsDropdown.setSelectedItem("Choose a reason");
 			reasonsDropdown.setEnabled(false);
@@ -177,7 +185,7 @@ public class ReturnItemsAndReasonsView extends JFrame{
 		deselectAllButton=new JButton("Deselect All");
 		deselectAllButton.setEnabled(false);
 		selectAllButton=new JButton("Select All");
-		infoPointButton=new JButton("InfoPoint");
+		infoPointButton=new JButton("help");
 		backPanel.add(backButton);
 		backPanel.add(deselectAllButton);
 		backPanel.add(selectAllButton);
@@ -224,7 +232,7 @@ public class ReturnItemsAndReasonsView extends JFrame{
 	private void addSelectAllButtonListener() {
 		SelectAllButtonListener sabl=new SelectAllButtonListener(this);
 		this.selectAllButton.addActionListener(sabl);
-		
+
 	}
 	private void addDeselectAllButtonListener() {
 		DeselectAllButtonListener dabl=new DeselectAllButtonListener(this);
@@ -300,7 +308,7 @@ public class ReturnItemsAndReasonsView extends JFrame{
 	}
 
 	public void InfoPointButtonManageAction(String string) {
-	
+
 	}
 
 	public StringBuilder getRecapMessage() {
@@ -310,7 +318,7 @@ public class ReturnItemsAndReasonsView extends JFrame{
 			JComboBox<String> comboBox = reasonsDropdownList.get(i);
 			if(checkBox.isSelected()) {
 				message.append("\n").append(checkBox.getText());
-				
+
 				String reason = comboBox.getSelectedItem().toString();
 				if(reason.equals(MOTIVAZIONE_PERSONALIZZATA)) {
 					reason = this.getCustomReasonAreaList().get(i).getText();
@@ -319,7 +327,7 @@ public class ReturnItemsAndReasonsView extends JFrame{
 				else {
 					message.append(". The Reason is: ").append(reason);
 				}
-				
+
 			}
 		}
 		return message;

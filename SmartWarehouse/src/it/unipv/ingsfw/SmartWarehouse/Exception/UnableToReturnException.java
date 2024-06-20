@@ -4,10 +4,10 @@ public class UnableToReturnException extends Exception {
 
 	
 	public UnableToReturnException() {
-		super("Non puoi più restituire questo ordine: sono passati troppi giorni!");
+		super("You can no longer return this order: too many days have passed!");
 	}
 	public UnableToReturnException(String itemDescription) {
-		super("Quantità massima restituibile raggiunta per l'articolo "+itemDescription);
+		super("Maximum returnable quantity reached for the item "+itemDescription);
 	}
 
 }

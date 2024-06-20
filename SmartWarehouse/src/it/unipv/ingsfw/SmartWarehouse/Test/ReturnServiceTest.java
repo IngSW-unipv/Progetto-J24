@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import it.unipv.ingsfw.SmartWarehouse.Exception.UnableToReturnException;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnService;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Category;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.ItemDetails;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Position;
@@ -24,10 +25,10 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
 
 public class ReturnServiceTest {
 	
-	private Position pos1=new Position("linea1","pod1","bin1");
+	private Position pos1=new Position("A","A","A");
 	private ItemDetails itemDetails1=new ItemDetails(1,1,Category.ELECTRONICS);
 	private InventoryItem inventoryItem1=new InventoryItem("Smartphone",itemDetails1,"SKU001",500,2,1000,pos1);
-	private HashMap<InventoryItem, Integer> skuqty=new HashMap<InventoryItem, Integer>();
+	private HashMap<IInventoryItem, Integer> skuqty=new HashMap<IInventoryItem, Integer>();
 
 	
 	/* it doesn't work
@@ -58,7 +59,7 @@ public class ReturnServiceTest {
 	 * Order date: yesterday-->ok
 	 */
 	@Test
-	public void testReturnServiceOk2() throws UnableToReturnException {
+	public void testReturnServiceOk2() throws UnableToReturnException {;
 		skuqty.put(inventoryItem1, 5);
 		IReturnable returnableOrder=new Order(skuqty,"Email");
 		returnableOrder.setDate(LocalDateTime.now().minusDays(1));
@@ -101,7 +102,4 @@ public class ReturnServiceTest {
 			new ReturnService(returnableOrder);
 		});
 	}
-
-	
-	
 }
