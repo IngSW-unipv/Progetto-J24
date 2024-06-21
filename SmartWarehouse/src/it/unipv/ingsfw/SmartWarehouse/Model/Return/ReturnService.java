@@ -1,12 +1,10 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.Return;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import it.unipv.ingsfw.SmartWarehouse.SmartWarehouseInfoPoint;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.MissingReasonException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
@@ -15,6 +13,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
+import it.unipv.ingsfw.SmartWarehouse.SmartWarehouseInfoPoint;
 
 public class ReturnService { 
 	private IReturnable returnableOrder;
@@ -24,8 +23,10 @@ public class ReturnService {
 	private int deadlineForMakingReturn;
 
 	
-	/*
+	/**
 	 * Constructor and Checking the order date to verify returnability.
+	 * @param returnableOrder the order to be returned
+	 * @throws UnableToReturnException if the order is not returnable
 	 */
 	public ReturnService(IReturnable returnableOrder) throws UnableToReturnException  {
 		this.returnableOrder = returnableOrder;
@@ -33,23 +34,37 @@ public class ReturnService {
 		this.moneyAlreadyReturned=0;
 		this.returnServiceDAOFacade=ReturnServiceDAOFacade.getIstance(); 
 		deadlineForMakingReturn=SmartWarehouseInfoPoint.getDeadlineForMakingReturn();
+		
 		if(!ReturnValidator.checkReturnability(this)) {
 			throw new UnableToReturnException();
 		}
 	}
 
-	/*
-	 * Methods related to the Return process
+	/**
+	 * Adds an item to the return process.
+	 * @param inventoryItem the item to be returned
+	 * @param reason the reason for the return
+	 * @throws UnableToReturnException if the item is not returnable
+	 * @throws MissingReasonException if the reason is missing or invalid
 	 */
 	public void addItemToReturn(IInventoryItem inventoryItem,String reason) throws UnableToReturnException, MissingReasonException{
 		if(!ReturnValidator.checkReturnabilityOfInventoryItem(inventoryItem,this)){
-			throw new UnableToReturnException(returnableOrder.getDescBySku(inventoryItem.getSku()));
+			throw new UnableToReturnException(inventoryItem.getDescription());
 		}
-		returnedItems.put(inventoryItem,getReason(reason));
+		returnedItems.put(inventoryItem,findReason(reason));
 	}
+	
+	/**
+	 * Removes all items from the return process.
+	 */
 	public void removeAllFromReturn() {
 		returnedItems.clear();
 	}
+	
+	/**
+	 * Calculates the total amount of money to be returned.
+	 * @return the amount of money to be returned
+	 */
 	public double getMoneyToBeReturned(){
 		double moneyToBeReturned=0;
 		for(IInventoryItem inventoryItem:returnedItems.keySet()) {
@@ -58,12 +73,30 @@ public class ReturnService {
 		moneyToBeReturned=moneyToBeReturned-moneyAlreadyReturned;
 		return moneyToBeReturned;
 	}
-	private String getReason(String reason) throws MissingReasonException {
+	
+	/**
+	 * Finds the reason.
+	 * @param reason the reason string
+	 * @return the reason
+	 * @throws MissingReasonException if the reason is missing or invalid
+	 */
+	private String findReason(String reason) throws MissingReasonException {
 		return Reasons.findReason(reason);
 	}
+	
+	/**
+	 * Issues a refund.
+	 * @param rm IRefund 
+	 * @return true if the refund was successful, false otherwise
+	 * @throws PaymentException if there is a payment error
+	 */
 	public boolean issueRefund(IRefund rm) throws PaymentException {
 		return rm.issueRefund();
 	}
+	
+	/**
+	 * Updates the warehouse quantities for the returned items.
+	 */
 	public void updateWarehouseQty(){
 		InventoryDAOFacade idv=InventoryDAOFacade.getInstance();
 		/*decrease item already Returned*/
@@ -84,13 +117,18 @@ public class ReturnService {
 			}
 		}
 	}
+	
+	/**
+	 * Adds the return and refund mode to the database.
+	 * @param rm IRefund
+	 */
 	public void AddReturnToDB(IRefund rm) {
 		//Adding the return to the DB
 		returnServiceDAOFacade.writeReturnService(this);
 		returnServiceDAOFacade.writeRefundMode(this,rm);
 	}
 
-	/*
+	/**
 	 * toString() Method
 	 */
 	public String toString(){
@@ -104,7 +142,7 @@ public class ReturnService {
 		return s.toString();
 	} 
 
-	/*
+	/**
 	 * setters and getters
 	 */
 	public void setReturnableOrder(IReturnable returnableOrder) {
@@ -127,7 +165,7 @@ public class ReturnService {
 		return this.moneyAlreadyReturned;
 	}
 
-	/*
+	/**
 	 * setters and getters ad hoc
 	 */
 	public Set<IInventoryItem> getReturnedItemsKeySet() {

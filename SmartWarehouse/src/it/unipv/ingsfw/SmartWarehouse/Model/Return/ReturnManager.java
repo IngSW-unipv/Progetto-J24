@@ -22,9 +22,14 @@ public class ReturnManager {
 		return istance;
 	}
 	
-	/*
-	 * DAO Methods
-	 */
+    /**
+     * Retrieves the ReturnService for a given returnable order.
+     * If the return service does not exist, a new one is created.
+     * @param returnableOrder the order to be returned
+     * @return the ReturnService associated with the given order
+     * @throws UnableToReturnException if the order is not returnable
+     * @throws ReturnableOrderNullPointerException if the returnable order is null
+     */
     public ReturnService getReturnService(IReturnable returnableOrder) throws UnableToReturnException {
     	if(returnableOrder==null) {
     		throw new ReturnableOrderNullPointerException();

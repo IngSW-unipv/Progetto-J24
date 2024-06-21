@@ -21,7 +21,7 @@ public class Reasons {
 			while ((line = reader.readLine()) != null) {
 				String[] parts = line.split("=", 2); 
 				if (parts.length == 2) {
-					reasons.put(parts[0], parts[1]); // La prima parte è la chiave, la seconda è il valore
+					reasons.put(parts[0], parts[1]); 
 				}
 			}
 			reader.close();

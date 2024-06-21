@@ -4,7 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-public class SmartWarehouseInfoPoint {
+public final class SmartWarehouseInfoPoint {
 	private static final String DEADLINE_FOR_MAKING_RETURN="DEADLINE_FOR_MAKING_RETURN"; 
 	private static final String SMARTWAREHOUSE_EMAIL="SMARTWAREHOUSE_EMAIL";
 	private static final String MINSTANDARDLEVEL = "MINSTANDARD_LEVEL";

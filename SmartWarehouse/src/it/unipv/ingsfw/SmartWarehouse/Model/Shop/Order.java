@@ -1,5 +1,6 @@
 
 
+
 package it.unipv.ingsfw.SmartWarehouse.Model.Shop;
 
 import java.time.LocalDateTime;
