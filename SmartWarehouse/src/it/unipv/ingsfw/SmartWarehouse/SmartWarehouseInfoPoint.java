@@ -25,25 +25,44 @@ public final class SmartWarehouseInfoPoint {
 	}
 	
 	public static int getDeadlineForMakingReturn() {
+		FileInputStream f = null;
 		try {
 			Properties p = new Properties(System.getProperties());
-			p.load(new FileInputStream("properties/SmartWarehouseInfoPoint"));
+			f = new FileInputStream("properties/SmartWarehouseInfoPoint");
+			p.load(f);
 			deadline=Integer.parseInt(p.getProperty(DEADLINE_FOR_MAKING_RETURN));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			if (f != null) {
+				try {
+					f.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}	
 		}
 		return deadline;
 	}
 	
 	public static String getEmail() {
+		FileInputStream f = null;
 		try {
 			Properties p = new Properties(System.getProperties());
-			p.load(new FileInputStream("properties/SmartWarehouseInfoPoint"));
+			f = new FileInputStream("properties/SmartWarehouseInfoPoint");
+			p.load(f);
 			email=p.getProperty(SMARTWAREHOUSE_EMAIL);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			if (f != null) {
+				try {
+					f.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}	
 		}
 		return email;
 	}

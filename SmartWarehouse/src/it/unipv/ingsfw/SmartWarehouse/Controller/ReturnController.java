@@ -1,16 +1,11 @@
-
-//
 package it.unipv.ingsfw.SmartWarehouse.Controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
-
 import javax.swing.ButtonModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-
 import it.unipv.ingsfw.SmartWarehouse.SmartWarehouseInfoPoint;
 import it.unipv.ingsfw.SmartWarehouse.Exception.MissingReasonException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
@@ -25,7 +20,6 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnServiceDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.RegisterFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.ItemAndReason.ReturnItemsAndReasonsView;
 
@@ -34,8 +28,12 @@ public class ReturnController {
 	private ReturnItemsAndReasonsView riarView;
 	private static final String PERSONALIZED_REASON ="Other";
 	private static final String NO_REASON ="Choose a reason";
+	private static final String MISSING_REASON="Missing reason";
+	private static final String NO_ITEM_SELECTED = "Select at least one item to return";
+	private static final String NO_REFUND_METHOD = "Missing refund method";
+	private static final String PAYMENT_CONFIRMED = "Payment confirmed";
 
-	/*
+	/**
 	 * Controller for ReturnItemsAndReasonsView: it manages the choice of items to return, the reasons and the refund method
 	 */
 	public ReturnController(ReturnService returnService,ReturnItemsAndReasonsView riarView) {
@@ -47,9 +45,8 @@ public class ReturnController {
 	}
 
 	private void initWithItemOfTheOrder() {
-		int selectedOrderId=returnService.getReturnableOrder().getId();
+		int selectedOrderId=returnService.getIdOfReturnableOrder();
 		riarView.setTextOfSelectedOrderLabel(selectedOrderId);
-		riarView.getSelectedOrderLabel().setText("Selected order: " +selectedOrderId);
 		Order order = RegisterFacade.getIstance().selectOrder(selectedOrderId);
 		String skuForActionCommand[]=new String[order.getQtyTotal()];
 		ArrayList<IInventoryItem> inventoryItem_keyOfOrderMap= new ArrayList<>(order.getMap().keySet());
@@ -67,20 +64,16 @@ public class ReturnController {
 	}
 
 	private void addItemsAndReasonsToReturnService() {
-		/*
+		/**
 		 * Listener for NextButton: addItemToReturn
 		 */
 		ActionListener NextButtonLister=new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				manageAction();
 			}
 			private void manageAction() {
-				riarView.setVisible(false);
-
-				/* 1) Management of product choice and reasons */
+				/** 1) Management of product choice and reasons */
 				ArrayList<JCheckBox> checkBoxList = riarView.getCheckBoxList();
 				ArrayList<JComboBox<String>> reasonsDropdownList = riarView.getReasonsDropdownList();
 
@@ -100,7 +93,7 @@ public class ReturnController {
 						}
 						if(reason.equals(NO_REASON)) {
 							riarView.setVisible(true);
-							riarView.showErrorMessagge("Missing reason");
+							riarView.showErrorMessagge(MISSING_REASON);
 							removeItemsNotActuallyReturned();
 							return;
 						}
@@ -117,27 +110,23 @@ public class ReturnController {
 				}
 				if (!itemSelected) {
 					riarView.setVisible(true);
-					riarView.showWarningMessagge("Select at least one item to return");
+					riarView.showWarningMessagge(NO_ITEM_SELECTED);
 					return;
 				}
 
 
 
 
-				/* 2) Refund management */
-				StringBuilder message=riarView.getRecapMessage();
+				/** 2) Refund management */
 				ButtonModel button=riarView.getRefundButtonGroup().getSelection();
 				if(button==null) {
 					riarView.setVisible(true);
-					riarView.showWarningMessagge("Missing refund method");
+					riarView.showWarningMessagge(NO_REFUND_METHOD);
 					removeItemsNotActuallyReturned();
 					return;
 				}
-				message.append("\nSelected refund method:\n").append(button.getActionCommand());
-
-				// Recap panel to confirm or cancel the return.
-				riarView.setVisible(true);
-				int recapPanel = riarView.showConfirmPanel(message.toString());
+				String refundMethod=button.getActionCommand();
+				int recapPanel = riarView.showConfirmPanel(refundMethod);
 				if(recapPanel==JOptionPane.OK_OPTION) {
 					IRefund refundMode;
 					String senderEmail=SmartWarehouseInfoPoint.getEmail();
@@ -161,7 +150,7 @@ public class ReturnController {
 					returnService.setMoneyAlreadyReturned(returnService.getMoneyAlreadyReturned()+refundMode.getValue());
 					returnService.updateWarehouseQty();
 					returnService.AddReturnToDB(refundMode);
-					riarView.showSuccessDialog("payment successful");
+					riarView.showSuccessDialog(PAYMENT_CONFIRMED);
 				}
 				else {
 					riarView.setVisible(true);
@@ -173,7 +162,6 @@ public class ReturnController {
 	}
 
 	private void removeItemsNotActuallyReturned() {
-		// TODO Auto-generated method stub
 		returnService.removeAllFromReturn();
 		returnService.setReturnedItems(ReturnServiceDAOFacade.getIstance().readItemAndReason(returnService.getReturnableOrder()));
 	}
@@ -182,7 +170,7 @@ public class ReturnController {
 
 	private void infoPointButtonHandlerMethod() {
 		/*
-		 * Listener for infoPointButton
+		 * Listener for helpButton
 		 */
 		riarView.addInfoPointButtonListener(returnService.toString());
 	}

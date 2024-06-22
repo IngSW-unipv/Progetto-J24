@@ -42,7 +42,6 @@ public class ReturnServiceDAOFacade {
 		return rsdao.insertReturnService(rs);
 	}
 	public boolean writeRefundMode(ReturnService rs, IRefund rm) {
-		// TODO Auto-generated method stub
 		return rsdao.insertRefundMode(rs,rm);
 	}
 	

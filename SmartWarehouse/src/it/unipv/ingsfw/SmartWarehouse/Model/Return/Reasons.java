@@ -14,6 +14,9 @@ public class Reasons {
 	private Reasons() {
 	}
 	public static  void init() {
+		if (reasons != null) {
+			return; // Already initialized
+		}
 		reasons = new HashMap<>();
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(REASONS_FILE_PATH));

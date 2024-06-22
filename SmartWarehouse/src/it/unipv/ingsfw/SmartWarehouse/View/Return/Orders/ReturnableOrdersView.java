@@ -2,25 +2,15 @@
 package it.unipv.ingsfw.SmartWarehouse.View.Return.Orders;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.Toolkit;
 import java.util.ArrayList;
-
-import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.plaf.nimbus.NimbusLookAndFeel;
-
 import it.unipv.ingsfw.SmartWarehouse.View.ShopFrame;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.BackButtonListenerForReturnableOrdersView;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.WindowClosingListenerReturnableOrderView;
@@ -53,7 +43,7 @@ public class ReturnableOrdersView extends JFrame{
 
 		selectOrderPanel = new SelectOrderPanel();
 		mainPanel.add(selectOrderPanel.getScrollPane(),BorderLayout.CENTER);
-		
+
 	}
 	public void initWithClientOrders(ArrayList<String> ordersDescriptionsForButton, Integer[] orderIdForActionCommand) {
 		orderButtonGroup = new ButtonGroup();
@@ -68,7 +58,6 @@ public class ReturnableOrdersView extends JFrame{
 		completeTheView();
 	}
 	private void completeTheView() {
-		// TODO Auto-generated method stub
 		confirmPanel = new JPanel();
 		confirmPanel.repaint();
 		confirmButton = new JButton("Confirm >");
@@ -80,22 +69,21 @@ public class ReturnableOrdersView extends JFrame{
 		backButton = new JButton("Back",UIManager.getIcon("FileView.directoryIcon"));
 		backPanel.add(backButton);
 		mainPanel.add(backPanel, BorderLayout.NORTH);
-		
+
 		addBackButtonListener();
 		addWindowClosingListener();
-		
+
 		setVisible(true);
 
 	}
 	private void addBackButtonListener() {
 		BackButtonListenerForReturnableOrdersView bb=new BackButtonListenerForReturnableOrdersView(this,this.shopFrame);
 		this.backButton.addActionListener(bb);
-		
+
 	}
 	private void addWindowClosingListener() {
 		WindowClosingListenerReturnableOrderView wcl=new WindowClosingListenerReturnableOrderView(this);
-		 this.addWindowListener(wcl);
-		
+		this.addWindowListener(wcl);
 	}
 	public void showWarningMessagge(String message) {
 		JOptionPane.showMessageDialog(this, message, "Alert", JOptionPane.WARNING_MESSAGE);

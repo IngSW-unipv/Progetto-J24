@@ -12,7 +12,6 @@ import it.unipv.ingsfw.SmartWarehouse.Exception.UnableToReturnException;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.SmartWarehouseInfoPoint;
 
 public class ReturnService { 
@@ -98,12 +97,11 @@ public class ReturnService {
 	 * Updates the warehouse quantities for the returned items.
 	 */
 	public void updateWarehouseQty(){
-		InventoryDAOFacade idv=InventoryDAOFacade.getInstance();
 		/*decrease item already Returned*/
 		for(IInventoryItem i:returnServiceDAOFacade.readItem(this.returnableOrder)){
 			try {
-				if(i!=null)
-					idv.findInventoryItemBySku(i.getSku()).decreaseQty();
+				//if(i!=null)
+					i.decreaseQty();
 			} catch (IllegalArgumentException | ItemNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -111,7 +109,7 @@ public class ReturnService {
 		/*increase all item qty*/
 		for(IInventoryItem i:getReturnedItemsKeySet()) {
 			try {
-				InventoryDAOFacade.getInstance().findInventoryItemBySku(i.getSku()).increaseQty();
+				i.increaseQty();
 			} catch (IllegalArgumentException | ItemNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -123,7 +121,6 @@ public class ReturnService {
 	 * @param rm IRefund
 	 */
 	public void AddReturnToDB(IRefund rm) {
-		//Adding the return to the DB
 		returnServiceDAOFacade.writeReturnService(this);
 		returnServiceDAOFacade.writeRefundMode(this,rm);
 	}
@@ -134,7 +131,7 @@ public class ReturnService {
 	public String toString(){
 		StringBuilder s= new StringBuilder();
 		s.append("Here are the items you have returned to date\n");
-		s.append("Return Service: Order: ").append(returnableOrder.getId());
+		s.append("Return Service: Order: ").append(getIdOfReturnableOrder());
 		s.append("\n Returned items are: \n");
 		for(IInventoryItem inventoryItem:returnedItems.keySet()) {
 			s.append(inventoryItem.getDescription()).append(". The reason is: ").append(returnedItems.get(inventoryItem)).append("\n");

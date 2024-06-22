@@ -213,7 +213,6 @@ public class ReturnServiceDAO implements IReturnServiceDAO{
 			int rowsAffected = st1.executeUpdate();
 			if (rowsAffected <= 0) {
 				success = false;
-				//System.out.println("Nessuna riga è stata eliminata");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

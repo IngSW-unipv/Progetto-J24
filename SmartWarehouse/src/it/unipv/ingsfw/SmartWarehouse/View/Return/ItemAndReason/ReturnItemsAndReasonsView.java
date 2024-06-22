@@ -100,11 +100,6 @@ public class ReturnItemsAndReasonsView extends JFrame{
 		addWindowClosingListener();
 	}
 
-	private void addWindowClosingListener() {
-		WindowClosingListenerRiarView wcl=new WindowClosingListenerRiarView(this);
-		this.addWindowListener(wcl);
-	}
-
 	public void initWithItemOfTheOrder(ArrayList<String> itemsDescriptionsForButton, String[] skuForActionCommand,Map<String, String> mapOfReasons) {
 		int count3=0;
 		for (String i : itemsDescriptionsForButton) {
@@ -145,25 +140,9 @@ public class ReturnItemsAndReasonsView extends JFrame{
 		}
 		addCheckBoxListener();
 		addComboBoxListener();
-
-
 		//mainPanel.add(orderDetailsPanel, BorderLayout.CENTER);
 		completeTheView();
 
-	}
-
-
-	private void addCheckBoxListener() {
-		CheckBoxListener checkBoxListener=new CheckBoxListener(this);
-		for(int i=0;i<this.getCheckBoxList().size();i++) {
-			this.getCheckBoxList().get(i).addItemListener(checkBoxListener);
-		}
-	}
-	private void addComboBoxListener() {
-		ComboBoxListener comboBoxListener=new ComboBoxListener(this);
-		for(int i=0;i<this.getReasonsDropdownList().size();i++) {
-			this.getReasonsDropdownList().get(i).addActionListener(comboBoxListener);
-		}
 	}
 
 	private void completeTheView() {
@@ -198,8 +177,71 @@ public class ReturnItemsAndReasonsView extends JFrame{
 		addSelectAllButtonListener();
 		setVisible(true);
 	}
+	
+	/** Adding Listener method
+	 * 
+	 */
+	private void addWindowClosingListener() {
+		WindowClosingListenerRiarView wcl=new WindowClosingListenerRiarView(this);
+		this.addWindowListener(wcl);
+	}
+	private void addCheckBoxListener() {
+		CheckBoxListener checkBoxListener=new CheckBoxListener(this);
+		for(int i=0;i<this.getCheckBoxList().size();i++) {
+			this.getCheckBoxList().get(i).addItemListener(checkBoxListener);
+		}
+	}
+	private void addComboBoxListener() {
+		ComboBoxListener comboBoxListener=new ComboBoxListener(this);
+		for(int i=0;i<this.getReasonsDropdownList().size();i++) {
+			this.getReasonsDropdownList().get(i).addActionListener(comboBoxListener);
+		}
+	}
+	private void addSelectAllButtonListener() {
+		SelectAllButtonListener sabl=new SelectAllButtonListener(this);
+		this.selectAllButton.addActionListener(sabl);
 
-	public int showConfirmPanel(String recap) {
+	}
+	private void addDeselectAllButtonListener() {
+		DeselectAllButtonListener dabl=new DeselectAllButtonListener(this);
+		this.deselectAllButton.addActionListener(dabl);
+	}
+
+	private void addBackButtonListener() {
+		BackButtonListenerForReturnItemsAndReasonView bb=new BackButtonListenerForReturnItemsAndReasonView(this, this.returnableOrdersView);
+		this.getBackButton().addActionListener(bb);
+	}
+	public void addInfoPointButtonListener(String returnServiceRecap) {
+		InfoPointButtonListener ipbl=new InfoPointButtonListener(returnServiceRecap);
+		this.getInfoPointButton().addActionListener(ipbl);		
+	}
+	
+	
+	
+	public StringBuilder getRecapMessage() {
+		StringBuilder message = new StringBuilder("The items you are about to return are:");
+		for (int i = 0; i < checkBoxList.size(); i++) {
+			JCheckBox checkBox = checkBoxList.get(i);
+			JComboBox<String> comboBox = reasonsDropdownList.get(i);
+			if(checkBox.isSelected()) {
+				message.append("\n").append(checkBox.getText());
+
+				String reason = comboBox.getSelectedItem().toString();
+				if(reason.equals(MOTIVAZIONE_PERSONALIZZATA)) {
+					reason = this.getCustomReasonAreaList().get(i).getText();
+					message.append(". The Reason is: ").append(reason);
+				}
+				else {
+					message.append(". The Reason is: ").append(reason);
+				}
+
+			}
+		}
+		message.append("\nSelected refund method:\n");
+		return message;
+	}
+	public int showConfirmPanel(String refundMethod) {
+		String recap=getRecapMessage().append(refundMethod).toString();
 		return JOptionPane.showConfirmDialog(this, recap, "Confirm Panel", JOptionPane.OK_CANCEL_OPTION);
 	}
 	public void showWarningMessagge(String message) {
@@ -222,24 +264,6 @@ public class ReturnItemsAndReasonsView extends JFrame{
 		} else if (n == JOptionPane.NO_OPTION) {
 		}
 		this.setVisible(false);
-	}
-	private void addSelectAllButtonListener() {
-		SelectAllButtonListener sabl=new SelectAllButtonListener(this);
-		this.selectAllButton.addActionListener(sabl);
-
-	}
-	private void addDeselectAllButtonListener() {
-		DeselectAllButtonListener dabl=new DeselectAllButtonListener(this);
-		this.deselectAllButton.addActionListener(dabl);
-	}
-
-	private void addBackButtonListener() {
-		BackButtonListenerForReturnItemsAndReasonView bb=new BackButtonListenerForReturnItemsAndReasonView(this, this.returnableOrdersView);
-		this.getBackButton().addActionListener(bb);
-	}
-	public void addInfoPointButtonListener(String returnServiceRecap) {
-		InfoPointButtonListener ipbl=new InfoPointButtonListener(returnServiceRecap);
-		this.getInfoPointButton().addActionListener(ipbl);		
 	}
 
 
@@ -304,29 +328,5 @@ public class ReturnItemsAndReasonsView extends JFrame{
 	public void InfoPointButtonManageAction(String string) {
 
 	}
-
-	public StringBuilder getRecapMessage() {
-		StringBuilder message = new StringBuilder("The items you are about to return are:");
-		for (int i = 0; i < checkBoxList.size(); i++) {
-			JCheckBox checkBox = checkBoxList.get(i);
-			JComboBox<String> comboBox = reasonsDropdownList.get(i);
-			if(checkBox.isSelected()) {
-				message.append("\n").append(checkBox.getText());
-
-				String reason = comboBox.getSelectedItem().toString();
-				if(reason.equals(MOTIVAZIONE_PERSONALIZZATA)) {
-					reason = this.getCustomReasonAreaList().get(i).getText();
-					message.append(". The Reason is: ").append(reason);
-				}
-				else {
-					message.append(". The Reason is: ").append(reason);
-				}
-
-			}
-		}
-		return message;
-	}
-
-
 }
 
