@@ -85,7 +85,6 @@ public class Order implements IReturnable{
 		return sq;
 	}
 	
-	@Override
 	public IInventoryItem getItemBySku(String sku) {
 		IInventoryItem ret = null;
 		for(IInventoryItem i: getSet()) {
@@ -100,12 +99,6 @@ public class Order implements IReturnable{
 	public int getQtyBySku(String sku) {
 		return getQtyOfItem(getItemBySku(sku));
 	}
-	
-	@Override 
-	public String getDescBySku(String sku) {
-		return getItemBySku(sku).getDescription();
-	}
-	
 	
 	@Override
 	public String toString() {
