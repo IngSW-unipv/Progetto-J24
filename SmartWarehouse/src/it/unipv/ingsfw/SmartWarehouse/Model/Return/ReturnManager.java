@@ -35,9 +35,7 @@ public class ReturnManager {
     		throw new ReturnableOrderNullPointerException();
     	}
     	ReturnService rs=returnServiceDAOFacade.findByOrder(returnableOrder);
-    	 if(rs==null) {
-    		 return new ReturnService(returnableOrder);
-    	 }
+    	 rs = (rs == null) ? new ReturnService(returnableOrder) : rs;
     	 rs.setReturnedItems(returnServiceDAOFacade.readItemAndReason(returnableOrder)); //valutare se devo passare solo rs oppure se è giusto come ho fatto
     	 rs.setMoneyAlreadyReturned(returnServiceDAOFacade.readMoneyAlreadyReturned(returnableOrder));
     	 return rs;

@@ -29,7 +29,7 @@ public class VoucherRefund {
 		}
 	}
 	public String toString() {
-		return "Voucher di "+value;
+		return "Voucher value: "+value;
 	}
 	public double getValue() {
 		return value;

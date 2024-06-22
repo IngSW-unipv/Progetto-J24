@@ -19,9 +19,6 @@ public class BankTransferAdapter implements IRefund {
 	public double getValue() {
 		return br.getValue();
 	}
-	public String toString() {
-		return br.toString();
-	}
 }
 
 

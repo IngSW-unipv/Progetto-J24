@@ -19,12 +19,9 @@ public class ReturnValidator {
 	public static boolean checkReturnability(ReturnService returnService){
 		LocalDate criticalDate=returnService.getCriticalDate();
 		LocalDate now=LocalDate.now();
-		if (now.isAfter(criticalDate)) {
-			return false;
-		}
-		return true;
+		return now.isAfter(criticalDate) ? false : true;
 	}
-	
+
     /**
      * Checks if an inventory item can be returned: qty check
      * @param inventoryItem the inventory item to be checked
@@ -34,11 +31,7 @@ public class ReturnValidator {
 	public static boolean checkReturnabilityOfInventoryItem(IInventoryItem inventoryItem,ReturnService returnService){
 		int qtyYouWouldLikeToReturn=getQtyReturned(inventoryItem,returnService)+1;
 		int qtyYouAreAllowedToReturn=returnService.getQtyYouAreAllowedToReturn(inventoryItem);
-		
-		if(qtyYouWouldLikeToReturn>qtyYouAreAllowedToReturn) {
-			return false;
-		}
-		return true;
+		return qtyYouWouldLikeToReturn > qtyYouAreAllowedToReturn ? false : true;
 	}
 	
     /**
