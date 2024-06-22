@@ -44,7 +44,7 @@ public class Client extends User {
 	
 	public void setPrime(boolean prime) {
 		this.prime=prime;
-		SingletonUser.getInstance().getCustoumerDAO().updateWallet(this);
+		SingletonUser.getInstance().getCustoumerDAO().updatePrime(this);
 	}
 
 	public String getPassword() {
