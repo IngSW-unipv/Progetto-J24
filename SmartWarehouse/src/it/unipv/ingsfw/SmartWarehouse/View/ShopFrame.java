@@ -36,7 +36,7 @@ public class ShopFrame extends JFrame {
 
 	public ShopFrame() {
 		
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setTitle("SmartWarehouse/Shop");
 		this.setLayout(new BorderLayout());

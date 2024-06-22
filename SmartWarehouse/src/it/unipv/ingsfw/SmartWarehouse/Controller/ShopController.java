@@ -5,6 +5,8 @@ package it.unipv.ingsfw.SmartWarehouse.Controller;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 
@@ -21,6 +23,7 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IStdPrimePaymentStrategy;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Shop;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.StdPrimePaymentFactory;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Orders.ReturnableOrdersView;
+import it.unipv.ingsfw.SmartWarehouse.View.MainView;
 import it.unipv.ingsfw.SmartWarehouse.View.ShopFrame;
 
 public class ShopController {
@@ -222,5 +225,39 @@ public class ShopController {
 			}
 		};
 		view.getChargeWallet().addActionListener(chargeWallet);
+		
+		WindowListener closeListener = new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent e) {			
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent e) {				
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent e) {	
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent e) {	
+				view.dispose();
+				new MainController(new MainView());				
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent e) {
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent e) {
+			}
+		};
+		view.addWindowListener(closeListener);
 	}
 }
