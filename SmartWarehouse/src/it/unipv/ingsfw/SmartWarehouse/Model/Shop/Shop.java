@@ -49,7 +49,7 @@ public class Shop {
 	 * Getters and Setters
 	 */
 	public void setPrime() {
-		cl.setPrime(true);		
+		cl.setPrime(true);
 	}
 
 	public InventoryManager getInv() {

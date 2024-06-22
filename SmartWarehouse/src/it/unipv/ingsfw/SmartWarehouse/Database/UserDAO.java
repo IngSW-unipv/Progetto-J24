@@ -41,7 +41,7 @@ public class UserDAO implements IUserDAO{
 			rs1=st1.executeQuery();
 			
 			if(rs1.next()) {
-				result= new Client(rs1.getString(1),rs1.getString(2), rs1.getString(3),rs1.getString(4));
+				result= new Client(rs1.getString(1),rs1.getString(2), rs1.getString(3),rs1.getString(4),rs1.getBoolean(5),rs1.getDouble(6));
 			}
 			
 		} catch  (Exception e) { 

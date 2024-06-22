@@ -1,5 +1,7 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.user;
 
+import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
+
 public class Client extends User {
 	private double wallet;
 	private boolean prime;
@@ -33,6 +35,7 @@ public class Client extends User {
 
 	public void setWallet(double wallet) {
 		this.wallet = wallet;
+		SingletonUser.getInstance().getCustoumerDAO().updateWallet(this);
 	}
 	
 	public boolean getPrime() {
@@ -41,6 +44,7 @@ public class Client extends User {
 	
 	public void setPrime(boolean prime) {
 		this.prime=prime;
+		SingletonUser.getInstance().getCustoumerDAO().updateWallet(this);
 	}
 
 	public String getPassword() {

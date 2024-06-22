@@ -147,30 +147,33 @@ public class ShopController {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(view.displayConfirm()==0 && !model.getCl().getPrime()) {
-					IPayment mode=null;
-					switch (view.displayPaymentOption()) {
-				    case 0:
-				        mode = PaymentFactory.getPayPalAdapter(new PayPal());
-				        break;
-				    case 1:
-				        mode = PaymentFactory.getWalletPaymentAdapter(new WalletPayment());
-				        break;
-					}
-					
-					PaymentProcess pay=new PaymentProcess(mode, model.getCl().getEmail(), "warehouse");
-					try {
-						pay.startPayment(SmartWarehouseInfoPoint.PrimeImport); 
-						view.displayInfo("Payment of: "+SmartWarehouseInfoPoint.PrimeImport+"euro succesfully ended");
-						model.setPrime();
-						view.getPrime().setBackground(Color.green);
-						view.getPrime().setText("You are Prime");
+				if(!model.getCl().getPrime()) {
+					if(view.displayConfirm()==0) {
+						IPayment mode=null;
+						switch (view.displayPaymentOption()) {
+					    case 0:
+					        mode = PaymentFactory.getPayPalAdapter(new PayPal());
+					        break;
+					    case 1:
+					        mode = PaymentFactory.getWalletPaymentAdapter(new WalletPayment());
+					        break;
+						}
 						
-					} catch (PaymentException ex) {
-						view.displayWarn(ex.getMessage());
+						PaymentProcess pay=new PaymentProcess(mode, model.getCl().getEmail(), "warehouse");
+						try {
+							pay.startPayment(SmartWarehouseInfoPoint.PrimeImport); 
+							view.displayInfo("Payment of: "+SmartWarehouseInfoPoint.PrimeImport+"euro succesfully ended");
+							model.setPrime();
+							view.getPrime().setBackground(Color.green);
+							view.getPrime().setText("You are Prime");
+							
+						} catch (PaymentException ex) {
+							view.displayWarn(ex.getMessage());
+						}
 					}
 				}
-				if(model.getCl().getPrime()) {
+				
+				else {
 					view.getPrime().setBackground(Color.green);
 				}
 				view.setWalletLabImp(model.getCl().getWallet());
@@ -204,19 +207,16 @@ public class ShopController {
 			        break;
 				}
 				PaymentProcess pay=new PaymentProcess(mode, model.getCl().getEmail(), "warehouse");
-				int q = 0;
+				int q;	
 				try {
 					q=view.displayOption();
-				}catch (NumberFormatException ex) {
-					//do nothing
-				}
-				
-				try {
 					pay.startPayment(q);
 					model.getCl().setWallet(model.getCl().getWallet() + q);
 					view.displayInfo("Payment of: "+q+"euro succesfully ended");
 				} catch (PaymentException e1) {
 					view.displayWarn(e1.getMessage());
+				} catch(NumberFormatException nf) {
+					//do nothing
 				}
 				view.setWalletLabImp(model.getCl().getWallet());
 			}
