@@ -6,9 +6,6 @@ import java.util.HashSet;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.EmptyKartExceptio;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
-import it.unipv.ingsfw.SmartWarehouse.Exception.PaymentException;
-import it.unipv.ingsfw.SmartWarehouse.Model.Payment.IPayment;
-import it.unipv.ingsfw.SmartWarehouse.Model.Payment.PaymentProcess;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
 
@@ -21,6 +18,7 @@ public class Cart {
 	/*
 	 * add to the Map skuqty the selected item and its quantity
 	 * if the given quantity is < 1 throws an exception
+	 * if the given item was already in the map the quantity value is updated
 	 */
 	public void add(IInventoryItem it, int qty)throws IllegalArgumentException{
 		int i;

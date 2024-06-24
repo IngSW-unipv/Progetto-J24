@@ -4,18 +4,11 @@ package it.unipv.ingsfw.SmartWarehouse.Database;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
-
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.OrderLine;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Category;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.ItemDetails;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Position;
 
 public class RegisterDAO implements IRegisterDAO {
 	
