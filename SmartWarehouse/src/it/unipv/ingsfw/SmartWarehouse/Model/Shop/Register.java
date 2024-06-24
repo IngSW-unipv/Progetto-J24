@@ -6,7 +6,6 @@ import java.util.HashMap;
 
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryManager;
-import it.unipv.ingsfw.SmartWarehouse.Model.picking.orderpicking.OrderP;
 
 public class Register {
 	private int id;
@@ -40,14 +39,13 @@ public class Register {
 	}
 	
 	
-	
 	public Order rebuildOrder(ArrayList<OrderLine> o, int id) { 
 		HashMap<IInventoryItem, Integer> hs = new HashMap<IInventoryItem, Integer>();
 		OrderLine temp=o.get(0);
 		for(OrderLine ord: o) {
 			hs.put(inv.findInventoryItem(ord.getSku()), ord.getQty());
 		}
-		return new OrderP(hs, id, temp.getEmail(), temp.getDate());
+		return new Order(hs, id, temp.getEmail(), temp.getDate());
 	}
 	
 	private ArrayList<OrderLine> makeLine(Order o) {
