@@ -163,7 +163,7 @@ public class ReturnService {
 	}
 
 	/**
-	 * setters and getters ad hoc
+	 * setters and getters ad hoc--> Don't talk to strangers
 	 */
 	public Set<IInventoryItem> getReturnedItemsKeySet() {
 		return getReturnedItems().keySet();

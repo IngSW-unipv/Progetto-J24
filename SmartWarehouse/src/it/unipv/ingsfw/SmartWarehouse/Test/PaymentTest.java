@@ -19,6 +19,7 @@ class PaymentTest {
 	@Before
 	public void initTest() {
 		paymentProcessArray = new PaymentProcess[5];
+		System.out.println("CIAO");
 	}
 
 	@Test

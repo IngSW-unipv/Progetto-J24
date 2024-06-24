@@ -19,7 +19,7 @@ public class SelectOrderPanel extends JPanel{
 		this.add(selectOrderLabel);
 	    scrollPane = new JScrollPane(this);
 	    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-	    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 	}
 	public JScrollPane getScrollPane() {
 		return scrollPane;

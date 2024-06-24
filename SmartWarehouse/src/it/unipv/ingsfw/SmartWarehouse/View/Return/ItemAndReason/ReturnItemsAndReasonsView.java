@@ -4,23 +4,10 @@
 package it.unipv.ingsfw.SmartWarehouse.View.Return.ItemAndReason;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.Toolkit;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Map;
-
-import javax.swing.AbstractButton;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -29,22 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
-import it.unipv.ingsfw.SmartWarehouse.Model.Return.Reasons;
-import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
-import it.unipv.ingsfw.SmartWarehouse.Model.Shop.OrderLine;
-import it.unipv.ingsfw.SmartWarehouse.Model.Shop.RegisterFacade;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.View.ShopFrame;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.BackButtonListenerForReturnItemsAndReasonView;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.CheckBoxListener;
@@ -52,7 +24,6 @@ import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.ComboBoxListener;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.DeselectAllButtonListener;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.InfoPointButtonListener;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.SelectAllButtonListener;
-import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.WindowClosingListenerReturnableOrderView;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Listener.WindowClosingListenerRiarView;
 import it.unipv.ingsfw.SmartWarehouse.View.Return.Orders.ReturnableOrdersView;
 
@@ -67,8 +38,6 @@ public class ReturnItemsAndReasonsView extends JFrame{
 	private ArrayList< JComboBox<String> > reasonsDropdownList=new ArrayList< JComboBox<String> >();
 	private ArrayList<CustomReasonArea> customReasonAreaList=new ArrayList<CustomReasonArea>();
 	private ArrayList<JLabel> customReasonLabelList=new ArrayList<JLabel>();
-	public static final String VOUCHER_RADIO_TEXT = "VOUCHER (recommended): receive an instant refund on a non-expiring voucher that can be spent throughout the shop.";
-	public static final String BANK_TRANSFER_RADIO_TEXT = "Bank Transfer: receive a transfer to the card you used to make the purchase. Estimated time 14 working days.";
 	private static final String MOTIVAZIONE_PERSONALIZZATA="Other";
 	private JButton backButton;
 	private JButton nextButton;
@@ -268,11 +237,11 @@ public class ReturnItemsAndReasonsView extends JFrame{
 
 
 	public static String getVoucherRadioText() {
-		return VOUCHER_RADIO_TEXT;
+		return RefundPanel.VOUCHER_RADIO_TEXT;
 	}
 
 	public static String getBankTransferRadioText() {
-		return BANK_TRANSFER_RADIO_TEXT;
+		return RefundPanel.BANK_TRANSFER_RADIO_TEXT;
 	}
 
 	public JButton getNextButton() {

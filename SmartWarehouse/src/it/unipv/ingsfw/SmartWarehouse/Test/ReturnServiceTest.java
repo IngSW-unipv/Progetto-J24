@@ -29,19 +29,6 @@ public class ReturnServiceTest {
 	private ItemDetails itemDetails1=new ItemDetails(1,1,Category.ELECTRONICS);
 	private InventoryItem inventoryItem1=new InventoryItem("Smartphone",itemDetails1,"SKU001",500,2,1000,pos1);
 	private HashMap<IInventoryItem, Integer> skuqty=new HashMap<IInventoryItem, Integer>();
-
-	
-	/* it doesn't work
-	@BeforeEach
-	public void initTest() {
-		pos1=new Position("linea1","pod1","bin1");
-		itemDetails1=new ItemDetails(1,1,Category.ELECTRONICS);
-		inventoryItem1=new InventoryItem("Smartphone",itemDetails1,"SKU001",500,2,1000,pos1);
-		skuqty=new HashMap<InventoryItem, Integer>();
-		skuqty.put(inventoryItem1, 5);
-		System.out.println("CIAOOO");
-	}
-	*/
 	
 	
 	

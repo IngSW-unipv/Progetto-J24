@@ -18,14 +18,14 @@ public class VoucherAdapter implements IRefund{
 		return vr.makeVoucher();
 
 	}
+	@Override
 	public double getValue() {
 		return vr.getValue();
 	}
-
+	@Override
 	public String toString() {
 		return vr.toString();
 	}
-
 
 
 }
