@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -62,6 +63,22 @@ public class FirstDialog extends JDialog {
 	public void addSupplierToTable(String ids, String fullname, String email, String address, double price, int maxqty) { 
         tableModel.addRow(new Object[]{ids,fullname, email, address, price, maxqty});
     }
+	
+	public void showErrorMessage(Exception e) {
+        JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+	}
+	
+	public void showConfirmMessage(String message) {
+		JOptionPane.showMessageDialog(this, message, "Success", JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	public boolean askConfirm(String mess) {
+		boolean b = false;
+		if (JOptionPane.showConfirmDialog(this, mess, "Confirm your choice", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
+			b = true;
+		}
+		return b;
+	}
 
 	public JButton getDelete() {
 		return delete;

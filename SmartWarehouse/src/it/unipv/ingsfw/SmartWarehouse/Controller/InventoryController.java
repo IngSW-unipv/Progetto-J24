@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -130,8 +129,7 @@ public class InventoryController {
 				try {
 					input=iv.showInsertDialog();
 				} catch(NumberFormatException e) {
-		            JOptionPane.showMessageDialog(iv, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-
+					iv.showErrorMessage(e);
 				}	
 				if (input!=null) {   
 					try {   
@@ -140,7 +138,7 @@ public class InventoryController {
 						i.addToInventory();
 						updateInventory(w.getInventory());
 					} catch(Exception e) {
-			            JOptionPane.showMessageDialog(iv, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+						iv.showErrorMessage(e);
 					}
 				}	
 			} 
@@ -203,7 +201,7 @@ public class InventoryController {
 	        	iv.getFirstDialog().addSupplierToTable(((Supplier)o[0]).getIDS(), ((Supplier)o[0]).getFullName(), ((Supplier)o[0]).getEmail(), ((Supplier)o[0]).getAddress(), (double)o[1], (int)o[2]);
 	        }
 		}catch(Exception e) {
-			JOptionPane.showMessageDialog(iv.getFirstDialog(), e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+			iv.getFirstDialog().showErrorMessage(e);
 		}
     }
 	
@@ -218,7 +216,7 @@ public class InventoryController {
 					w.findInventoryItem(iv.getFirstDialog().getSku()).increaseQty();
 					updateInventory(w.getInventory()); 
 				}catch(Exception e) {
-					JOptionPane.showMessageDialog(iv.getFirstDialog(), e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+					iv.getFirstDialog().showErrorMessage(e);
 				}		
 			}
 		};
@@ -236,7 +234,7 @@ public class InventoryController {
 					w.findInventoryItem(iv.getFirstDialog().getSku()).decreaseQty();
 					updateInventory(w.getInventory()); 
 				}catch(Exception e) {
-					JOptionPane.showMessageDialog(iv.getFirstDialog(), e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+					iv.getFirstDialog().showErrorMessage(e);
 				}		
 			}
 		};
@@ -256,7 +254,7 @@ public class InventoryController {
 					w.findInventoryItem(iv.getFirstDialog().getSku()).updateQty(qty);
 					updateInventory(w.getInventory()); 
 				}catch(Exception e) {
-					JOptionPane.showMessageDialog(iv.getFirstDialog(), e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+					iv.getFirstDialog().showErrorMessage(e);
 				}		
 			}
 		};
@@ -271,14 +269,13 @@ public class InventoryController {
 
 			private void manageAction() {
 				try {
-					int choice = JOptionPane.showConfirmDialog(iv.getFirstDialog(), "are you sure you want to delete this item?", "confirm delete", JOptionPane.YES_NO_OPTION);
-					if (choice==JOptionPane.YES_OPTION) {
+					if (iv.getFirstDialog().askConfirm("are you sure you want to delete this item?")) {
 						iv.getFirstDialog().dispose();
 						w.findInventoryItem(iv.getFirstDialog().getSku()).delete();
 						updateInventory(w.getInventory()); 
 					}	
 				} catch(Exception e) {
-					JOptionPane.showMessageDialog(iv.getFirstDialog(), e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+					iv.getFirstDialog().showErrorMessage(e);
 				}		
 			}
 		};
@@ -318,10 +315,10 @@ public class InventoryController {
 				try {
 					int qty=Integer.parseInt(iv.getFirstDialog().getSecondDialog().getQty().getText());
 					SupplyDAOFacade.getInstance().findSupplyBySkuAndIds(iv.getFirstDialog().getSku(), iv.getFirstDialog().getSecondDialog().getIds()).buy(qty);
-					JOptionPane.showMessageDialog(iv.getFirstDialog(), "successfull order", "Order", JOptionPane.INFORMATION_MESSAGE);
+					iv.getFirstDialog().showConfirmMessage("successfull order");
 					iv.getFirstDialog().getSecondDialog().dispose(); 
 				} catch(Exception e) {
-					JOptionPane.showMessageDialog(iv.getFirstDialog().getSecondDialog(), e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+					iv.getFirstDialog().getSecondDialog().showErrorMessage(e);
 				}			
 			}
 		};

@@ -2,10 +2,12 @@ package it.unipv.ingsfw.SmartWarehouse.View.inventory;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -41,7 +43,14 @@ public class SupplyOrderDialog extends JDialog {
 	}
 
 	public void addSupplyOrderToTable(int n_order, String idSupply, int qty, double price, LocalDateTime date) {
-		tableModel.addRow(new Object[] {n_order,idSupply,qty,price,date});
+		DecimalFormat df = new DecimalFormat("0.00");
+	    String formattedPrice = df.format(price);
+
+		tableModel.addRow(new Object[] {n_order,idSupply,qty,formattedPrice,date});
+	}
+	
+	public void showErrorMessage(Exception e) {
+		JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 	}
 
 	public DefaultTableModel getTableModel() {

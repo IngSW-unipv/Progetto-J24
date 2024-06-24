@@ -3,6 +3,7 @@ package it.unipv.ingsfw.SmartWarehouse.View.inventory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -30,6 +31,10 @@ public class SecondDialog extends JDialog{
 		panel.add(order);
 		add(panel);
 		
+	}
+	
+	public void showErrorMessage(Exception e) {
+        JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 	}
 
 	public JTextField getQty() {

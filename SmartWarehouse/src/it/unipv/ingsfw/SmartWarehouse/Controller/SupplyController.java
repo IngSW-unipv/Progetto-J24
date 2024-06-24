@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -51,7 +50,7 @@ public class SupplyController {
 						Supplier s=new Supplier((String)input[0], (String)input[1], (String)input[2], (String)input[3]);
 						s.add();
 					} catch(Exception e) {
-						JOptionPane.showMessageDialog(supplyPanel, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+						supplyPanel.showErrorMessage(e);
 					}	
 				}
 			}
@@ -74,7 +73,7 @@ public class SupplyController {
 						Supply s=new Supply((String)input[0], (String)input[1], (Double)input[2], (Integer)input[3]);
 						s.add();						
 					} catch(Exception e) {
-						JOptionPane.showMessageDialog(supplyPanel, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+						supplyPanel.showErrorMessage(e);
 					}	
 				}
 			} 
@@ -115,14 +114,13 @@ public class SupplyController {
 				int selectedRowIndex=supplyPanel.getSuppliersDialog().getTable().getSelectedRow();
 					if(selectedRowIndex!=-1) {
 						String ids= (String) supplyPanel.getSuppliersDialog().getTable().getValueAt(selectedRowIndex, 0);
-						int choice=JOptionPane.showConfirmDialog(supplyPanel.getSuppliersDialog(), "Do you want to remove the seleted supplier?",
-								ids+" remove option", JOptionPane.YES_NO_OPTION);
-						if(choice==JOptionPane.YES_OPTION) {
+	
+						if(supplyPanel.getSuppliersDialog().askDelete(ids)) {
 							try {
 								supplyManager.findSupplier(ids).delete();
 								updateSuppliers();
 							} catch(Exception ex) {
-								JOptionPane.showMessageDialog(supplyPanel.getSuppliersDialog(), ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+								supplyPanel.getSuppliersDialog().showErrorMessage(ex);
 							}
 						}
 					}
@@ -165,14 +163,13 @@ public class SupplyController {
 				int selectedRowIndex=supplyPanel.getSuppliesDialog().getTable().getSelectedRow();
 					if(selectedRowIndex!=-1) {
 						String idSupply= (String) supplyPanel.getSuppliesDialog().getTable().getValueAt(selectedRowIndex, 0);
-						int choice=JOptionPane.showConfirmDialog(supplyPanel.getSuppliesDialog(), "Do you want to remove the seleted supply?",
-								idSupply+" remove option", JOptionPane.YES_NO_OPTION);
-						if(choice==JOptionPane.YES_OPTION) {
+				
+						if(supplyPanel.getSuppliesDialog().askDelete(idSupply)) {
 							try {
 								supplyManager.findSupply(idSupply).delete();
 								updateSupplies();
 							} catch(Exception ex) {
-								JOptionPane.showMessageDialog(supplyPanel.getSuppliesDialog(), ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+								supplyPanel.getSuppliesDialog().showErrorMessage(ex);
 							}
 						}
 					}
@@ -269,9 +266,9 @@ public class SupplyController {
 					}
 					}
 					supplyManager.replenishAll(InventoryDAOFacade.getInstance().viewInventory());
-					JOptionPane.showMessageDialog(supplyPanel, "successfull replenishment", "Success", JOptionPane.INFORMATION_MESSAGE);
+					supplyPanel.showConfirmMessage("successfull replenishment");
 				} catch(Exception e) {
-					JOptionPane.showMessageDialog(supplyPanel.getSuppliesDialog(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					supplyPanel.showErrorMessage(e);
 				}
 				
 			}

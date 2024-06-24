@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.text.DecimalFormat;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -150,7 +152,9 @@ public class InventoryView extends JFrame {
  
 	//add an inventoryItem into the table
 	public void addInventoryItem(String sku, String d, double price, int qty, int stdl, String line, String pod, String bin, int fr, int dim, String cat) { 
-        tableModel.addRow(new Object[]{sku, d, price, qty, stdl, line, pod, bin, fr, dim, cat});
+		DecimalFormat df = new DecimalFormat("0.00");
+	    String formattedPrice = df.format(price);
+		tableModel.addRow(new Object[]{sku, d, formattedPrice, qty, stdl, line, pod, bin, fr, dim, cat});
     }
 	 
 	public void cleanTable() {
@@ -186,6 +190,10 @@ public class InventoryView extends JFrame {
 			return new String[] {line,pod,bin};
 		}
 		return null;
+	}
+	
+	public void showErrorMessage(Exception e) {
+        JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 	}
 
 	public JTable getTable() {

@@ -142,6 +142,14 @@ public class SupplyPanel extends JPanel{
 		}
 		return null;
 	}
+	
+	public void showErrorMessage(Exception e) {
+		JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+	}
+	
+	public void showConfirmMessage(String message) {
+		JOptionPane.showMessageDialog(this, message, "Success", JOptionPane.INFORMATION_MESSAGE);
+	}
 
 	public JButton getNewSupplier() {
 		return newSupplier;

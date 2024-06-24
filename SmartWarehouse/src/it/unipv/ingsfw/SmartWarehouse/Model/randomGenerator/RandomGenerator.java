@@ -1,8 +1,7 @@
-//
+
 package it.unipv.ingsfw.SmartWarehouse.Model.randomGenerator;
 
 import java.util.Random;
-import java.util.UUID;
 
 public class RandomGenerator implements IRandomGenerator{
 
@@ -14,9 +13,8 @@ public class RandomGenerator implements IRandomGenerator{
 		String alphaNumeric = alphabet + numbers;
 		Random random = new Random();
 		for(int i=0; i<lenght; i++) { 
-			// generate random index number
+			//random index number
 		    int index = random.nextInt(alphaNumeric.length());
-			//Returns the char value at the specified index.
 			char randomChar = alphaNumeric.charAt(index);
 			sb.append(randomChar);
 		}
