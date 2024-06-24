@@ -32,7 +32,7 @@ public class ReturnService {
 		this.returnedItems = new HashMap<>();
 		this.moneyAlreadyReturned=0;
 		this.returnServiceDAOFacade=ReturnServiceDAOFacade.getIstance(); 
-		deadlineForMakingReturn=SmartWarehouseInfoPoint.getDeadlineForMakingReturn();
+		this.deadlineForMakingReturn=SmartWarehouseInfoPoint.getDeadlineForMakingReturn();
 		
 		if(!ReturnValidator.checkReturnability(this)) {
 			throw new UnableToReturnException();
