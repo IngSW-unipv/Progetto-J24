@@ -10,16 +10,17 @@ import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Cart;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Category;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
+import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.ItemDetails;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Position;
 import it.unipv.ingsfw.SmartWarehouse.Model.user.Client;
 
 public class CartTest {
-	private Position pos1=new Position("L1", "P1", "B1");
+	private Position pos1=new Position("G", "A", "A");
 	private ItemDetails itemDetails1=new ItemDetails(1,1,Category.ELECTRONICS);
 	private ItemDetails itemDetails2=new ItemDetails(1,1,Category.GROCERIES);
-	private InventoryItem inventoryItem1=new InventoryItem("computer",itemDetails1,"SKU001",10,92,10,pos1);
-	private InventoryItem inventoryItem2=new InventoryItem("zaino",itemDetails2,"@Kls54",10,92,10,pos1);
+	private IInventoryItem inventoryItem1=new InventoryItem("computer",itemDetails1,"SKU001",10,92,10,pos1);
+	private IInventoryItem inventoryItem2=new InventoryItem("zaino",itemDetails2,"@Kls54",10,92,10,pos1);
 
 	private Cart ca;
 	private Client cli;
