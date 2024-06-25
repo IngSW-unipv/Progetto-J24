@@ -13,8 +13,6 @@ import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnService;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryDAOFacade;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
-import it.unipv.ingsfw.SmartWarehouse.Model.SingletonUser;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 
 public class ReturnServiceDAO implements IReturnServiceDAO{

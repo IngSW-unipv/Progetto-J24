@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 
 /**
- * Utility class for validating return eligibility and returnable inventory items.
+ * Utility class for validating return validity and returnable inventory items.
  */
 public class ReturnValidator {
 	private ReturnValidator() {

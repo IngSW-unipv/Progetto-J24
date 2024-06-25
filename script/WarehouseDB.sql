@@ -72,7 +72,6 @@ CREATE TABLE clientorders (
   key id (id),
   key sku (sku),
   key email (email),
-  foreign key(sku) references inventory (sku),
   foreign key(email) references clients (email)
 );
 

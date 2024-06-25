@@ -6,7 +6,6 @@ import java.util.Map;
 import it.unipv.ingsfw.SmartWarehouse.Model.Return.ReturnService;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.IReturnable;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
-import it.unipv.ingsfw.SmartWarehouse.Model.inventory.InventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.Refund.IRefund;
 
 public interface IReturnServiceDAO {
@@ -17,6 +16,4 @@ public interface IReturnServiceDAO {
 	public boolean insertReturnService(ReturnService rs);
 	public boolean deleteReturnService(ReturnService rs);
 	public boolean insertRefundMode(ReturnService rs, IRefund rm);
-	
-
 }
