@@ -48,7 +48,7 @@ public class AddSupplyTest {
 	@Test 
 	public void testKO4() {
 		IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-			s = new Supply("XB7OHW4JBX", "4562", -6.9, 30);
+			s = new Supply("LKJZC", "S07", -6.9, 30);
             s.add();
 		});
 		assertEquals("Price must be positive", thrown.getMessage());

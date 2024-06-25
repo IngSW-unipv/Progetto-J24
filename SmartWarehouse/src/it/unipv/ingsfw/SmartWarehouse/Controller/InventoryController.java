@@ -24,29 +24,29 @@ import it.unipv.ingsfw.SmartWarehouse.View.inventory.SecondDialog;
 public class InventoryController {
 	private InventoryManager w;
 	private InventoryView iv;
-	 
+
 	public InventoryController(InventoryManager w, InventoryView iv) {
-        this.w = w;
-        this.iv = iv;
-        updateInventory(w.getInventory());       
-        find();
-        findPosition();
-        underLevel();
-        back();
-        insert();
-        order();
-        rowSelection();  
-        close();
-    }
-	
+		this.w = w;
+		this.iv = iv;
+		updateInventory(w.getInventory());       
+		find();
+		findPosition();
+		underLevel();
+		back();
+		insert();
+		order();
+		rowSelection();  
+		close();
+	}
+
 	private void updateInventory(List<IInventoryItem> items) {
-        iv.cleanTable();
-        for (IInventoryItem i : items) {
-            iv.addInventoryItem(i.getSku(), i.getDescription(), i.getPrice(), i.getQty(), i.getStdLevel(), i.getPos().getLine(), i.getPos().getPod(), i.getPos().getBin(),
-            		i.getDetails().getFragility(), i.getDetails().getDimension(), i.getDetails().getCategory().getLabel());
-        }
-    }
-	
+		iv.cleanTable();
+		for (IInventoryItem i : items) {
+			iv.addInventoryItem(i.getSku(), i.getDescription(), i.getPrice(), i.getQty(), i.getStdLevel(), i.getPos().getLine(), i.getPos().getPod(), i.getPos().getBin(),
+					i.getDetails().getFragility(), i.getDetails().getDimension(), i.getDetails().getCategory().getLabel());
+		}
+	}
+
 	private void find() {
 		ActionListener findLItemListener=new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -62,20 +62,20 @@ public class InventoryController {
 						iv.addInventoryItem(i.getSku(), i.getDescription(), i.getPrice(),i.getQty(), i.getStdLevel(), i.getPos().getLine(), i.getPos().getPod(), i.getPos().getBin(),
 								i.getDetails().getFragility(), i.getDetails().getDimension(), i.getDetails().getCategory().getLabel());
 					}
-	            }
+				}
 			}
 		};
 		iv.getSkutf().addActionListener(findLItemListener);
 	} 
-	
+
 	private void findPosition() {
 		ActionListener actionListener=new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				manage();
 			}
-			
+
 			private void manage() {
 				Object[] input=iv.showFilterPosition();
 				if(input!=null) {
@@ -90,7 +90,7 @@ public class InventoryController {
 		};
 		iv.getPosb().addActionListener(actionListener);
 	}
-	
+
 	private void underLevel() {
 		ActionListener underLevelListener=new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -103,7 +103,7 @@ public class InventoryController {
 		};
 		iv.getUnderLevel().addActionListener(underLevelListener);
 	}
-	
+
 	private void back() {
 		ActionListener backListener=new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -117,13 +117,13 @@ public class InventoryController {
 		};
 		iv.getx().addActionListener(backListener);
 	}
-	
+
 	private void insert() {
 		ActionListener insertListener=new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				manageAction();
 			}
-			
+
 			private void manageAction() {
 				Object[] input=null;
 				try {
@@ -145,13 +145,13 @@ public class InventoryController {
 		};
 		iv.getInsert().addActionListener(insertListener);
 	}
-	
+
 	private void order() {
 		ActionListener orderListener=new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				manageAction();
 			}
-			
+
 			private void manageAction() {
 				List<IInventoryItem> items=w.getInventory();
 				w.orderInventoryItems(items);
@@ -160,14 +160,14 @@ public class InventoryController {
 		};
 		iv.getOrderItem().addActionListener(orderListener);
 	}
-	
+
 	private void rowSelection() {
 		ListSelectionListener listSelectionListener=new ListSelectionListener() {
-			
+
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if (!e.getValueIsAdjusting()) { 
-				int selectedRowIndex=iv.getTable().getSelectedRow();
+					int selectedRowIndex=iv.getTable().getSelectedRow();
 					if(selectedRowIndex!=-1) {
 						if (iv.getFirstDialog() == null || !iv.getFirstDialog().isVisible()) {
 							String sku= (String) iv.getTable().getValueAt(selectedRowIndex, 0);
@@ -181,7 +181,7 @@ public class InventoryController {
 		}; 
 		iv.getTable().getSelectionModel().addListSelectionListener(listSelectionListener);
 	}
-	
+
 	private void init() {
 		updateSupplier();
 		plus();
@@ -190,21 +190,21 @@ public class InventoryController {
 		delete();
 		rowOrderSelection();
 	}
-	
+
 	private void updateSupplier() {
 		String sku=iv.getFirstDialog().getSku();
 		try {
 			List<Object[]> suppliersInfo=w.findInventoryItem(sku).getSuppliersInfo();
-			 
+
 			iv.getFirstDialog().getTableModel().setRowCount(0);
-	        for (Object[] o : suppliersInfo) {
-	        	iv.getFirstDialog().addSupplierToTable(((Supplier)o[0]).getIDS(), ((Supplier)o[0]).getFullName(), ((Supplier)o[0]).getEmail(), ((Supplier)o[0]).getAddress(), (double)o[1], (int)o[2]);
-	        }
+			for (Object[] o : suppliersInfo) {
+				iv.getFirstDialog().addSupplierToTable(((Supplier)o[0]).getIDS(), ((Supplier)o[0]).getFullName(), ((Supplier)o[0]).getEmail(), ((Supplier)o[0]).getAddress(), (double)o[1], (int)o[2]);
+			}
 		}catch(Exception e) {
 			iv.getFirstDialog().showErrorMessage(e);
 		}
-    }
-	
+	}
+
 	private void plus() {
 		ActionListener plusListener=new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -222,7 +222,7 @@ public class InventoryController {
 		};
 		iv.getFirstDialog().getPlus().addActionListener(plusListener);
 	}
-	
+
 	private void minus() {
 		ActionListener minusListener=new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -240,7 +240,7 @@ public class InventoryController {
 		};
 		iv.getFirstDialog().getMinus().addActionListener(minusListener);
 	}
-	
+
 	private void changeQty() {
 		ActionListener qtyListener=new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -260,7 +260,7 @@ public class InventoryController {
 		};
 		iv.getFirstDialog().getEditQtyField().addActionListener(qtyListener);
 	}
-	
+
 	private void delete() {
 		ActionListener deleteListener=new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -281,14 +281,14 @@ public class InventoryController {
 		};
 		iv.getFirstDialog().getDelete().addActionListener(deleteListener);
 	}
-	
+
 	private void rowOrderSelection() {
 		ListSelectionListener listSelectionListener=new ListSelectionListener() {
-			
+
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if (!e.getValueIsAdjusting()) { 
-				int selectedRowIndex=iv.getFirstDialog().getTable().getSelectedRow();
+					int selectedRowIndex=iv.getFirstDialog().getTable().getSelectedRow();
 					if(selectedRowIndex!=-1) {
 						if (iv.getFirstDialog().getSecondDialog() == null || !iv.getFirstDialog().getSecondDialog().isVisible()) {
 							String ids= (String) iv.getFirstDialog().getTable().getValueAt(selectedRowIndex, 0);
@@ -302,15 +302,15 @@ public class InventoryController {
 		}; 
 		iv.getFirstDialog().getTable().getSelectionModel().addListSelectionListener(listSelectionListener);
 	}
-	
+
 	private void ok_buy() {
 		ActionListener buyListener=new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				manageAction();
 			}
-			
+
 			private void manageAction() {
 				try {
 					int qty=Integer.parseInt(iv.getFirstDialog().getSecondDialog().getQty().getText());
@@ -324,36 +324,36 @@ public class InventoryController {
 		};
 		iv.getFirstDialog().getSecondDialog().getOrder().addActionListener(buyListener);
 	}
-	
+
 	private void close() {
 		WindowListener closeListener = new WindowListener() {
-			
+
 			@Override
 			public void windowOpened(WindowEvent e) {			
 			}
-			
+
 			@Override
 			public void windowIconified(WindowEvent e) {				
 			}
-			
+
 			@Override
 			public void windowDeiconified(WindowEvent e) {	
 			}
-			
+
 			@Override
 			public void windowDeactivated(WindowEvent e) {
 			}
-			
+
 			@Override
 			public void windowClosing(WindowEvent e) {	
 				iv.dispose();
 				new MainController(new MainView());				
 			}
-			
+
 			@Override
 			public void windowClosed(WindowEvent e) {
 			}
-			
+
 			@Override
 			public void windowActivated(WindowEvent e) {
 			}
