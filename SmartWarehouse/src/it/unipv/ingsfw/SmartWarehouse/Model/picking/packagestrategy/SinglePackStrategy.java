@@ -1,95 +1,74 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.picking.packagestrategy;
 
-import java.util.List;
-
+import java.util.LinkedList;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.picking.orderpicking.OrderP;
 
 public class SinglePackStrategy implements IPackageStrategy {
-    private OrderP o;
-    private int counts = 0;
-    private int countm = 0;
-    private int countl = 0;
+    private OrderP o;    
+    public int counts = 0;
+    public int countm = 0;
+    public int countl = 0;
     private int countfrs = 0;
     private int countfrm = 0;
-    private int countfrl = 0;
-   
-
+    private int countfrl = 0; 
+  
     public SinglePackStrategy(OrderP o) {
         this.o = o;
     }
 
-    public boolean isPackageFragile(List<IInventoryItem> pack) {
-        for (IInventoryItem item : pack) {
-            if (item.getDetails().getFragility() > IPackageStrategy.N) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public String calculatePackages() {
-        List<IInventoryItem> itemList = o.getSkuqtyAsList();
+        LinkedList<IInventoryItem> itemList = o.getSkuqtyAsList();
         int totalSize = o.calculateTotalSize();
-        boolean isFragile = isPackageFragile(itemList);
+        boolean isFragile = o.checkFragility(itemList);
         String packageInfo = "";
-
-        if (totalSize <= IPackageStrategy.maxs) {
+       
+        if (totalSize <= SMALL) {   
+            packageInfo = "Small";
             counts++;
-            packageInfo = "small";
             if (isFragile) {
                 countfrs++;
                 packageInfo += " and requires fragile packaging.";
             }
-        } else if (totalSize <= IPackageStrategy.maxm) {
+        }   
+        else if (totalSize <= MEDIUM) {
+            packageInfo = "Medium";
             countm++;
-            packageInfo = "medium";
             if (isFragile) {
                 countfrm++;
                 packageInfo += " and requires fragile packaging.";
             }
-        } else if (totalSize <= IPackageStrategy.maxl) {
+        }
+              
+        else { 
+            packageInfo = "Large";
             countl++;
-            packageInfo = "large";
             if (isFragile) {
                 countfrl++;
                 packageInfo += " and requires fragile packaging.";
             }
         }
-        return "Package 1 is a " + packageInfo + " pack.";
+        
+        return "Package 1 is a " + packageInfo ;
+        
     }
 
-    public boolean isPackageCorrect(String packageType, int quantity, int fr) {
+    public boolean isPackageCorrect(String typeP, int quantity, int fr) {
+    	String packageType=typeP;
         switch (packageType) {
-            case "small":
-                return fr == countfrs && quantity == counts;
-
-            case "medium":
-                return quantity == countm && fr == countfrm;
-
-            case "large":
-                return fr == countfrl && quantity == countl;
-
+            case "Small":
+                return quantity == counts &&  fr == getCountfrs();
+            case "Medium":
+                return quantity==countm && fr == getCountfrm();
+            case "Large":
+                return quantity == countl && fr == getCountfrl();
             default:
                 return false;
         }
     }
-
+   
     public int getCountPack() {
-    	
         return 1;
-    }
-
-    public int getCounts() {
-        return counts;
-    }
-
-    public int getCountm() {
-        return countm;
-    }
-
-    public int getCountl() {
-        return countl;
     }
 
     public int getCountfrs() {
@@ -103,4 +82,5 @@ public class SinglePackStrategy implements IPackageStrategy {
     public int getCountfrl() {
         return countfrl;
     }
+    
 }

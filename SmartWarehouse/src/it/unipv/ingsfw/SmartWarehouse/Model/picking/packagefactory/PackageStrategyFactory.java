@@ -5,8 +5,14 @@ import it.unipv.ingsfw.SmartWarehouse.Model.picking.packagestrategy.IPackageStra
 import it.unipv.ingsfw.SmartWarehouse.Model.picking.packagestrategy.MultiplePackStrategy;
 import it.unipv.ingsfw.SmartWarehouse.Model.picking.packagestrategy.SinglePackStrategy;
 
-
 public class PackageStrategyFactory {
+	private static PackageStrategyFactory istance;
+	public static PackageStrategyFactory  getInstance() {
+		if(istance == null) {
+			istance = new PackageStrategyFactory();
+		}
+		return istance;
+	}
 	
 	    public IPackageStrategy getPackageStrategy(OrderP o) {
 	        int totalSize = o.calculateTotalSize();

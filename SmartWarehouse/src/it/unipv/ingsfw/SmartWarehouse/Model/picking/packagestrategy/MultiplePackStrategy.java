@@ -1,8 +1,8 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.picking.packagestrategy;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
 import it.unipv.ingsfw.SmartWarehouse.Model.picking.orderpicking.OrderP;
 
@@ -14,50 +14,22 @@ public class MultiplePackStrategy implements IPackageStrategy {
     public int countfrs = 0;
     public int countfrm = 0;
     public int countfrl = 0;
-    
-
+    public int packCount = 0; 
+   
     public MultiplePackStrategy(OrderP o) {
         this.o = o;
     }
-
     /**
      * Calculate packages based on item dimensions and fragility.
      */
-    @Override
     public String calculatePackages() {
-        List<List<IInventoryItem>> packs = new ArrayList<>(); 
-        List<IInventoryItem> itemList = o.getSkuqtyAsList(); 
-        List<IInventoryItem> currentPack = new ArrayList<>(); 
+        LinkedList<List<IInventoryItem>> packs = new LinkedList<>(); 
+        LinkedList<IInventoryItem> itemList = o.getSkuqtyAsList(); 
+        List<IInventoryItem> currentPack = new LinkedList<>(); 
         int currentPackSize = 0; 
         for (IInventoryItem item : itemList) {
             int itemSize = item.getDetails().getDimension();  
-            if (currentPackSize + itemSize > maxl) {
-                packs.add(new ArrayList<>(currentPack)); 
-                currentPack.clear(); 
-                currentPackSize = 0; 
-            }
-            currentPack.add(item); 
-            currentPackSize += itemSize; 
-        }
-
-        if (!currentPack.isEmpty()) {
-            packs.add(currentPack); 
-        }
-        return printSummary(packs); 
-    }
-
-    /**
-     * Count the number of packs generated based on item dimensions.
-     */
-    public int getCountPack() {
-        List<IInventoryItem> itemList = o.getSkuqtyAsList();
-        List<List<IInventoryItem>> packs = new ArrayList<>(); 
-        List<IInventoryItem> currentPack = new ArrayList<>(); 
-        int currentPackSize = 0; 
-        int packCount = 0; 
-        for (IInventoryItem item : itemList) {
-            int itemSize = item.getDetails().getDimension(); 
-            if (currentPackSize + itemSize > maxl) {
+            if (currentPackSize + itemSize > LARGE) {
                 packs.add(new ArrayList<>(currentPack)); 
                 currentPack.clear(); 
                 currentPackSize = 0; 
@@ -71,61 +43,43 @@ public class MultiplePackStrategy implements IPackageStrategy {
             packs.add(currentPack); 
             packCount++; 
         }
-        return packCount; 
+        return getSummary(packs); 
     }
-
-    /**
-     * Check if a pack contains any fragile items.
-     */
-    public boolean isPackageFragile(List<IInventoryItem> pack) {
-        for (IInventoryItem item : pack) {
-            if (item.getDetails().getFragility() > N) {
-                return true; 
-            }
-        }
-        return false;
-    }
-
+  
     /**
      * Generate a summary string for the list of packs.
      */
-    private String printSummary(List<List<IInventoryItem>> packages) {
-        String summary = "";
-        for (int i = 0; i < packages.size(); i++) {
-            List<IInventoryItem> pack = packages.get(i); 
-            int totalSize = calculateTotalSize(pack); 
-            String packSize; 
-            boolean isFragile = isPackageFragile(pack); 
-            if (totalSize <= maxs) {
-                packSize = "small"; 
-                counts++; 
+    private String getSummary(LinkedList<List<IInventoryItem>> packages) {
+        for (List<IInventoryItem> pack : packages) {
+            int totalSize = calculateTotalSize(pack);
+            boolean isFragile = o.checkFragility(pack);
+            if (totalSize <= SMALL) {
+                counts++;
                 if (isFragile) {
-                    countfrs++; 
+                	countfrs++;
                 }
-            } else if (totalSize <= maxm) {
-                packSize = "medium"; 
-                countm++; 
+            }              
+            else if (totalSize <= MEDIUM) {
+                countm++;
                 if (isFragile) {
-                    countfrm++; 
+                    countfrm++;
                 }
-            } else {
-                packSize = "large"; 
-                countl++; 
+            }  
+             else {
+                countl++;
                 if (isFragile) {
-                    countfrl++; 
+                   countfrl++;
                 }
-            }
-            summary = summary.concat("Package ").concat(String.valueOf(i + 1)).concat(" is a ")
-                             .concat(packSize)
-                             .concat(" pack");
-            if (isFragile) {
-                summary = summary.concat(" and requires fragile packaging.\n");
-            } else {
-                summary = summary.concat(".\n");
-            }
+             } 
         }
-        return summary; 
+        String summary = "Total packages summary:\n";
+        summary += "Small packs: " + counts + " (Fragile: " + countfrs + ")\n";
+        summary += "Medium packs: " + countm + " (Fragile: " + countfrm + ")\n";
+        summary += "Large packs: " + countl + " (Fragile: " + countfrl + ")\n";
+
+        return summary;
     }
+
     private int calculateTotalSize(List<IInventoryItem> items) {
         int totalSize = 0;
         for (IInventoryItem item : items) {
@@ -137,18 +91,18 @@ public class MultiplePackStrategy implements IPackageStrategy {
     /**
      * method to check if the package i insert is correct,and the quantity and the fragility too
      */
-    public boolean isPackageCorrect(String packageType, int quantity, int fr) {
+    public boolean isPackageCorrect(String typeP, int quantity, int fr) {
         boolean isFragile = false; 
-        
+        String packageType=typeP;
         switch (packageType) {
-            case "small":
+            case "Small":
                 isFragile = fr == getCountfrs(); 
                 return getCounts() == quantity && isFragile; 
                 
-            case "medium":
+            case "Medium":
                 isFragile = fr == getCountfrm();
                 return getCountm() == quantity && isFragile;                 
-            case "large":
+            case "Large":
                 isFragile = fr == getCountfrl(); 
                 return getCountl() == quantity && isFragile; 
                 
@@ -156,8 +110,6 @@ public class MultiplePackStrategy implements IPackageStrategy {
                 return false; 
         }
     }
-   
- 
 	public int getCounts() {
         return counts;
     }
@@ -180,9 +132,8 @@ public class MultiplePackStrategy implements IPackageStrategy {
     public int getCountfrl() {
         return countfrl;
     }
-}
-    
-    
+    public int getCountPack() {
+    	return packCount;
+    }
    
-
-
+}

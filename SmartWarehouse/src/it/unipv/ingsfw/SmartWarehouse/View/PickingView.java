@@ -128,9 +128,9 @@ public class PickingView {
         }
         return insertedPackages.trim();
     }
-
+    
     public int[] getPackageDetails() {
-        JPanel panel = new JPanel(new GridLayout(2, 2));
+        JPanel panel = new JPanel(new GridLayout(3, 2));
         JLabel quantityLabel = new JLabel("Quantity:");
         JTextField quantityField = new JTextField();
         JLabel fragilityLabel = new JLabel("Fragility:");
@@ -139,7 +139,7 @@ public class PickingView {
         panel.add(quantityField);
         panel.add(fragilityLabel);
         panel.add(fragilityField);
-        int result = JOptionPane.showConfirmDialog(null, panel, "Enter Package Details", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);     
+        int result = JOptionPane.showConfirmDialog(null, panel, "Enter Package Details", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE); 
         if (result == JOptionPane.OK_OPTION) {
             try {
                 int quantity = Integer.parseInt(quantityField.getText());
@@ -150,10 +150,11 @@ public class PickingView {
                 return null;
             }
         } else if (result == JOptionPane.CLOSED_OPTION) {
-        	//do nothing
+            //do nothing
         }
         return null;
     }
+
 
     public HashMap<String, Integer> getItemDetails() {
         JPanel panel = new JPanel(new GridLayout(2, 2));
@@ -199,64 +200,26 @@ public class PickingView {
         this.selectedOrderId = selectedOrderId;
     }
 
-    public JFrame getFrame() {
-        return frame;
-    }
-
-    public void setFrame(JFrame frame) {
-        this.frame = frame;
-    }
-
     public JButton getCalculatePack() {
         return calculatePack;
-    }
-
-    public void setCalculatePack(JButton calculatePack) {
-        this.calculatePack = calculatePack;
     }
 
     public JButton getPacked() {
         return packed;
     }
 
-    public void setPacked(JButton packed) {
-        this.packed = packed;
-    }
-
     public JButton getItemButton() {
         return itemButton;
-    }
-
-    public void setItemButton(JButton itemButton) {
-        this.itemButton = itemButton;
     }
 
     public JButton getSmallButton() {
         return smallButton;
     }
-
     public JButton getMediumButton() {
         return mediumButton;
     }
-
     public JButton getLargeButton() {
         return largeButton;
-    }
-
-    public JTextArea getOrderDetails() {
-        return orderdetails;
-    }
-
-    public void setText(JTextArea orderdetails) {
-        this.orderdetails = orderdetails;
-    }
-
-    public JTextArea getPackageSummaryTextArea() {
-        return packageSummaryTextArea;
-    }
-
-    public void setPackageSummaryTextArea(JTextArea packageSummaryTextArea) {
-        this.packageSummaryTextArea = packageSummaryTextArea;
     }
 
     public JTextArea getSelected() {
@@ -265,14 +228,6 @@ public class PickingView {
 
     public void setSelected(JTextArea selected) {
         this.selected = selected;
-    }
-
-    public JPanel getListId() {
-        return ListId;
-    }
-
-    public void setListId(JPanel listId) {
-        ListId = listId;
     }
 
     public void displayPackageInfo(String packageInfo) {
@@ -290,23 +245,17 @@ public class PickingView {
     public void clearInsertedItemsDisplay() {
     	insertedItemsTextArea.setText("");
     }
-    public void displayItemInfo(String packageInfo) {
-    	insertedItemsTextArea.setText(packageInfo);
-    }
     
-    public void setPackageInfo(String packageInfo) {
-        selected.setText(packageInfo);
-    }
-
-    public void clearPackageSummary() {
+   public void clearPackageSummary() {
         packageSummaryTextArea.setText(""); 
     }
 
     public void clearMessages() {
         selected.setText(""); 
     }
-    public JTextArea getInsertItem() {
-        return insertedItemsTextArea;
+  
+    public void addItemInserted(String sku, int insertedQty) {
+        insertedItemsTextArea.append("Item: " + sku + ", Total Quantity: " + insertedQty + "\n");
     }
 
 }
