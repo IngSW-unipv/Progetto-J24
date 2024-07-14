@@ -1,8 +1,6 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.picking.manager;
 
 import java.util.HashMap;
-import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
-import it.unipv.ingsfw.SmartWarehouse.Exception.QuantityMismatchItemException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.QuantityMismatchPackageException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.WrongPackageException;
 import it.unipv.ingsfw.SmartWarehouse.Model.picking.orderpicking.OrderP;
@@ -11,11 +9,12 @@ import it.unipv.ingsfw.SmartWarehouse.Model.picking.packagestrategy.IPackageStra
 
 public class PickingManager {
     private static PickingManager instance;
-    private HashMap<String, Integer> items;
-	private int countpack = 0;
+    private HashMap<OrderP, IPackageStrategy> orderStrategies;
+    private HashMap<OrderP, Integer> orderCountPacks;
 
     private PickingManager() {
-        items = new HashMap<>();
+        orderStrategies = new HashMap<>();
+        orderCountPacks = new HashMap<>();
     }
 
     public static PickingManager getInstance() {
@@ -25,46 +24,53 @@ public class PickingManager {
         return instance;
     }
 
-    public boolean addItem(String sku, int quantity, OrderP order) throws ItemNotFoundException, QuantityMismatchItemException {
-        if (order.selectItemqty(sku, quantity) != 0) {
-            items.merge(sku, quantity, Integer::sum);
+    public IPackageStrategy getStrategy(OrderP order) {
+        IPackageStrategy strategy = orderStrategies.get(order);
+        if (strategy == null) {
+            strategy = calculatePack(order);
+            orderStrategies.put(order, strategy);
+        }
+        return strategy;
+    }
+
+    /**
+     * Calculates the packaging strategy for the order
+     */
+    public IPackageStrategy calculatePack(OrderP order) {
+    	 IPackageStrategy strategy = orderStrategies.get(order);
+         if (strategy == null) {
+             strategy = new PackageStrategyFactory().getPackageStrategy(order);
+             orderStrategies.put(order, strategy);
+         }
+        return strategy;
+    }
+
+    public boolean addAndComparePackageSize(String typeP, int quantity, int fr, OrderP order) throws WrongPackageException {   
+    	  IPackageStrategy strategy= orderStrategies.get(order);
+        if (strategy.isPackageCorrect(typeP, quantity, fr)) {
+            int countpack = orderCountPacks.getOrDefault(order, 0);
+            countpack += quantity;
+            orderCountPacks.put(order, countpack);
             return true;
         } else {
-            return false;
+            throw new WrongPackageException("Wrong package size or fragility." + strategy.calculatePackages());
         }
     }
 
     /**
-	 * Calculates the packaging strategy for the order
-	 */
-	public IPackageStrategy calculatePack(OrderP or) {
-		return new PackageStrategyFactory().getPackageStrategy(or);
-	}
-  
-  	public boolean addAndComparePackageSize(String typeP, int quantity, int fr,OrderP or) throws WrongPackageException {
-  	   IPackageStrategy strategy = calculatePack(or); 
-  	   strategy.calculatePackages();
-  	    if (strategy.isPackageCorrect(typeP, quantity, fr)) {
-  	        countpack += quantity;
-  	        return true;
-  	    } else {
-  	        throw new WrongPackageException("Wrong package size or fragility."+strategy.calculatePackages());
-  	    }
-  	}
-  	/*
-  	 * method for check if all required packs are present
-  	 */
-  	public boolean allPackPresent(OrderP or ) throws QuantityMismatchPackageException {
-  		IPackageStrategy strategy =calculatePack(or); 
-  		if (strategy.getCountPack() == countpack) 
-  			return true;
-  		else 
-  			throw new QuantityMismatchPackageException("not all the package are selected");
-  		
-  	}
-  	
-  	public int getCountp() {
-  		return countpack;
-  	}
+     * Method to check if all required packs are present
+     */
+    public boolean allPackPresent(OrderP order) throws QuantityMismatchPackageException {
+        IPackageStrategy strategy = getStrategy(order);
+        int countpack = orderCountPacks.getOrDefault(order, 0);
+        if (strategy.getCountPack() == countpack) {
+            return true;
+        } else {
+            throw new QuantityMismatchPackageException("Not all the packages are selected");
+        }
+    }
 
+    public int getCountp(OrderP order) {
+        return orderCountPacks.getOrDefault(order, 0);
+    }
 }

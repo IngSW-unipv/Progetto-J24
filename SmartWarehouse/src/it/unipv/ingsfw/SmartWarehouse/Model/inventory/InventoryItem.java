@@ -81,6 +81,15 @@ public class InventoryItem implements IInventoryItem {
 	public Position getPos() {
 		return pos;
 	}
+	public Position getPosBySku() throws ItemNotFoundException {
+	    IInventoryItem item = inventoryDAOFacade.findInventoryItemBySku(sku);
+	    if (item != null) {
+	        return item.getPos();
+	    } else {
+	        throw new ItemNotFoundException("Item not found for SKU: " + sku);
+	    }
+	}
+
 	
 	/**
 	 * Sets the price only if it is positive

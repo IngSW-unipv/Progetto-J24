@@ -1,11 +1,11 @@
 package it.unipv.ingsfw.SmartWarehouse.Controller;
 
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
+
 import it.unipv.ingsfw.SmartWarehouse.Exception.QuantityMismatchItemException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.QuantityMismatchPackageException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ReturnableOrderNullPointerException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.WrongPackageException;
-import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.RegisterDAOFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.RegisterFacade;
 import it.unipv.ingsfw.SmartWarehouse.Model.picking.manager.PickingManager;
@@ -98,20 +98,16 @@ public class PickingController {
 	                int qty = itemDetails.get(sku);
 	                int id = view.getSelectedOrderId();
 	                OrderP order = (OrderP) RegisterFacade.getIstance().selectOrder(id);
-					boolean result=false;
-					
+					int check=0;
 						try {
-							result = pickingmanager.addItem(sku, qty, order);
+						    check=order.selectItemqty(sku, qty);
+						    if (check!=0) 
+							    view.addItemInserted(sku, qty);
+						   	
 						} catch (ItemNotFoundException | QuantityMismatchItemException e1) {
 							// TODO Auto-generated catch block
-							e1.getMessage();
+							view.showErrorMessage(e1.getMessage());
 						}
-					if (result) {
-					    view.addItemInserted(sku, qty);
-					    
-					} else {
-					    view.showErrorMessage("Failed to add item to order.");
-					}
 	            }
 	        });
 	    }
@@ -131,15 +127,14 @@ public class PickingController {
 			boolean result=false;
 			try {
 				result = pickingmanager.addAndComparePackageSize(typeP, quantityToAdd, fragility, order);
-			} catch (WrongPackageException e) {
-				e.getMessage();
-			}
-			if (result) {
-			    view.getSelected().append( "Selected package type: " + typeP + "\n");
-			    view.getSelected().append("Quantity: " + quantityToAdd + "\n");
-			    view.getSelected().append("Fragility: " + fragility + "\n");
-			} else {
-			    view.showErrorMessage("Failed to add package.");
+				if (result) {
+				    view.getSelected().append( "Selected package type: " + typeP + "\n");
+				    view.getSelected().append("Quantity: " + quantityToAdd + "\n");
+				    view.getSelected().append("Fragility: " + fragility + "\n");
+				}
+			} 
+			catch (WrongPackageException e) {
+				view.showErrorMessage(e.getMessage());
 			}
         }
     }
@@ -170,25 +165,27 @@ public class PickingController {
 	        }
 	    });
 	}
-
-
   			
-	private void confirmPackaging(Order order) {
+	private void confirmPackaging(OrderP order) {
 		view.showConfirmationMessage("Order packed successfully.");
 		view.clearPackageSummary();
 		view.clearMessages();
 		view.clearInsertedItemsDisplay();
+        RegisterDAOFacade.getIstance().setPicked(order.getId());
 	}
+	
 	private void disablePackageTypeButtons() {
 		view.getSmallButton().setEnabled(false);
 		view.getMediumButton().setEnabled(false);
 		view.getLargeButton().setEnabled(false);
 	}
+	
 	private void enablePackageTypeButtons() {
 		view.getSmallButton().setEnabled(true);
 		view.getMediumButton().setEnabled(true);
 		view.getLargeButton().setEnabled(true);
 	}
+	
 	private void enableCalculatePackButton() {
 		calculatePackButton.setEnabled(true);
 	}

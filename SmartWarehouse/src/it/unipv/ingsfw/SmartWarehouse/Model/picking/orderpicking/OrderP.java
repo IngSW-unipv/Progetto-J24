@@ -16,7 +16,6 @@ import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Position;
 
 public class OrderP extends Order {
 	private int countItemInserted=0;
-
 	public static final int N = 3;
 	private Map<String, Integer> qtyInsertedMap;
 	private HashMap<IInventoryItem, Integer> skuqty;
@@ -107,16 +106,16 @@ public class OrderP extends Order {
 	 */
 	public int selectItemqty(String sku, int qty) throws ItemNotFoundException, QuantityMismatchItemException {
 		boolean itemFound = false;
-		int actualQuantity = 0;
+		int actualQuantity = 0;	
 		for (IInventoryItem item : skuqty.keySet()) {
-			if (item.getSku().equals(sku)) {
-				itemFound = true;
-				actualQuantity = skuqty.get(item);
-				break;
-			}
+	        if (item.getSku().equals(sku) ){
+	            itemFound = true;
+	            actualQuantity = skuqty.get(item);
+	            break;
+	        }
 		}
 		if (!itemFound) 
-			throw new ItemNotFoundException("Item not found for SKU: " + sku);
+			throw new ItemNotFoundException("Item not found for SKU: " + sku );
 		if(qtyInsertedMap.containsKey(sku))
 			actualQuantity = qtyInsertedMap.get(sku);
 		if (qty > actualQuantity)
