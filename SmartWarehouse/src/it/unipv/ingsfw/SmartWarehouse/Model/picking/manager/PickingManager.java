@@ -23,47 +23,69 @@ public class PickingManager {
         }
         return instance;
     }
+    /**
+     * method for get the strategy
+     */
 
     public IPackageStrategy getStrategy(OrderP order) {
         IPackageStrategy strategy = orderStrategies.get(order);
         if (strategy == null) {
             strategy = calculatePack(order);
-            orderStrategies.put(order, strategy);
+            this.orderStrategies.put(order, strategy);
         }
         return strategy;
     }
 
     /**
-     * Calculates the packaging strategy for the order
+     * 
+     * @param order
+     * @return
+     * 
      */
     public IPackageStrategy calculatePack(OrderP order) {
-    	 IPackageStrategy strategy = orderStrategies.get(order);
-         if (strategy == null) {
-             strategy = new PackageStrategyFactory().getPackageStrategy(order);
-             orderStrategies.put(order, strategy);
-         }
+        new PackageStrategyFactory();
+        IPackageStrategy strategy = PackageStrategyFactory.getInstance()
+        		.getPackageStrategy(order);
+        this.orderStrategies.put(order, strategy);
         return strategy;
     }
-
+    
+    /**
+     *
+     * @param typeP
+     * @param quantity
+     * @param fr
+     * @param order
+     * @return
+     * @throws WrongPackageException
+     * 
+     * check if the package is correct
+     */
+    
     public boolean addAndComparePackageSize(String typeP, int quantity, int fr, OrderP order) throws WrongPackageException {   
-    	  IPackageStrategy strategy= orderStrategies.get(order);
+    	IPackageStrategy strategy= this.orderStrategies.get(order);
         if (strategy.isPackageCorrect(typeP, quantity, fr)) {
-            int countpack = orderCountPacks.getOrDefault(order, 0);
+            int countpack =orderCountPacks.getOrDefault(order, 0);
             countpack += quantity;
-            orderCountPacks.put(order, countpack);
+            this.orderCountPacks.put(order, countpack);
             return true;
         } else {
-            throw new WrongPackageException("Wrong package size or fragility." + strategy.calculatePackages());
+            throw new WrongPackageException("Wrong package size or fragility");
+
         }
     }
 
     /**
-     * Method to check if all required packs are present
+     * 
+     * @param order
+     * @return
+     * @throws QuantityMismatchPackageException
+     * 
+     * checking if the pack/s are all present
      */
     public boolean allPackPresent(OrderP order) throws QuantityMismatchPackageException {
         IPackageStrategy strategy = getStrategy(order);
-        int countpack = orderCountPacks.getOrDefault(order, 0);
-        if (strategy.getCountPack() == countpack) {
+        if (strategy.getCountPack() == getCountp(order) && getCountp(order)!=0) {
             return true;
         } else {
             throw new QuantityMismatchPackageException("Not all the packages are selected");
@@ -71,6 +93,6 @@ public class PickingManager {
     }
 
     public int getCountp(OrderP order) {
-        return orderCountPacks.getOrDefault(order, 0);
+        return this.orderCountPacks.getOrDefault(order, 0);
     }
 }

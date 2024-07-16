@@ -1,13 +1,11 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.picking.orderpicking;
 
 import java.time.LocalDateTime;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import it.unipv.ingsfw.SmartWarehouse.Exception.ItemNotFoundException;
 import it.unipv.ingsfw.SmartWarehouse.Exception.QuantityMismatchItemException;
 import it.unipv.ingsfw.SmartWarehouse.Model.Shop.Order;
@@ -17,23 +15,25 @@ import it.unipv.ingsfw.SmartWarehouse.Model.inventory.Position;
 public class OrderP extends Order {
 	private int countItemInserted=0;
 	public static final int N = 3;
-	private Map<String, Integer> qtyInsertedMap;
+	private HashMap<String, Integer> qtyInsertedMap;
 	private HashMap<IInventoryItem, Integer> skuqty;
-
 
 	public OrderP(HashMap<IInventoryItem, Integer> skuqty, int id, String email, LocalDateTime date) {
 		super(skuqty, id, email, date);
 		this.skuqty = super.getSkuqty();
 		this.qtyInsertedMap = new HashMap<>();
 	}
-	/*
+	/**
+	 * 
+	 * @return
 	 * method used for calculate the total size of the pack, I use a for loop the inventors of the 
-	 * article and from there using the get method I find the quantity
+	 *article and from there using the get method I find the quantity
 	 */
+	
 	public int calculateTotalSize() {
 	    int totalSize = 0;
-	    for (IInventoryItem item : skuqty.keySet()) {
-	        int countTotalItem = skuqty.get(item);
+	    for (IInventoryItem item : this.skuqty.keySet()) {
+	        int countTotalItem = this.skuqty.get(item);
 	        if (item.getDetails() == null) {
 	            throw new IllegalArgumentException("Item details are not set for SKU: " + item.getSku());
 	        }
@@ -43,25 +43,31 @@ public class OrderP extends Order {
 	    return totalSize;
 	}
 	/**
-	 * this method is for trasforming the orderp hasmap into a linkedlist of InventoryItems.
+	 * 
+	 * @return
+	 *  this method is for trasforming the orderp hasmap into a linkedlist of InventoryItems.
 	 * using a for loop.
 	 */
+	
 	public LinkedList<IInventoryItem> getSkuqtyAsList() {
 		LinkedList<IInventoryItem> itemList = new LinkedList<>();
-		for (IInventoryItem item: skuqty.keySet()) {
-			int quantity = skuqty.get(item);
+		for (IInventoryItem item: this.skuqty.keySet()) {
+			int quantity = this.skuqty.get(item);
 			for (int i = 0; i < quantity; i++) {
 				itemList.add(item);
 			}
 		}
 		return itemList;
 	}
-	/*
-	 * with this method you can take the details of items in the order sorted by
-	 * position.
+	/**
+	 * 
+	 * @return
+	 *  with this method you can take the details of items in the order sorted by
+	 *position.
 	 */
+	 
 	public List<String> getItemDetails() {
-	    List<IInventoryItem> sortedItems = new ArrayList<>(skuqty.keySet());
+	    List<IInventoryItem> sortedItems = new ArrayList<>(this.skuqty.keySet());
 	    sortedItems.sort(new Comparator<IInventoryItem>() {
 	        @Override
 	        public int compare(IInventoryItem item1, IInventoryItem item2) {
@@ -81,7 +87,7 @@ public class OrderP extends Order {
 	    });
 	    List<String> itemDetailsList = new ArrayList<>();
 	    for (IInventoryItem item : sortedItems) {
-	        int quantity = skuqty.get(item);
+	        int quantity = this.skuqty.get(item);
 	        if (item == null || item.getSku() == null) {
 	            throw new IllegalArgumentException("Item or SKU is null in the inventory.");
 	        }
@@ -93,8 +99,8 @@ public class OrderP extends Order {
 	    return itemDetailsList;
 	}
 	
-	public boolean checkFragility(List<IInventoryItem> pack) {
-	        for (IInventoryItem item : pack) {
+	public boolean checkFragility(List<IInventoryItem> items) {
+	        for (IInventoryItem item : items) {
 	            if (item.getDetails().getFragility() > N) {
 	                return true;
 	            }
@@ -102,15 +108,22 @@ public class OrderP extends Order {
 	        return false;
 	    }
 	/**
+	 * 
+	 * @param sku
+	 * @param qty
+	 * @return
+	 * @throws ItemNotFoundException
+	 * @throws QuantityMismatchItemException
 	 * method for see if i select the correct item and the correct qty
 	 */
+	  
 	public int selectItemqty(String sku, int qty) throws ItemNotFoundException, QuantityMismatchItemException {
 		boolean itemFound = false;
 		int actualQuantity = 0;	
-		for (IInventoryItem item : skuqty.keySet()) {
+		for (IInventoryItem item : this.skuqty.keySet()) {
 	        if (item.getSku().equals(sku) ){
 	            itemFound = true;
-	            actualQuantity = skuqty.get(item);
+	            actualQuantity = this.skuqty.get(item);
 	            break;
 	        }
 		}
@@ -131,9 +144,15 @@ public class OrderP extends Order {
 		qtyInsertedMap.put(sku, actualQuantity);
 		return qty;
 	}
-	/*  method for checking if all the items are in the respective package
-  	 * check if count item is the same of the total of the package
-  	 */
+	/**
+	 * 
+	 * @return
+	 * @throws QuantityMismatchItemException
+	 * 
+	 * method for checking if all the items are in the respective package
+  	 *check if count item is the same of the total of the package
+	 */
+	  
   	public boolean allItemPresent() throws QuantityMismatchItemException {
   		if (countItemInserted==getTotalItem()) 
   			return true;
@@ -143,8 +162,8 @@ public class OrderP extends Order {
 	
   	public int getTotalItem() {
 	    int countTotalItem=0;
-	    for (IInventoryItem item : skuqty.keySet()) {
-	        countTotalItem+= skuqty.get(item);   
+	    for (IInventoryItem item : this.skuqty.keySet()) {
+	        countTotalItem+= this.skuqty.get(item);   
 	    }
  	    return countTotalItem;
   }

@@ -22,7 +22,6 @@ import java.util.List;
 public class PickingController {
 	private PickingView view;
 	private HashMap<Integer, JButton> orderButtons = new HashMap<>();
-	private JButton calculatePackButton;
 	private PickingManager pickingmanager;
 
 	public PickingController(PickingView view) {
@@ -47,8 +46,7 @@ public class PickingController {
 	    });
 	}
 	private void addCalculatePackListener() {
-	    calculatePackButton = view.getCalculatePack();
-	    calculatePackButton.addActionListener(e -> {
+	    view.getCalculatePack().addActionListener(e -> {
 	        int id = view.getSelectedOrderId();
 	        if (id != -1) {
 	           OrderP or= (OrderP) RegisterFacade.getIstance().selectOrder(id);  
@@ -57,7 +55,7 @@ public class PickingController {
 	                String packageInfo = strategy.calculatePackages();
 	                view.displayPackageInfo(packageInfo);
 	                enablePackageTypeButtons();
-	                calculatePackButton.setEnabled(false);
+	                view.getCalculatePack().setEnabled(false);
 	            } else {
 	                throw new ReturnableOrderNullPointerException();
 	            }
@@ -78,7 +76,8 @@ public class PickingController {
 			view.clearMessages();
 			view.clearPackageSummary();
 			disablePackageTypeButtons();
-			enableCalculatePackButton();
+			view.getCalculatePack().setEnabled(true);
+			
 		};
 		for (Integer orderId : idList) {
 			boolean picked = RegisterDAOFacade.getIstance().getPicked(orderId);
@@ -90,27 +89,33 @@ public class PickingController {
 			}
 		}
 	}
-	  private void addItemButtonListener() {
-	        view.getItemButton().addActionListener(e -> {
-	            HashMap<String, Integer> itemDetails = view.getItemDetails();
-	            if (itemDetails != null && !itemDetails.isEmpty()) {
-	                String sku = itemDetails.keySet().iterator().next();
+	private void addItemButtonListener() {
+	    view.getItemButton().addActionListener(e -> {
+	        int selectedOrderId = view.getSelectedOrderId();
+	        if (selectedOrderId == -1) {
+	            view.showErrorMessage("no order selected.");
+	            return;
+	        }
+	        HashMap<String, Integer> itemDetails = view.getItemDetails();
+	        if (itemDetails != null && !itemDetails.isEmpty()) {
+	            for (String sku : itemDetails.keySet()) {
 	                int qty = itemDetails.get(sku);
-	                int id = view.getSelectedOrderId();
-	                OrderP order = (OrderP) RegisterFacade.getIstance().selectOrder(id);
-					int check=0;
-						try {
-						    check=order.selectItemqty(sku, qty);
-						    if (check!=0) 
-							    view.addItemInserted(sku, qty);
-						   	
-						} catch (ItemNotFoundException | QuantityMismatchItemException e1) {
-							// TODO Auto-generated catch block
-							view.showErrorMessage(e1.getMessage());
-						}
+	                OrderP order = (OrderP) RegisterFacade.getIstance().selectOrder(selectedOrderId);
+	                int check = 0;
+	                try {
+	                    check = order.selectItemqty(sku, qty);
+	                    if (check != 0) {
+	                        view.addItemInserted(sku, qty);
+	                    }
+	                } catch (ItemNotFoundException | QuantityMismatchItemException e1) {
+	                    view.showErrorMessage(e1.getMessage());
+	                }
 	            }
-	        });
-	    }
+	        }
+	    });
+	}
+
+
     
 	private void showItems(int id) {
 		OrderP or = (OrderP) RegisterFacade.getIstance().selectOrder(id);
@@ -148,10 +153,10 @@ public class PickingController {
 	                try {
 	                    allPacked = pickingmanager.allPackPresent(order);
 	                    if (allPacked && order.allItemPresent()) {
-	                        JButton orderButton = orderButtons.get(id);
+	                        JButton orderButton = this.orderButtons.get(id);
 	                        if (orderButton != null) {
 	                            orderButton.setEnabled(false);
-	                            confirmPackaging(order);
+	                            confirmPackaging(order);	                            
 	                        }
 	                    } else {
 	                        view.showErrorMessage("Not all items are packed or inserted.");
@@ -173,20 +178,15 @@ public class PickingController {
 		view.clearInsertedItemsDisplay();
         RegisterDAOFacade.getIstance().setPicked(order.getId());
 	}
-	
 	private void disablePackageTypeButtons() {
 		view.getSmallButton().setEnabled(false);
 		view.getMediumButton().setEnabled(false);
 		view.getLargeButton().setEnabled(false);
 	}
-	
 	private void enablePackageTypeButtons() {
 		view.getSmallButton().setEnabled(true);
 		view.getMediumButton().setEnabled(true);
 		view.getLargeButton().setEnabled(true);
 	}
 	
-	private void enableCalculatePackButton() {
-		calculatePackButton.setEnabled(true);
-	}
 }

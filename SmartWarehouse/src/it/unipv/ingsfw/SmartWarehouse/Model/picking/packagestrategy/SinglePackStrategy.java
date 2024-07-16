@@ -16,11 +16,11 @@ public class SinglePackStrategy implements IPackageStrategy {
     public SinglePackStrategy(OrderP o) {
         this.o = o;
     }
-
+    
     public String calculatePackages() {
-        LinkedList<IInventoryItem> itemList = o.getSkuqtyAsList();
-        int totalSize = o.calculateTotalSize();
-        boolean isFragile = o.checkFragility(itemList);
+        LinkedList<IInventoryItem> itemList = this.o.getSkuqtyAsList();
+        int totalSize = this.o.calculateTotalSize();
+        boolean isFragile = this.o.checkFragility(itemList);
         String packageInfo = "";
        
         if (totalSize <= SMALL) {   
@@ -52,7 +52,9 @@ public class SinglePackStrategy implements IPackageStrategy {
         return "Package 1 is a " + packageInfo ;
         
     }
-
+    /**
+     * check if the package, qty and fr are correct
+     */
     public boolean isPackageCorrect(String typeP, int quantity, int fr) {
     	String packageType=typeP;
         switch (packageType) {

@@ -1,6 +1,5 @@
 package it.unipv.ingsfw.SmartWarehouse.Model.picking.packagestrategy;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import it.unipv.ingsfw.SmartWarehouse.Model.inventory.IInventoryItem;
@@ -21,16 +20,16 @@ public class MultiplePackStrategy implements IPackageStrategy {
     }
     /**
      * Calculate packages based on item dimensions and fragility.
-     */
+     */  
     public String calculatePackages() {
         LinkedList<List<IInventoryItem>> packs = new LinkedList<>(); 
-        LinkedList<IInventoryItem> itemList = o.getSkuqtyAsList(); 
+        LinkedList<IInventoryItem> itemList = this.o.getSkuqtyAsList(); 
         List<IInventoryItem> currentPack = new LinkedList<>(); 
         int currentPackSize = 0; 
         for (IInventoryItem item : itemList) {
             int itemSize = item.getDetails().getDimension();  
             if (currentPackSize + itemSize > LARGE) {
-                packs.add(new ArrayList<>(currentPack)); 
+                packs.add(new LinkedList<>(currentPack)); 
                 currentPack.clear(); 
                 currentPackSize = 0; 
                 packCount++; 
@@ -47,12 +46,15 @@ public class MultiplePackStrategy implements IPackageStrategy {
     }
   
     /**
+     * 
+     * @param packages
+     * @return
      * Generate a summary string for the list of packs.
      */
     private String getSummary(LinkedList<List<IInventoryItem>> packages) {
         for (List<IInventoryItem> pack : packages) {
             int totalSize = calculateTotalSize(pack);
-            boolean isFragile = o.checkFragility(pack);
+            boolean isFragile = this.o.checkFragility(pack);
             if (totalSize <= SMALL) {
                 counts++;
                 if (isFragile) {
@@ -89,7 +91,8 @@ public class MultiplePackStrategy implements IPackageStrategy {
     }
 
     /**
-     * method to check if the package i insert is correct,and the quantity and the fragility too
+     * method to check if the package i insert is correct,and the quantity 
+     * and the fragility too
      */
     public boolean isPackageCorrect(String typeP, int quantity, int fr) {
         boolean isFragile = false; 
